@@ -26,3 +26,9 @@ doc/api/
 .flutter-plugins
 .flutter-plugins-dependencies
 .env
+
+/android
+/ios
+/linux
+/macos
+/windows
