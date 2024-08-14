@@ -27,6 +27,7 @@ doc/api/
 .flutter-plugins-dependencies
 .env
 
+.idea
 /android
 /ios
 /linux
