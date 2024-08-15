@@ -27,9 +27,12 @@ doc/api/
 .flutter-plugins-dependencies
 .env
 
+.dart_tool
 .idea
-/android
-/ios
-/linux
-/macos
-/windows
+android
+build
+ios
+linux
+macos
+web
+windows
