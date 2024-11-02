@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-dynamic mainTheme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+final ThemeData darkTheme = ThemeData(
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: Colors.deepPurple,
+    brightness: Brightness.dark,
+  ),
   useMaterial3: true,
-) as Theme;
+);

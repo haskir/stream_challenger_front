@@ -1,0 +1,7 @@
+import 'package:cookie_jar/cookie_jar.dart';
+
+final cookieJar = CookieJar();
+
+
+const String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzYyODg0MTAsImxvZ2luIjoibGFwa2luYXN0b2wiLCJwcm9maWxlX2ltYWdlX3VybCI6Imh0dHBzOi8vc3RhdGljLWNkbi5qdHZudy5uZXQvanR2X3VzZXJfcGljdHVyZXMvMzY5MmU2OGItNDViOC00ZGVkLTgxYWMtNjVhZjU1NjI3NzIxLXByb2ZpbGVfaW1hZ2UtMzAweDMwMC5wbmciLCJkaXNwbGF5X25hbWUiOiJMYXBraU5hU3RvbCIsImVtYWlsIjoiaGFza2lyZDJAZ21haWwuY29tIiwiZXhwaXJlc19hdCI6MTczMDU0NDc4OC4yNDUyNzZ9.geM3zc7h0FR0rZR4Owwdq1Krr3O33vXGCEoc_SZNwgo";
+const String cookies = "Athorization=Bearer $token";
