@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-// #docregion demo
 class DemoLocalizations {
   DemoLocalizations(this.locale);
 
@@ -29,9 +27,7 @@ class DemoLocalizations {
     return _localizedValues[locale.languageCode]!['title']!;
   }
 }
-// #enddocregion demo
 
-// #docregion delegate
 class DemoLocalizationsDelegate
     extends LocalizationsDelegate<DemoLocalizations> {
   const DemoLocalizationsDelegate();
@@ -42,8 +38,6 @@ class DemoLocalizationsDelegate
 
   @override
   Future<DemoLocalizations> load(Locale locale) {
-    // Returning a SynchronousFuture here because an async "load" operation
-    // isn't needed to produce an instance of DemoLocalizations.
     return SynchronousFuture<DemoLocalizations>(DemoLocalizations(locale));
   }
 
@@ -51,8 +45,21 @@ class DemoLocalizationsDelegate
   bool shouldReload(DemoLocalizationsDelegate old) => false;
 }
 
-class DemoApp extends StatelessWidget {
-  const DemoApp({super.key});
+class LocalisationTestWidget extends StatelessWidget {
+  const LocalisationTestWidget({super.key, required this.onLocaleChange});
+
+  final ValueChanged<String> onLocaleChange;
+
+  List<DropdownMenuItem<String>> languages() => [
+        const DropdownMenuItem(
+          value: 'en',
+          child: Text('English'),
+        ),
+        const DropdownMenuItem(
+          value: 'ru',
+          child: Text('Русский'),
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -61,29 +68,70 @@ class DemoApp extends StatelessWidget {
         title: Text(DemoLocalizations.of(context).title),
       ),
       body: Center(
-        child: Text(DemoLocalizations.of(context).title),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            DropdownButton<String>(
+              items: languages(),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  onLocaleChange(newValue);
+                }
+              },
+              value: Localizations.localeOf(context).languageCode,
+            ),
+            Text(DemoLocalizations.of(context).title),
+          ],
+        ),
       ),
     );
   }
 }
 
-class StreamChallengeApp extends StatelessWidget {
+class StreamChallengeApp extends StatefulWidget {
   const StreamChallengeApp({super.key});
 
   @override
+  State<StreamChallengeApp> createState() => _StreamChallengeAppState();
+}
+
+class _StreamChallengeAppState extends State<StreamChallengeApp> {
+  final StreamController<Locale> _localeStreamController =
+      StreamController<Locale>();
+
+  @override
+  void dispose() {
+    _localeStreamController.close();
+    super.dispose();
+  }
+
+  void _changeLocale(String languageCode) {
+    _localeStreamController.add(Locale(languageCode));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      onGenerateTitle: (context) => DemoLocalizations.of(context).title,
-      localizationsDelegates: const [
-        DemoLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', ''),
-        Locale('ru', ''),
-      ],
-      home: const DemoApp(),
+    return StreamBuilder<Locale>(
+      stream: _localeStreamController.stream,
+      initialData: const Locale('en'),
+      builder: (context, snapshot) {
+        return MaterialApp(
+          locale: snapshot.data,
+          onGenerateTitle: (context) => DemoLocalizations.of(context).title,
+          localizationsDelegates: const [
+            DemoLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', ''),
+            Locale('ru', ''),
+          ],
+          home: LocalisationTestWidget(
+            onLocaleChange: _changeLocale,
+          ),
+        );
+      },
     );
   }
 }
