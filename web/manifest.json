@@ -1,11 +1,11 @@
 {
-    "name": "stream_challenger_front",
-    "short_name": "stream_challenger_front",
+    "name": "StreamChallenge App",
+    "short_name": "StreamChallenge",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "StreamChallenge App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
