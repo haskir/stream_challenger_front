@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/feature/presentation/widgets/challenge_create.dart';
+import 'package:stream_challenge/feature/presentation/widgets/challenges_list.dart';
+import 'package:stream_challenge/feature/presentation/widgets/profile.dart';
 import 'package:stream_challenge/feature/presentation/widgets/scaffold.dart';
 
 class StreamChallengeApp extends StatefulWidget {
@@ -42,9 +45,12 @@ class _StreamChallengeAppState extends State<StreamChallengeApp> {
             Locale('en', 'US'),
             Locale('ru', 'RU'),
           ],
-          home: MainWidget(
-            onLocaleChange: _changeLocale,
-          ),
+          routes: {
+            '/': (context) => MainWidget(onLocaleChange: _changeLocale),
+            '/profile': (context) => const ProfileWidget(),
+            '/challenges': (context) => const ChallengeListWidget(),
+            '/challenge_create': (context) => const ChallengeCreateWidget(),
+          },
         );
       },
     );

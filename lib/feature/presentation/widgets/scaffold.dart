@@ -1,9 +1,9 @@
 // ignore_for_file: no_logic_in_create_state
 
 import 'package:flutter/material.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/auth.dart';
 import 'package:stream_challenge/feature/presentation/widgets/auth_widget.dart';
-import 'package:stream_challenge/feature/presentation/widgets/locale_widget.dart';
 import 'package:stream_challenge/feature/presentation/widgets/logo.dart';
 
 class MainWidget extends StatelessWidget {
@@ -56,18 +56,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               TextButton(
                 onPressed: () {},
-                child:
-                    const Text('Home', style: TextStyle(color: Colors.black)),
+                child: Text(
+                    AppLocalizations.of(context).translate('CreateChallenge'),
+                    style: const TextStyle(color: Colors.black)),
               ),
               TextButton(
                 onPressed: () {},
-                child: const Text('Features',
-                    style: TextStyle(color: Colors.black)),
+                child: Text(
+                    AppLocalizations.of(context).translate('Challenges'),
+                    style: const TextStyle(color: Colors.black)),
               ),
               TextButton(
                 onPressed: () {},
-                child: const Text('Contact',
-                    style: TextStyle(color: Colors.black)),
+                child: Text(AppLocalizations.of(context).translate('Profile'),
+                    style: const TextStyle(color: Colors.black)),
               ),
             ],
           ),

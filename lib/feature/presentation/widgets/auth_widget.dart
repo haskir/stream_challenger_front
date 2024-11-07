@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/auth.dart';
 import 'package:stream_challenge/core/platform/auth_state.dart';
 
@@ -25,12 +26,12 @@ class AuthWidget extends StatelessWidget {
             return Center(
               child: Column(
                 children: [
-                  Text('Добро пожаловать, ${authState.user?.displayName}'),
-                  Image.network(
-                      authState.user!.profileImageUrl), // Отображение аватарки
+                  Text('Welcome, ${authState.user?.displayName}'),
+                  Image.network(authState.user!.profileImageUrl),
                   ElevatedButton(
                     onPressed: auth.logout,
-                    child: const Text('Выйти'),
+                    child:
+                        Text(AppLocalizations.of(context).translate('logout')),
                   ),
                 ],
               ),
@@ -38,12 +39,12 @@ class AuthWidget extends StatelessWidget {
           case AuthStatus.unauthenticated:
             return Center(
                 child: TextButton(
-              child: const Text("Авторизоваться"),
+              child: Text(AppLocalizations.of(context).translate('Auth')),
               onPressed: () {},
             ));
           // return LoginForm(auth: auth);
           case AuthStatus.error:
-            return Center(child: Text('Ошибка: ${authState.errorMessage}'));
+            return Center(child: Text('Error: ${authState.errorMessage}'));
         }
       },
     );

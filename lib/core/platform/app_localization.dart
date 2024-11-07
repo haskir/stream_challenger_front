@@ -26,7 +26,7 @@ class AppLocalizations {
 
   // Получение перевода по ключу
   String translate(String key) {
-    return _localizedStrings[key] ?? '** $key not found';
+    return _localizedStrings[key] ?? '*$key*';
   }
 }
 
