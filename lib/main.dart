@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:stream_challenge/common/app_theme.dart';
-import 'package:stream_challenge/feature/presentation/widgets/locale_widget.dart';
-import 'package:stream_challenge/feature/presentation/widgets/top_bar.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/feature/presentation/widgets/scaffold.dart';
 
 class StreamChallengeApp extends StatefulWidget {
   const StreamChallengeApp({super.key});
-
   @override
   State<StreamChallengeApp> createState() => _StreamChallengeAppState();
 }
@@ -33,25 +31,24 @@ class _StreamChallengeAppState extends State<StreamChallengeApp> {
       initialData: const Locale('en'),
       builder: (context, snapshot) {
         return MaterialApp(
-          theme: mainTheme(),
           locale: snapshot.data,
-          onGenerateTitle: (context) => DemoLocalizations.of(context).title,
+          onGenerateTitle: (context) =>
+              AppLocalizations.of(context).translate('title'),
           localizationsDelegates: const [
-            DemoLocalizationsDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
+            AppLocalizationsDelegate(),
+            ...GlobalMaterialLocalizations.delegates,
           ],
           supportedLocales: const [
-            Locale('en', ''),
-            Locale('ru', ''),
+            Locale('en', 'US'),
+            Locale('ru', 'RU'),
           ],
-          home: TopBarWidget(onLocaleChange: _changeLocale),
+          home: MainWidget(
+            onLocaleChange: _changeLocale,
+          ),
         );
       },
     );
   }
 }
 
-void main() {
-  runApp(const StreamChallengeApp());
-}
+void main() => runApp(const StreamChallengeApp());
