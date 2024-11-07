@@ -20,6 +20,7 @@ dependencies:
   cached_network_image: any
   flutter_bloc: any
   get_it: any
+  go_router: ^14.4.1
 
 dev_dependencies:
   flutter_test:

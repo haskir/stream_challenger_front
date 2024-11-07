@@ -1,13 +1,15 @@
 // ignore_for_file: no_logic_in_create_state
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/auth.dart';
 import 'package:stream_challenge/feature/presentation/widgets/auth_widget.dart';
-import 'package:stream_challenge/feature/presentation/widgets/body_widgets/challenge_create.dart';
-import 'package:stream_challenge/feature/presentation/widgets/body_widgets/challenges_list.dart';
 import 'package:stream_challenge/feature/presentation/widgets/logo.dart';
-import 'package:stream_challenge/feature/presentation/widgets/body_widgets/profile.dart';
+
+import 'body_widgets/challenge_create.dart';
+import 'body_widgets/challenges_list.dart';
+import 'body_widgets/profile.dart';
 
 class MainWidget extends StatefulWidget {
   const MainWidget({super.key, required this.onLocaleChange});
@@ -20,30 +22,42 @@ class MainWidget extends StatefulWidget {
 
 class _MainWidgetState extends State<MainWidget> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  CustomAppBar appBar = const CustomAppBar();
+
+  final GoRouter _router = GoRouter(
+    initialLocation: '/',
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const LogoWidget(),
+      ),
+      GoRoute(
+        path: '/challenge_create',
+        builder: (context, state) => const ChallengeCreateWidget(),
+      ),
+      GoRoute(
+        path: '/challenges',
+        builder: (context, state) => const ChallengeListWidget(),
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) => const ProfileWidget(),
+      ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
-      body: Navigator(
-        key: _navigatorKey,
-        onGenerateRoute: (RouteSettings settings) {
-          Widget page;
-          switch (settings.name) {
-            case '/challenge_create':
-              page = const ChallengeCreateWidget();
-              break;
-            case '/challenges':
-              page = const ChallengeListWidget();
-              break;
-            case '/profile':
-              page = const ProfileWidget();
-              break;
-            default:
-              page = const LogoWidget();
-          }
-          return MaterialPageRoute(builder: (_) => page, settings: settings);
-        },
+      appBar: appBar,
+      body: MaterialApp.router(
+        routerDelegate: _router.routerDelegate,
+        routeInformationParser: _router.routeInformationParser,
+        routeInformationProvider: _router.routeInformationProvider,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
       ),
     );
   }
@@ -84,22 +98,21 @@ class TabsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainWidgetState = context.findAncestorStateOfType<_MainWidgetState>();
-
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         TextButton(
-          onPressed: () => mainWidgetState?.navigateTo('/challenge_create'),
+          // onPressed: () => Navigator.pushNamed(context, '/challenge_create'),
+          onPressed: () => context.go('/challenge_create'),
           child:
               Text(AppLocalizations.of(context).translate('CreateChallenge')),
         ),
         TextButton(
-          onPressed: () => mainWidgetState?.navigateTo('/challenges'),
+          onPressed: () => context.go('/challenges'),
           child: Text(AppLocalizations.of(context).translate('Challenges')),
         ),
         TextButton(
-          onPressed: () => mainWidgetState?.navigateTo('/profile'),
+          onPressed: () => context.go('/profile'),
           child: Text(AppLocalizations.of(context).translate('Profile')),
         ),
       ],

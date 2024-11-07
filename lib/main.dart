@@ -47,9 +47,9 @@ class _StreamChallengeAppState extends State<StreamChallengeApp> {
           ],
           routes: {
             '/': (context) => MainWidget(onLocaleChange: _changeLocale),
-            // '/profile': (context) => const ProfileWidget(),
-            // '/challenges': (context) => const ChallengeListWidget(),
-            // '/challenge_create': (context) => const ChallengeCreateWidget(),
+            '/profile': (context) => const ProfileWidget(),
+            '/challenges': (context) => const ChallengeListWidget(),
+            '/challenge_create': (context) => const ChallengeCreateWidget(),
           },
         );
       },
