@@ -4,15 +4,17 @@ import 'package:stream_challenge/feature/presentation/widgets/body_widgets/chall
 import 'package:stream_challenge/feature/presentation/widgets/body_widgets/profile.dart';
 import 'package:stream_challenge/feature/presentation/widgets/appbar_widgets/logo.dart';
 
-final GoRouter router = GoRouter(
+final GoRouter goRouter = GoRouter(
   initialLocation: '/',
   routes: routes,
 );
 
-final List<GoRoute> routes = [
+List<GoRoute> routes = [
   GoRoute(
     path: '/',
-    builder: (context, state) => const LogoWidget(),
+    builder: (context, state) => LogoWidget(
+      onTap: () => context.go('/'),
+    ),
   ),
   GoRoute(
     path: '/challenge_create',

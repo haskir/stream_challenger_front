@@ -30,7 +30,6 @@ class AppLocalizations {
   }
 }
 
-// Delegate для работы с локализацией
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();
 
