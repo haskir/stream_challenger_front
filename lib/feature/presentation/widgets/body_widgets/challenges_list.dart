@@ -5,6 +5,6 @@ class ChallengeListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('ChallengeListWidget');
+    return const Center(child: Text('ChallengeListWidget'));
   }
 }
