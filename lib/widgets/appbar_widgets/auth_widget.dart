@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:stream_challenge/core/api_client.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/auth.dart';
 import 'package:stream_challenge/core/platform/auth_state.dart';
 
 class AuthWidget extends StatelessWidget {
   final Auth auth;
+  final AuthService authService =
+      AuthService(); // Создаем экземпляр AuthService
 
-  const AuthWidget({super.key, required this.auth});
+  AuthWidget({super.key, required this.auth});
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +41,13 @@ class AuthWidget extends StatelessWidget {
             );
           case AuthStatus.unauthenticated:
             return Center(
-                child: TextButton(
-              child: Text(AppLocalizations.of(context).translate('Auth')),
-              onPressed: () {},
-            ));
-          // return LoginForm(auth: auth);
+              child: TextButton(
+                child: Text(AppLocalizations.of(context).translate('Auth')),
+                onPressed: () async {
+                  await authService.authorizeUser(context);
+                },
+              ),
+            );
           case AuthStatus.error:
             return Center(child: Text('Error: ${authState.errorMessage}'));
         }
