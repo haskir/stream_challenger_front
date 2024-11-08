@@ -1,5 +1,3 @@
-import 'dart:ui';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
@@ -53,8 +51,8 @@ class ChallengeWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
-            getAuthorInfo(challenge.author),
             ChallengeInfoWidget(challenge: challenge),
+            const SizedBox(height: 8),
             if (challenge.status == "PENDING") ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -65,7 +63,22 @@ class ChallengeWidget extends StatelessWidget {
               Center(child: endChallengeButton(onEnd)),
             ],
             const SizedBox(height: 8),
-            getStatusText(challenge),
+            Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: getStatusText(challenge),
+                  ),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: getAuthorInfo(challenge.author),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),

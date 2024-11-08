@@ -24,41 +24,47 @@ List<Widget> getActionButtons(
   VoidCallback onReport,
 ) {
   return [
-    ElevatedButton(
+    TextButton(
+      onPressed: onReject,
+      style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all<Color>(
+              const Color.fromARGB(255, 145, 144, 144)),
+          minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40))),
+      child: const Row(children: [
+        Icon(Icons.close),
+        Text("Reject", style: TextStyle(color: Colors.white))
+      ]),
+    ),
+    TextButton(
       onPressed: onAccept,
       style: ButtonStyle(
           backgroundColor: WidgetStateProperty.all<Color>(
               const Color.fromARGB(255, 127, 209, 130)),
           minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40))),
-      child: const Text("Accept", style: TextStyle(color: Colors.white)),
+      child: const Row(children: [
+        Icon(Icons.check),
+        Text("Accept", style: TextStyle(color: Colors.white))
+      ]),
     ),
-    ElevatedButton(
-      onPressed: onReject,
-      style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all<Color>(
-              const Color.fromARGB(255, 217, 221, 217)),
-          minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40))),
-      child: const Text("Reject", style: TextStyle(color: Colors.black)),
-    ),
-    ElevatedButton(
+    TextButton(
       onPressed: onReport,
       style: ButtonStyle(
           backgroundColor: WidgetStateProperty.all<Color>(
               const Color.fromARGB(186, 212, 3, 3)),
-          minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40))),
-      child: const Text("Report", style: TextStyle(color: Colors.white)),
+          minimumSize: WidgetStateProperty.all<Size>(const Size(80, 40))),
+      child: const Row(children: [
+        Icon(Icons.report_outlined),
+        Text("Report", style: TextStyle(color: Colors.white))
+      ]),
     ),
   ];
 }
 
 Row getAuthorInfo(ChallengeAuthor author) {
-  return Row(children: [
-    Text('Author: ${author.name}',
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-        )),
+  return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+    Text(author.name),
     CircleAvatar(
-      radius: 20,
+      radius: 15,
       backgroundImage: NetworkImage(author.urlImage),
     )
   ]);
@@ -72,7 +78,13 @@ class ChallengeInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text('Bet: ${challenge.bet} ${challenge.currency}'),
+      Row(children: [
+        const Text('Bet:'),
+        Text(
+          ' ${challenge.bet} ${challenge.currency}',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ]),
       Text('Due: ${DateFormat('dd.MM.yyyy HH:mm').format(challenge.due_at)}'),
       const SizedBox(height: 8),
       Text('Conditions:', style: Theme.of(context).textTheme.titleMedium),
