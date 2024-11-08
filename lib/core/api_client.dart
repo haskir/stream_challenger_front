@@ -1,52 +1,62 @@
 import 'dart:html' as html;
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:stream_challenge/core/token_repo.dart';
 
-class AuthService {
-  AuthService() {
-    _initLocalStorageListener();
-  }
+import 'platform/auth_state.dart';
 
-  Future<void> authorizeUser(BuildContext context) async {
-    final Uri authUrl = Uri.parse('http://localhost:80/api/auth');
+abstract class AuthClient {
+  Future<void> auth(BuildContext context);
+  Future<String?> getToken();
+  Future<AuthToken?> getUserInfo();
+}
+
+class AuthServiceHTML implements AuthClient {
+  final Uri authUrl = Uri.parse('http://localhost:80/api/auth');
+  final TokenRepo _tokenRepo = TokenRepo();
+
+  @override
+  Future<void> auth(BuildContext context) async {
     final newWindow = html.window.open(authUrl.toString(), "_blank");
-
-    // Слушаем сообщения от открытого окна
     html.window.addEventListener('message', (event) {
       if (event is html.MessageEvent && event.origin == authUrl.origin) {
-        _handleToken(event.data);
+        if (kDebugMode) {
+          String token = event.data;
+          print("token: `$token`");
+        }
+        _tokenRepo.setToken(event.data);
         newWindow.close();
       }
     });
   }
 
-  void _initLocalStorageListener() {
-    html.window.addEventListener('storage', (event) {
-      if (event is html.StorageEvent &&
-          event.storageArea == html.window.localStorage &&
-          event.key == 'jwt' &&
-          event.newValue != null) {
-        _handleToken(event.newValue!);
-      }
-    });
+  @override
+  Future<AuthToken?> getUserInfo() async {
+    String? token = await _tokenRepo.getToken();
+    if (token == null) {
+      return null;
+    }
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    return AuthToken.fromJson(decodedToken);
   }
 
-  void _handleToken(String token) {
-    html.window.localStorage['jwt'] = token;
-  }
-
+  @override
   Future<String?> getToken() async {
-    return html.window.localStorage['jwt'];
+    return await _tokenRepo.getToken();
   }
 }
 
 class AuthWidget extends StatefulWidget {
+  const AuthWidget({super.key});
+
   @override
   _AuthWidgetState createState() => _AuthWidgetState();
 }
 
 class _AuthWidgetState extends State<AuthWidget> {
-  final AuthService authService = AuthService();
+  final AuthServiceHTML authService = AuthServiceHTML();
   String? _token;
 
   @override
@@ -69,7 +79,7 @@ class _AuthWidgetState extends State<AuthWidget> {
         children: [
           ElevatedButton(
             onPressed: () async {
-              await authService.authorizeUser(context);
+              await authService.auth(context);
               _loadToken();
             },
             child: const Text('Авторизация через Twitch'),

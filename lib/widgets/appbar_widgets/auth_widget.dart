@@ -6,8 +6,8 @@ import 'package:stream_challenge/core/platform/auth_state.dart';
 
 class AuthWidget extends StatelessWidget {
   final Auth auth;
-  final AuthService authService =
-      AuthService(); // Создаем экземпляр AuthService
+  final AuthServiceHTML authService =
+      AuthServiceHTML(); // Создаем экземпляр AuthService
 
   AuthWidget({super.key, required this.auth});
 
@@ -44,7 +44,7 @@ class AuthWidget extends StatelessWidget {
               child: TextButton(
                 child: Text(AppLocalizations.of(context).translate('Auth')),
                 onPressed: () async {
-                  await authService.authorizeUser(context);
+                  await authService.auth(context);
                 },
               ),
             );
