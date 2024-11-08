@@ -19,17 +19,29 @@ class AuthServiceHTML implements AuthClient {
   final Uri authUrl = Uri.parse('http://localhost:80/api/auth');
   final TokenRepo _tokenRepo = TokenRepo();
 
+  // Создаем ValueNotifier для отслеживания состояния авторизации
+  final ValueNotifier<AuthState> authStateNotifier = ValueNotifier(
+    AuthState(status: AuthStatus.unauthenticated),
+  );
+
   @override
   Future<void> auth(BuildContext context) async {
     final newWindow = html.window.open(authUrl.toString(), "_blank");
-    html.window.addEventListener('message', (event) {
+
+    html.window.addEventListener('message', (event) async {
       if (event is html.MessageEvent && event.origin == authUrl.origin) {
         if (kDebugMode) {
           String token = event.data;
           print("token: `$token`");
         }
-        _tokenRepo.setToken(event.data);
+        await _tokenRepo.setToken(event.data);
         newWindow.close();
+
+        // Обновляем состояние авторизации после получения токена
+        AuthToken? user = await getUserInfo();
+        authStateNotifier.value = user == null
+            ? AuthState(status: AuthStatus.unauthenticated)
+            : AuthState(status: AuthStatus.authenticated, user: user);
       }
     });
   }
@@ -47,14 +59,14 @@ class AuthServiceHTML implements AuthClient {
   @override
   Future<AuthState> getState() async {
     AuthToken? token = await getUserInfo();
-    if (token == null) {
-      return AuthState(status: AuthStatus.unauthenticated);
-    }
-    return AuthState(status: AuthStatus.authenticated, user: token);
+    return token == null
+        ? AuthState(status: AuthStatus.unauthenticated)
+        : AuthState(status: AuthStatus.authenticated, user: token);
   }
 
   @override
   Future<void> logout() async {
     await _tokenRepo.deleteToken();
+    authStateNotifier.value = AuthState(status: AuthStatus.unauthenticated);
   }
 }

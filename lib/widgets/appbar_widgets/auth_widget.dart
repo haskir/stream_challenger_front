@@ -14,36 +14,56 @@ class AuthWidget extends StatefulWidget {
 
 class AuthWidgetState extends State<AuthWidget> {
   final AuthServiceHTML authService = AuthServiceHTML();
-  AuthState authState = AuthState(status: AuthStatus.unauthenticated);
 
   @override
   void initState() {
-    _loadToken();
     super.initState();
+    _loadToken();
+
+    authService.authStateNotifier.addListener(() {
+      setState(() {});
+    });
   }
 
   Future<void> _loadToken() async {
-    authState = await authService.getState();
-    setState(() {});
+    AuthState initialState = await authService.getState();
+    authService.authStateNotifier.value = initialState;
+  }
+
+  @override
+  void dispose() {
+    authService.authStateNotifier.removeListener(() {
+      setState(() {});
+    });
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    AuthState authState = authService.authStateNotifier.value;
+
     if (authState.status == AuthStatus.authenticated) {
       return Center(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
-                radius: 20,
-                backgroundImage: NetworkImage(authState.user!.profileImageUrl)),
+              radius: 20,
+              backgroundImage: NetworkImage(authState.user!.profileImageUrl),
+            ),
             const SizedBox(width: 15),
             GestureDetector(
-                onTap: () => {authService.logout()},
-                child: const Icon(Icons.logout))
+              onTap: () async {
+                await authService.logout();
+                setState(() {});
+              },
+              child: const Icon(Icons.logout),
+            )
           ],
         ),
       );
     }
+
     return Center(
       child: TextButton(
         child: Text(AppLocalizations.of(context).translate('Auth')),
