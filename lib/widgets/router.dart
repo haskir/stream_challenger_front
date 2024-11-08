@@ -31,6 +31,6 @@ List<GoRoute> routes = [
   ),
   GoRoute(
     path: '/panel',
-    builder: (context, state) => const PanelWidget(),
+    builder: (context, state) => PanelWidget(),
   ),
 ];
