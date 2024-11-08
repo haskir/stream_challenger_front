@@ -1,3 +1,4 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'dart:async';
 import 'package:flutter/foundation.dart';
@@ -9,7 +10,8 @@ import 'platform/auth_state.dart';
 
 abstract class AuthClient {
   Future<void> auth(BuildContext context);
-  Future<String?> getToken();
+  Future<void> logout();
+  Future<AuthState> getState();
   Future<AuthToken?> getUserInfo();
 }
 
@@ -43,51 +45,16 @@ class AuthServiceHTML implements AuthClient {
   }
 
   @override
-  Future<String?> getToken() async {
-    return await _tokenRepo.getToken();
-  }
-}
-
-class AuthWidget extends StatefulWidget {
-  const AuthWidget({super.key});
-
-  @override
-  _AuthWidgetState createState() => _AuthWidgetState();
-}
-
-class _AuthWidgetState extends State<AuthWidget> {
-  final AuthServiceHTML authService = AuthServiceHTML();
-  String? _token;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadToken();
-  }
-
-  Future<void> _loadToken() async {
-    setState(() async {
-      _token = await authService.getToken();
-    });
+  Future<AuthState> getState() async {
+    AuthToken? token = await getUserInfo();
+    if (token == null) {
+      return AuthState(status: AuthStatus.unauthenticated);
+    }
+    return AuthState(status: AuthStatus.authenticated, user: token);
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              await authService.auth(context);
-              _loadToken();
-            },
-            child: const Text('Авторизация через Twitch'),
-          ),
-          const SizedBox(height: 20),
-          Text(_token != null ? 'Токен: $_token' : 'Токен не получен'),
-        ],
-      ),
-    );
+  Future<void> logout() async {
+    await _tokenRepo.deleteToken();
   }
 }

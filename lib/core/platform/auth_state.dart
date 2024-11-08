@@ -1,8 +1,6 @@
 enum AuthStatus {
   authenticated, // Пользователь авторизован
   unauthenticated, // Пользователь не авторизован
-  loading, // Процесс авторизации (например, загрузка или проверка токена)
-  error, // Ошибка авторизации
 }
 
 class AuthToken {
@@ -38,7 +36,7 @@ class AuthToken {
 
 class AuthState {
   final AuthStatus status;
-  final AuthToken? user; // Пользовательские данные
+  final AuthToken? user;
   final String? errorMessage;
 
   AuthState({
@@ -53,13 +51,5 @@ class AuthState {
 
   factory AuthState.unauthenticated() {
     return AuthState(status: AuthStatus.unauthenticated);
-  }
-
-  factory AuthState.loading() {
-    return AuthState(status: AuthStatus.loading);
-  }
-
-  factory AuthState.error(String errorMessage) {
-    return AuthState(status: AuthStatus.error, errorMessage: errorMessage);
   }
 }

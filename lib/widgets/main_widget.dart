@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/core/platform/auth.dart';
 import 'appbar_widgets/auth_widget.dart';
 import 'appbar_widgets/logo.dart';
 
@@ -69,7 +68,7 @@ class CustomAppBarState extends State<CustomAppBar> {
 
       // Правые элементы
       actions: [
-        AuthWidget(auth: Auth()),
+        AuthWidget(onLocaleChange: widget.onLocaleChange),
         PopupMenuButton<String>(
           icon: const Icon(Icons.language),
           itemBuilder: (context) {
