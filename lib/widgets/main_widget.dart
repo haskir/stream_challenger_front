@@ -60,8 +60,8 @@ class CustomAppBarState extends State<CustomAppBar> {
             child: Text(AppLocalizations.of(context).translate('Challenges')),
           ),
           TextButton(
-            onPressed: () => context.go('/profile'),
-            child: Text(AppLocalizations.of(context).translate('Profile')),
+            onPressed: () => context.go('/panel'),
+            child: Text(AppLocalizations.of(context).translate('My Panel')),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stream_challenge/core/auth_client.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stream_challenge/core/platform/auth_client.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/auth_state.dart';
 
@@ -47,9 +48,12 @@ class AuthWidgetState extends State<AuthWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(authState.user!.profileImageUrl),
+            GestureDetector(
+              onTap: () => context.go('/panel'),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(authState.user!.profileImageUrl),
+              ),
             ),
             const SizedBox(width: 15),
             GestureDetector(

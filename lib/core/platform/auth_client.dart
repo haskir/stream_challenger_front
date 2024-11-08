@@ -4,9 +4,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:stream_challenge/core/token_repo.dart';
+import 'package:stream_challenge/core/platform/token_repo.dart';
 
-import 'platform/auth_state.dart';
+import 'auth_state.dart';
 
 abstract class AuthClient {
   Future<void> auth(BuildContext context);
