@@ -1,8 +1,8 @@
 import 'package:go_router/go_router.dart';
-import 'package:stream_challenge/feature/presentation/widgets/body_widgets/challenge_create.dart';
-import 'package:stream_challenge/feature/presentation/widgets/body_widgets/challenges_list.dart';
-import 'package:stream_challenge/feature/presentation/widgets/body_widgets/profile.dart';
-import 'package:stream_challenge/feature/presentation/widgets/appbar_widgets/logo.dart';
+import 'package:stream_challenge/widgets/body_widgets/challenge_create.dart';
+import 'package:stream_challenge/widgets/body_widgets/challenges_list.dart';
+import 'package:stream_challenge/widgets/body_widgets/profile.dart';
+import 'package:stream_challenge/widgets/appbar_widgets/logo.dart';
 
 final GoRouter goRouter = GoRouter(
   initialLocation: '/',

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'core/platform/app_localization.dart';
-import 'main_widget.dart';
+import 'widgets/main_widget.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-import 'router.dart';
+import 'widgets/router.dart';
 
 class StreamChallengeApp extends StatefulWidget {
   const StreamChallengeApp({super.key});

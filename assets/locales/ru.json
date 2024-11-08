@@ -1,4 +1,9 @@
 {
-    "title": "Привет мир"
+  "title": "Stream Challenge",    
+  "Create Challenge": "Создать испытание",
+  "Challenges": "Испытания",
+  "Challenge": "Испытание",
+  "Profile": "Профиль",
+  "Auth": "Авторизация через Twitch"
   }
   

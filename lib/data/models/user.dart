@@ -31,7 +31,6 @@ class User {
     required this.userPreferences,
   });
 
-  // From JSON
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
@@ -49,7 +48,6 @@ class User {
     );
   }
 
-  // To JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
