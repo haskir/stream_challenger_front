@@ -3,8 +3,16 @@ import 'package:stream_challenge/data/models/challenge.dart';
 
 import 'challenge_widget.dart';
 
+// ignore: must_be_immutable
 class PanelWidget extends StatelessWidget {
-  List<Challenge> challenges = [];
+  List<Challenge> challenges = [
+    Challenge.testPending(),
+    Challenge.testPending(),
+    Challenge.testAccepted(),
+    Challenge.testRejected(),
+    Challenge.testRejected(),
+    Challenge.testReported(),
+  ];
 
   PanelWidget({
     super.key,
@@ -23,6 +31,10 @@ class PanelWidget extends StatelessWidget {
     // Обработка жалобы на челлендж
   }
 
+  void _endChallenge(Challenge challenge) {
+    // Обработка завершения испытания
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -34,6 +46,7 @@ class PanelWidget extends StatelessWidget {
           onAccept: () => _acceptChallenge(challenge),
           onReject: () => _rejectChallenge(challenge),
           onReport: () => _reportChallenge(challenge),
+          onEnd: () => _endChallenge(challenge),
         );
       },
     );
