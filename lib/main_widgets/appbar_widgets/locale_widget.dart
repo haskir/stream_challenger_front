@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/providers.dart';
 
-class LocaleWidget extends StatelessWidget {
-  const LocaleWidget({super.key, required this.onLocaleChange});
-
-  final ValueChanged<String> onLocaleChange;
+class LocaleWidget extends ConsumerWidget {
+  const LocaleWidget({super.key});
 
   List<DropdownMenuItem<String>> languages() => [
-        const DropdownMenuItem(
-          value: 'en',
-          child: Text('English'),
-        ),
-        const DropdownMenuItem(
-          value: 'ru',
-          child: Text('Русский'),
-        ),
+        const DropdownMenuItem(value: 'en', child: Text('English')),
+        const DropdownMenuItem(value: 'ru', child: Text('Русский')),
       ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate('title')),
@@ -31,10 +27,10 @@ class LocaleWidget extends StatelessWidget {
               items: languages(),
               onChanged: (String? newValue) {
                 if (newValue != null) {
-                  onLocaleChange(newValue);
+                  ref.read(localeProvider.notifier).state = Locale(newValue);
                 }
               },
-              value: Localizations.localeOf(context).languageCode,
+              value: locale.languageCode,
             ),
             Text(AppLocalizations.of(context).translate('title')),
           ],

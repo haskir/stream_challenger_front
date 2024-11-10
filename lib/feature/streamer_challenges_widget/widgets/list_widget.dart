@@ -1,52 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/core/platform/auth_state.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/providers.dart';
 
 import 'challenge_widget.dart';
 
-// ignore: must_be_immutable
-class PanelWidget extends StatelessWidget {
-  List<Challenge> challenges = [
-    Challenge.testPending(),
-    Challenge.testPending(),
-    Challenge.testAccepted(),
-    Challenge.testRejected(),
-    Challenge.testRejected(),
-    Challenge.testReported(),
-  ];
-
-  PanelWidget({
-    super.key,
-    // required this.challenges,
-  });
-
-  void _acceptChallenge(Challenge challenge) {
-    // Обработка принятия челленджа
-  }
-
-  void _rejectChallenge(Challenge challenge) {
-    // Обработка отклонения челленджа
-  }
-
-  void _reportChallenge(Challenge challenge) {
-    // Обработка жалобы на челлендж
-  }
-
-  void _endChallenge(Challenge challenge) {
-    // Обработка завершения испытания
-  }
+class PanelWidget extends ConsumerStatefulWidget {
+  const PanelWidget({super.key});
 
   @override
+  ConsumerState<PanelWidget> createState() => _PanelWidgetState();
+}
+
+class _PanelWidgetState extends ConsumerState<PanelWidget> {
+  @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+    final List<Challenge> challenges = [];
+
+    if (!authState.isAuthenticated) {
+      return Center(
+        child: Text(
+          AppLocalizations.of(context).translate("Please log in"),
+        ),
+      );
+    }
+
+    if (challenges.isEmpty) {
+      return Center(
+        child: Text(
+          AppLocalizations.of(context).translate("No challenges."),
+        ),
+      );
+    }
+
     return ListView.builder(
       itemCount: challenges.length,
       itemBuilder: (context, index) {
         final challenge = challenges[index];
         return ChallengeWidget(
           challenge: challenge,
-          onAccept: () => _acceptChallenge(challenge),
-          onReject: () => _rejectChallenge(challenge),
-          onReport: () => _reportChallenge(challenge),
-          onEnd: () => _endChallenge(challenge),
         );
       },
     );

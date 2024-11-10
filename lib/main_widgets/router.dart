@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/feature/streamer_challenges_widget/widgets/list_widget.dart';
-import 'package:stream_challenge/widgets/body_widgets/challenge_create.dart';
-import 'package:stream_challenge/widgets/body_widgets/challenges_list.dart';
-import 'package:stream_challenge/widgets/body_widgets/profile.dart';
-import 'package:stream_challenge/widgets/appbar_widgets/logo.dart';
+import 'package:stream_challenge/main_widgets/body_widgets/challenge_create.dart';
+import 'package:stream_challenge/main_widgets/body_widgets/challenges_list.dart';
+import 'package:stream_challenge/main_widgets/body_widgets/profile.dart';
 
 final GoRouter goRouter = GoRouter(
   initialLocation: '/',
@@ -13,9 +13,7 @@ final GoRouter goRouter = GoRouter(
 List<GoRoute> routes = [
   GoRoute(
     path: '/',
-    builder: (context, state) => LogoWidget(
-      onTap: () => context.go('/'),
-    ),
+    builder: (context, state) => Center(child: Text("Home page")),
   ),
   GoRoute(
     path: '/challenge_create',

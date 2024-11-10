@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
-ElevatedButton endChallengeButton(
-  VoidCallback onEnd,
-) {
+ElevatedButton endChallengeButton() {
   return ElevatedButton(
-    onPressed: onEnd,
+    onPressed: () {},
     style: ButtonStyle(
       backgroundColor: WidgetStateProperty.all<Color>(
         const Color.fromARGB(255, 23, 185, 104),
@@ -19,39 +17,39 @@ ElevatedButton endChallengeButton(
 
 List<Widget> getActionButtons(
   BuildContext context,
-  VoidCallback onAccept,
-  VoidCallback onReject,
-  VoidCallback onReport,
 ) {
   return [
     TextButton(
-      onPressed: onReject,
+      onPressed: () {},
       style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all<Color>(
-              const Color.fromARGB(255, 145, 144, 144)),
-          minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40))),
+        minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40)),
+        backgroundColor: WidgetStateProperty.all<Color>(
+            const Color.fromARGB(255, 145, 144, 144)),
+      ),
       child: const Row(children: [
         Icon(Icons.close),
         Text("Reject", style: TextStyle(color: Colors.white))
       ]),
     ),
     TextButton(
-      onPressed: onAccept,
+      onPressed: () {},
       style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all<Color>(
-              const Color.fromARGB(255, 127, 209, 130)),
-          minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40))),
+        minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40)),
+        backgroundColor: WidgetStateProperty.all<Color>(
+            const Color.fromARGB(255, 127, 209, 130)),
+      ),
       child: const Row(children: [
         Icon(Icons.check),
         Text("Accept", style: TextStyle(color: Colors.white))
       ]),
     ),
     TextButton(
-      onPressed: onReport,
+      onPressed: () {},
       style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all<Color>(
-              const Color.fromARGB(186, 212, 3, 3)),
-          minimumSize: WidgetStateProperty.all<Size>(const Size(80, 40))),
+        minimumSize: WidgetStateProperty.all<Size>(const Size(80, 40)),
+        backgroundColor: WidgetStateProperty.all<Color>(
+            const Color.fromARGB(186, 212, 3, 3)),
+      ),
       child: const Row(children: [
         Icon(Icons.report_outlined),
         Text("Report", style: TextStyle(color: Colors.white))

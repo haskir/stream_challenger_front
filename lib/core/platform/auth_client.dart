@@ -1,8 +1,8 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:stream_challenge/core/platform/token_repo.dart';
 
@@ -11,40 +11,47 @@ import 'auth_state.dart';
 abstract class AuthClient {
   Future<void> auth(BuildContext context);
   Future<void> logout();
-  Future<AuthState> getState();
+  AuthState getState();
   AuthToken? getUserInfo();
 }
 
-class AuthServiceHTML implements AuthClient {
+class _AuthServiceHTML implements AuthClient {
   final Uri authUrl = Uri.parse('http://localhost:80/api/auth');
   String? _token;
   final TokenRepo _tokenRepo = TokenRepo();
 
-  // Создаем ValueNotifier для отслеживания состояния авторизации
+  Future<void> init() async {
+    _token = await _tokenRepo.getToken();
+    authStateNotifier.value =
+        _token == null ? AuthState() : AuthState(user: getUserInfo());
+  }
+
   final ValueNotifier<AuthState> authStateNotifier = ValueNotifier(
-    AuthState(status: AuthStatus.unauthenticated),
+    AuthState(),
   );
 
   @override
   Future<void> auth(BuildContext context) async {
+    // Создаем Completer для отслеживания завершения аутентификации
+    final authCompleter = Completer<void>();
+
     final newWindow = html.window.open(authUrl.toString(), "_blank");
 
-    html.window.addEventListener('message', (event) async {
+    // Функция для обработки сообщения
+    void messageHandler(html.Event event) async {
       if (event is html.MessageEvent && event.origin == authUrl.origin) {
-        if (kDebugMode) {
-          String token = event.data;
-          print("token: `$token`");
-        }
         _token = event.data;
         await _tokenRepo.setToken(event.data);
+        authStateNotifier.value = AuthState(user: getUserInfo());
         newWindow.close();
 
-        AuthToken? user = getUserInfo();
-        authStateNotifier.value = user == null
-            ? AuthState(status: AuthStatus.unauthenticated)
-            : AuthState(status: AuthStatus.authenticated, user: user);
+        authCompleter.complete();
       }
-    });
+    }
+
+    html.window.addEventListener('message', messageHandler);
+    await authCompleter.future;
+    html.window.removeEventListener('message', messageHandler);
   }
 
   @override
@@ -54,16 +61,38 @@ class AuthServiceHTML implements AuthClient {
   }
 
   @override
-  Future<AuthState> getState() async {
+  AuthState getState() {
     AuthToken? token = getUserInfo();
-    return token == null
-        ? AuthState(status: AuthStatus.unauthenticated)
-        : AuthState(status: AuthStatus.authenticated, user: token);
+    return token == null ? AuthState() : AuthState(user: token);
   }
 
   @override
   Future<void> logout() async {
     await _tokenRepo.deleteToken();
-    authStateNotifier.value = AuthState(status: AuthStatus.unauthenticated);
+    _token = null;
+    authStateNotifier.value = AuthState();
+  }
+}
+
+class AuthNotifier extends StateNotifier<AuthState> {
+  final _AuthServiceHTML _authService = _AuthServiceHTML();
+
+  AuthNotifier() : super(AuthState.unauthenticated()) {
+    _initializeAuthState();
+  }
+
+  void _initializeAuthState() async {
+    await _authService.init();
+    state = _authService.getState();
+  }
+
+  Future<void> auth(BuildContext context) async {
+    await _authService.auth(context);
+    state = _authService.getState();
+  }
+
+  Future<void> logout() async {
+    await _authService.logout();
+    state = AuthState.unauthenticated();
   }
 }

@@ -1,0 +1,31 @@
+import 'dart:ui';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'core/platform/auth_client.dart';
+import 'core/platform/auth_state.dart';
+import 'main_widgets/main_widget.dart';
+import 'main_widgets/router.dart';
+
+final localeProvider = StateProvider<Locale>((ref) => const Locale('en'));
+final authStateProvider =
+    StateNotifierProvider<AuthNotifier, AuthState>((ref) => AuthNotifier());
+
+final routerProvider = Provider<GoRouter>((ref) {
+  final changeLocale = ref.read(localeProvider.notifier);
+
+  return GoRouter(
+    routes: [
+      ShellRoute(
+        builder: (context, state, child) {
+          return MainWidget(
+            onLocaleChange: (languageCode) =>
+                changeLocale.state = Locale(languageCode),
+            child: child,
+          );
+        },
+        routes: routes,
+      ),
+    ],
+  );
+});

@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
 
 import 'action_buttons.dart';
 
-class ChallengeWidget extends StatelessWidget {
+class ChallengeWidget extends StatefulWidget {
   final Challenge challenge;
-  final VoidCallback onAccept;
-  final VoidCallback onReject;
-  final VoidCallback onReport;
-  final VoidCallback onEnd;
+  //final AbstractChallengeRequester requester;
 
   const ChallengeWidget({
     super.key,
     required this.challenge,
-    required this.onAccept,
-    required this.onReject,
-    required this.onReport,
-    required this.onEnd,
+    //required this.requester,
   });
+
+  @override
+  State<ChallengeWidget> createState() => _ChallengeWidgetState();
+}
+
+class _ChallengeWidgetState extends State<ChallengeWidget> {
+  late Challenge challenge;
+
+  @override
+  void initState() {
+    super.initState();
+    challenge = widget.challenge;
+  }
 
   Text getStatusText(Challenge challenge) {
     switch (challenge.status) {
@@ -56,11 +64,10 @@ class ChallengeWidget extends StatelessWidget {
             if (challenge.status == "PENDING") ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children:
-                    getActionButtons(context, onAccept, onReject, onReport),
+                children: getActionButtons(context),
               ),
             ] else if (challenge.status == "ACCEPTED") ...[
-              Center(child: endChallengeButton(onEnd)),
+              Center(child: endChallengeButton()),
             ],
             const SizedBox(height: 8),
             Row(

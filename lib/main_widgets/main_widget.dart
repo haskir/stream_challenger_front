@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/providers.dart';
 import 'appbar_widgets/auth_widget.dart';
 import 'appbar_widgets/logo.dart';
 
@@ -14,40 +16,28 @@ class MainWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(onLocaleChange: onLocaleChange),
+      appBar: _AppBar(),
       body: child,
     );
   }
 }
 
-class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final Function(String) onLocaleChange;
-  const CustomAppBar({super.key, required this.onLocaleChange});
-
-  @override
-  CustomAppBarState createState() => CustomAppBarState();
-
+class _AppBar extends ConsumerStatefulWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-}
-
-class CustomAppBarState extends State<CustomAppBar> {
-  String currentLanguage = 'en';
-
-  void _changeLanguage(String newLanguage) {
-    setState(() {
-      currentLanguage = newLanguage;
-      widget.onLocaleChange(newLanguage);
-    });
-  }
 
   @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _CustomAppBarState();
+}
+
+class _CustomAppBarState extends ConsumerState<_AppBar> {
+  @override
   Widget build(BuildContext context) {
-    return AppBar(
-      // Левые элементы
-      leading: LogoWidget(onTap: () => context.go('/')),
-      // Центральные элементы
-      title: Row(
+    final authState = ref.watch(authStateProvider);
+    Row? titleWidget;
+
+    if (authState.isAuthenticated) {
+      titleWidget = Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextButton(
@@ -60,15 +50,18 @@ class CustomAppBarState extends State<CustomAppBar> {
             child: Text(AppLocalizations.of(context).translate('Challenges')),
           ),
           TextButton(
-            onPressed: () => context.go('/panel'),
-            child: Text(AppLocalizations.of(context).translate('My Panel')),
-          ),
+              onPressed: () => context.go('/panel'),
+              child: Text(AppLocalizations.of(context).translate('My Panel')))
         ],
-      ),
-
-      // Правые элементы
+      );
+    }
+    return AppBar(
+      // Левые элементы
+      leading: LogoWidget(onTap: () => context.go('/')),
+      // Центральные элементы
+      title: titleWidget,
       actions: [
-        AuthWidget(onLocaleChange: widget.onLocaleChange),
+        AuthWidget(),
         PopupMenuButton<String>(
           icon: const Icon(Icons.language),
           itemBuilder: (context) {
@@ -77,7 +70,8 @@ class CustomAppBarState extends State<CustomAppBar> {
               const PopupMenuItem(value: 'ru', child: Text('Русский')),
             ];
           },
-          onSelected: _changeLanguage,
+          onSelected: (String value) =>
+              ref.read(localeProvider.notifier).state = Locale(value),
         ),
       ],
     );

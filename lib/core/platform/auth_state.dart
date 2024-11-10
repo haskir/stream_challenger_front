@@ -1,8 +1,3 @@
-enum AuthStatus {
-  authenticated, // Пользователь авторизован
-  unauthenticated, // Пользователь не авторизован
-}
-
 class AuthToken {
   final int id;
   final String login;
@@ -35,21 +30,21 @@ class AuthToken {
 }
 
 class AuthState {
-  final AuthStatus status;
   final AuthToken? user;
   final String? errorMessage;
 
   AuthState({
-    required this.status,
     this.user,
     this.errorMessage,
   });
 
   factory AuthState.authenticated(AuthToken user) {
-    return AuthState(status: AuthStatus.authenticated, user: user);
+    return AuthState(user: user);
   }
 
   factory AuthState.unauthenticated() {
-    return AuthState(status: AuthStatus.unauthenticated);
+    return AuthState();
   }
+
+  bool get isAuthenticated => user != null;
 }
