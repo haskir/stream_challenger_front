@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/providers.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -66,7 +64,7 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
   @override
   Future<void> disconnect() async {
     try {
-      await _channel.sink.close(status.goingAway);
+      await _channel.sink.close();
       _isConnected = false;
     } catch (e) {
       print('Error disconnecting: $e');

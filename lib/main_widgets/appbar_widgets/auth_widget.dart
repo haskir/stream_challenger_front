@@ -26,6 +26,7 @@ class AuthWidget extends ConsumerWidget {
             const SizedBox(width: 15),
             GestureDetector(
               onTap: () async {
+                context.go('/');
                 await ref.read(authStateProvider.notifier).logout();
               },
               child: const Icon(Icons.logout),

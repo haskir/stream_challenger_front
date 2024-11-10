@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
 import 'package:stream_challenge/providers.dart';
@@ -17,7 +16,6 @@ class PanelWidget extends ConsumerStatefulWidget {
 class _PanelWidgetState extends ConsumerState<PanelWidget> {
   late ChallengesPanelWebSocket _wsconnection;
 
-  // Стрим для задач, который может быть null до инициализации
   Stream<List<Challenge>>? challengesStream;
 
   @override
@@ -43,13 +41,10 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Проверяем, что challengesStream инициализирован
     if (challengesStream == null) {
-      // Показать индикатор загрузки, пока стрим не инициализирован
       return Center(child: CircularProgressIndicator());
     }
 
-    // Используем StreamBuilder для подписки на стрим задач
     return StreamBuilder<List<Challenge>>(
       stream: challengesStream,
       builder: (context, snapshot) {
