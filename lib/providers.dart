@@ -29,3 +29,18 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+class ApiPath {
+  static const url = 'localhost';
+  static const security = false;
+
+  static String get http {
+    if (security) return 'https://$url:443';
+    return 'http://$url:80';
+  }
+
+  static String get ws {
+    if (security) return 'wss://$url:443';
+    return 'ws://$url:80';
+  }
+}

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/core/platform/auth_state.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
 import 'package:stream_challenge/providers.dart';
 
 import 'challenge_widget.dart';
@@ -15,35 +15,66 @@ class PanelWidget extends ConsumerStatefulWidget {
 }
 
 class _PanelWidgetState extends ConsumerState<PanelWidget> {
+  late ChallengesPanelWebSocket _wsconnection;
+
+  // Стрим для задач, который может быть null до инициализации
+  Stream<List<Challenge>>? challengesStream;
+
+  @override
+  void initState() {
+    super.initState();
+    initStream();
+  }
+
+  void initStream() async {
+    final authNotifier = ref.read(authStateProvider.notifier);
+
+    _wsconnection = ChallengesPanelWebSocket(token: authNotifier.token);
+    await _wsconnection.connect().then((connected) {
+      if (connected) {
+        setState(() {
+          challengesStream = _wsconnection.getChallengesStream();
+        });
+      } else {
+        print('Failed to connect to WebSocket.');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authStateProvider);
-    final List<Challenge> challenges = [];
-
-    if (!authState.isAuthenticated) {
-      return Center(
-        child: Text(
-          AppLocalizations.of(context).translate("Please log in"),
-        ),
-      );
+    // Проверяем, что challengesStream инициализирован
+    if (challengesStream == null) {
+      // Показать индикатор загрузки, пока стрим не инициализирован
+      return Center(child: CircularProgressIndicator());
     }
 
-    if (challenges.isEmpty) {
-      return Center(
-        child: Text(
-          AppLocalizations.of(context).translate("No challenges."),
-        ),
-      );
-    }
-
-    return ListView.builder(
-      itemCount: challenges.length,
-      itemBuilder: (context, index) {
-        final challenge = challenges[index];
-        return ChallengeWidget(
-          challenge: challenge,
-        );
+    // Используем StreamBuilder для подписки на стрим задач
+    return StreamBuilder<List<Challenge>>(
+      stream: challengesStream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('No challenges available'));
+        } else {
+          final challenges = snapshot.data!;
+          return ListView.builder(
+            itemCount: challenges.length,
+            itemBuilder: (context, index) {
+              return ChallengeWidget(challenge: challenges[index]);
+            },
+          );
+        }
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _wsconnection.disconnect();
+    super.dispose();
   }
 }

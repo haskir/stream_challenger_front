@@ -56,6 +56,7 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
       );
     }
     return AppBar(
+      backgroundColor: Colors.blue[50],
       // Левые элементы
       leading: LogoWidget(onTap: () => context.go('/')),
       // Центральные элементы

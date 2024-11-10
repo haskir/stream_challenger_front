@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'providers.dart';
+import 'theme.dart';
 
 class StreamChallengeApp extends ConsumerWidget {
   const StreamChallengeApp({super.key});
@@ -20,6 +21,7 @@ class StreamChallengeApp extends ConsumerWidget {
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
       locale: locale,
+      theme: mainTheme,
       onGenerateTitle: (context) =>
           AppLocalizations.of(context).translate('title'),
       localizationsDelegates: const [

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:stream_challenge/core/platform/token_repo.dart';
+import 'package:stream_challenge/providers.dart';
 
 import 'auth_state.dart';
 
@@ -16,11 +17,15 @@ abstract class AuthClient {
 }
 
 class _AuthServiceHTML implements AuthClient {
-  final Uri authUrl = Uri.parse('http://localhost:80/api/auth');
+  late final Uri authUrl;
   String? _token;
   final TokenRepo _tokenRepo = TokenRepo();
 
+  String? get token => _token;
+
   Future<void> init() async {
+    String path = ApiPath.http;
+    authUrl = Uri.parse('$path/api/auth');
     _token = await _tokenRepo.getToken();
     authStateNotifier.value =
         _token == null ? AuthState() : AuthState(user: getUserInfo());
@@ -32,12 +37,11 @@ class _AuthServiceHTML implements AuthClient {
 
   @override
   Future<void> auth(BuildContext context) async {
-    // Создаем Completer для отслеживания завершения аутентификации
     final authCompleter = Completer<void>();
 
     final newWindow = html.window.open(authUrl.toString(), "_blank");
 
-    // Функция для обработки сообщения
+    // Функция для обработки сообщения от API
     void messageHandler(html.Event event) async {
       if (event is html.MessageEvent && event.origin == authUrl.origin) {
         _token = event.data;
@@ -95,4 +99,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     await _authService.logout();
     state = AuthState.unauthenticated();
   }
+
+  String get token => _authService.token ?? '';
 }
