@@ -2,13 +2,12 @@
 <html>
 <head>
   <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
 
   <!-- iOS meta tags & icons -->
-   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="StreamChallenge">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
@@ -18,30 +17,30 @@
 
   <title>StreamChallenge</title>
   <link rel="manifest" href="manifest.json">
-  <body>
-    <script src="flutter_bootstrap.js" async></script>
-  </body>
+  <script src="flutter.js" defer></script> <!-- Flutter initialization script -->
   <script>
-    // The value below is injected by flutter build, do not touch.
-    var flutter_service_worker_version = null;
+    var flutter_service_worker_version = null; // Value injected by flutter build
   </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
- <!--  <script src="main.dart.js" type="application/javascript"></script> -->
 </head>
 <body>
+  <script src="flutter_bootstrap.js" async></script>
   <script>
     window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.load({
-        serviceWorker: {
-          flutter_service_worker_version: flutter_service_worker_version,
-        }
-      }).then(function(engineInitializer) {
-        return engineInitializer.initializeEngine();
-      }).then(function(appRunner) {
-        return appRunner.runApp();
-      });
+      if (typeof _flutter !== 'undefined' && _flutter.loader) {
+        _flutter.loader.load({
+          serviceWorker: {
+            flutter_service_worker_version: flutter_service_worker_version,
+          }
+        }).then(function(engineInitializer) {
+          return engineInitializer.initializeEngine();
+        }).then(function(appRunner) {
+          return appRunner.runApp();
+        }).catch(function(error) {
+          console.error('Error during Flutter initialization:', error);
+        });
+      } else {
+        console.error('_flutter.loader is undefined.');
+      }
     });
   </script>
 </body>

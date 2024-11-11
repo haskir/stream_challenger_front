@@ -9,6 +9,7 @@ class DescriptionField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      maxLength: 255,
       decoration: const InputDecoration(
         labelText: 'Описание',
       ),

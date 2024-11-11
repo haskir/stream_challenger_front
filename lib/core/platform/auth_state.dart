@@ -1,4 +1,4 @@
-import 'package:stream_challenge/core/platform/user_preferences.dart';
+import 'package:stream_challenge/data/models/user_preferences.dart';
 
 class AuthToken {
   final int id;

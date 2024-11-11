@@ -25,12 +25,7 @@ class AppLocalizations {
   }
 
   // Получение перевода по ключу
-  String translate(String key) {
-    if (locale.countryCode != null && locale.countryCode == "en") {
-      return key;
-    }
-    return _localizedStrings[key] ?? '*$key*';
-  }
+  String translate(String key) => _localizedStrings[key] ?? key;
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

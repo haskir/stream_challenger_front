@@ -18,7 +18,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   final _minimumRewardController = TextEditingController();
   final _betController = TextEditingController();
   final _dueAtController = TextEditingController();
-  String _selectedCurrency = 'RUB';
+  static const double _margin = 10.0;
 
   @override
   void dispose() {
@@ -31,6 +31,10 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
 
   @override
   Widget build(BuildContext context) {
+    late final AuthToken? user = ref.watch(authStateProvider).user;
+    if (user == null) {
+      return const Center(child: Text('login required'));
+    }
     return Form(
       key: _formKey,
       child: Padding(
@@ -40,34 +44,32 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
           children: [
             // Поле для описания
             DescriptionField(controller: _descriptionController),
-            const SizedBox(height: 16),
+            const SizedBox(height: _margin),
 
             // Поле для минимального вознаграждения в процентах
             MinimumRewardField(controller: _minimumRewardController),
-            const SizedBox(height: 16),
+            const SizedBox(height: _margin),
 
             // Поле для ставки
-            BetField(controller: _betController),
-            const SizedBox(height: 16),
+            BetField(
+                controller: _betController,
+                minimumBet: 500,
+                maximumBet: user!.account.balance),
+            const SizedBox(height: _margin),
 
             // Выпадающий список для выбора валюты
-            CurrencyPickWidget(
-              selectedCurrency: _selectedCurrency,
-              onCurrencyChanged: (value) {
-                setState(() {
-                  _selectedCurrency = value;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
+            CurrencyPickWidget(user: user!),
+            const SizedBox(height: _margin),
 
             // Поле для срока выполнения
             DueDateField(controller: _dueAtController),
-            const SizedBox(height: 16),
+            const SizedBox(height: _margin),
 
             // Поле для условий испытания
             ConditionsSection(),
-            const SizedBox(height: 16),
+            const SizedBox(height: _margin),
+
+            // Кнопка "Создать"
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {

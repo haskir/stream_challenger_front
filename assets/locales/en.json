@@ -1,12 +1,3 @@
 {
-    "title": "Stream Challenge",
-    "Auth": "Auth with Twitch",
-    "Create Challenge": "Create Challenge",
-    "Challenges": "Challenges",
-    "Challenge": "Challenge",
-    "Profile": "Profile",
-    "logout": "Logout",
-    "My Panel": "My Panel",
-    "Please log in": "Please log in",
-    "No challenges": "No challenges"
+    "title": "Stream Challenge"
 }
