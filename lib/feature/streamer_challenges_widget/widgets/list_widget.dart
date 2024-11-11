@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
 import 'package:stream_challenge/providers.dart';
 
+import '../web_socket_client.dart';
 import 'challenge_widget.dart';
 
 class PanelWidget extends ConsumerStatefulWidget {

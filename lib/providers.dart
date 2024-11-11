@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stream_challenge/core/platform/dio.dart';
 import 'core/platform/auth_client.dart';
 import 'core/platform/auth_state.dart';
 import 'main_widgets/main_widget.dart';
@@ -12,6 +13,10 @@ import 'main_widgets/router.dart';
 final localeProvider = StateProvider<Locale>((ref) => const Locale('en'));
 final authStateProvider =
     StateNotifierProvider<AuthNotifier, AuthState>((ref) => AuthNotifier());
+final httpClientProvider = Provider<Requester>((ref) {
+  final token = ref.watch(authStateProvider.notifier).token;
+  return Requester(token: token);
+});
 
 final routerProvider = Provider<GoRouter>((ref) {
   final changeLocale = ref.read(localeProvider.notifier);

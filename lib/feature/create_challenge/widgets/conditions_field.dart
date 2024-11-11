@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 class ConditionsSection extends StatefulWidget {
-  List<TextEditingController> controllers;
+  final List<TextEditingController> controllers;
   final int max;
 
-  ConditionsSection({
+  const ConditionsSection({
     super.key,
     required this.controllers,
     required this.max,

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:stream_challenge/core/platform/auth_state.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
 import 'package:stream_challenge/providers.dart';
 import 'widgets/view.dart';
 
@@ -20,7 +21,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   final _minimumRewardController = TextEditingController();
   final _betController = TextEditingController();
   final _dueAtController = TextEditingController();
-  late List<TextEditingController> _controllers = [];
+  final List<TextEditingController> _controllers = [];
   static const double _margin = 10.0;
 
   @override
@@ -74,12 +75,13 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
 
             // Кнопка "Создать"
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   CreateChallengeDTO challenge = CreateChallengeDTO(
                     description: _descriptionController.text,
-                    minimum_reward: double.parse(_minimumRewardController.text),
+                    minimum_reward:
+                        double.parse(_minimumRewardController.text) / 100,
                     bet: double.parse(_betController.text),
                     currency: user.account.currency,
                     due_at: DateFormat('dd.MM.yyyy HH:mm')
@@ -88,6 +90,10 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                     performer_id: 76288410,
                   );
                   print(challenge.toString());
+                  await ChallengesActions().createChallenge(
+                    challenge: challenge,
+                    client: ref.read(httpClientProvider),
+                  );
                 }
               },
               child: const Text('Создать'),

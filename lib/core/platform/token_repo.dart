@@ -11,6 +11,8 @@ class TokenRepo {
     } catch (e) {
       return null;
     }
+    double exp = JwtDecoder.decode(token)["expires_at"] * 1000;
+    if (DateTime.now().millisecondsSinceEpoch > exp) return null;
     return token;
   }
 
