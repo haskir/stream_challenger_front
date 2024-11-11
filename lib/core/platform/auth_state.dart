@@ -1,3 +1,5 @@
+import 'package:stream_challenge/core/platform/user_preferences.dart';
+
 class AuthToken {
   final int id;
   final String login;
@@ -5,6 +7,8 @@ class AuthToken {
   final String displayName;
   final String email;
   final DateTime expiresAt;
+  final Preferences preferences;
+  final Account account;
 
   AuthToken({
     required this.id,
@@ -13,6 +17,8 @@ class AuthToken {
     required this.displayName,
     required this.email,
     required this.expiresAt,
+    required this.preferences,
+    required this.account,
   });
 
   // Метод для создания экземпляра User из JSON-ответа
@@ -25,7 +31,19 @@ class AuthToken {
       email: json['email'],
       expiresAt: DateTime.fromMillisecondsSinceEpoch(
           json['expires_at'].toInt() * 1000),
+      preferences: Preferences.fromJson(json['preferences']),
+      account: Account.fromJson(json['account']),
     );
+  }
+
+  @override
+  String toString() {
+    return 'AuthToken{'
+        '\nid: $id,\n login: $login,'
+        '\n profileImageUrl: $profileImageUrl,\n displayName: $displayName,'
+        '\n email: $email,\n expiresAt: $expiresAt,'
+        '\n preferences: $preferences,\n account: $account\n'
+        '}';
   }
 }
 

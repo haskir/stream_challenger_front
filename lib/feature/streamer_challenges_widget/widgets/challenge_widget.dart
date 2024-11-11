@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
 
 import 'action_buttons.dart';
 
