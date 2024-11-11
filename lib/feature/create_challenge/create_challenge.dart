@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:stream_challenge/core/platform/auth_state.dart';
+import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/providers.dart';
 import 'widgets/view.dart';
 
@@ -18,6 +20,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   final _minimumRewardController = TextEditingController();
   final _betController = TextEditingController();
   final _dueAtController = TextEditingController();
+  late List<TextEditingController> _controllers = [];
   static const double _margin = 10.0;
 
   @override
@@ -53,20 +56,20 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
             // Поле для ставки
             BetField(
                 controller: _betController,
-                minimumBet: 500,
-                maximumBet: user!.account.balance),
+                minimumBet: 100,
+                maximumBet: user.account.balance),
             const SizedBox(height: _margin),
 
             // Выпадающий список для выбора валюты
-            CurrencyPickWidget(user: user!),
+            CurrencyPickWidget(user: user),
             const SizedBox(height: _margin),
 
             // Поле для срока выполнения
-            DueDateField(controller: _dueAtController),
+            DueDateTimeField(controller: _dueAtController),
             const SizedBox(height: _margin),
 
             // Поле для условий испытания
-            ConditionsSection(),
+            ConditionsSection(controllers: _controllers, max: 3),
             const SizedBox(height: _margin),
 
             // Кнопка "Создать"
@@ -74,8 +77,17 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  // Send data to server here
-                  // ...
+                  CreateChallengeDTO challenge = CreateChallengeDTO(
+                    description: _descriptionController.text,
+                    minimum_reward: double.parse(_minimumRewardController.text),
+                    bet: double.parse(_betController.text),
+                    currency: user.account.currency,
+                    due_at: DateFormat('dd.MM.yyyy HH:mm')
+                        .parse(_dueAtController.text),
+                    conditions: _controllers.map((e) => e.text).toList(),
+                    performer_id: 76288410,
+                  );
+                  print(challenge.toString());
                 }
               },
               child: const Text('Создать'),

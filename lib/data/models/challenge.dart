@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:convert';
+
 class ChallengeAuthor {
   final String name;
   final String urlImage;
@@ -169,5 +171,40 @@ class Challenge {
       "created_at": "2024-11-08 18:37:05",
       "due_at": "2024-11-29 12:00:00",
     });
+  }
+}
+
+class CreateChallengeDTO {
+  final String description;
+  final List<String> conditions;
+  final int performer_id;
+  final double minimum_reward;
+  final double bet;
+  final String currency;
+  final DateTime due_at;
+
+  CreateChallengeDTO({
+    required this.description,
+    required this.conditions,
+    required this.performer_id,
+    required this.minimum_reward,
+    required this.bet,
+    required this.currency,
+    required this.due_at,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'description': description,
+        'conditions': conditions,
+        'performer_id': performer_id,
+        'minimum_reward': minimum_reward,
+        'bet': bet,
+        'currency': currency,
+        'due_at': due_at.toIso8601String(),
+      };
+
+  @override
+  String toString() {
+    return JsonEncoder.withIndent('  ').convert(toJson());
   }
 }

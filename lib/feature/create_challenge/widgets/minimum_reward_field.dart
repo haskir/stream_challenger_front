@@ -8,6 +8,7 @@ class MinimumRewardField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.text = '10';
     return TextFormField(
       controller: controller,
       keyboardType: TextInputType.number,

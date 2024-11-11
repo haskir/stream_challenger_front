@@ -1,45 +1,53 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 class ConditionsSection extends StatefulWidget {
-  final List<String> conditions = [];
-  static const int max = 3;
+  List<TextEditingController> controllers;
+  final int max;
 
-  ConditionsSection({super.key});
+  ConditionsSection({
+    super.key,
+    required this.controllers,
+    required this.max,
+  });
 
   @override
   State<ConditionsSection> createState() => _ConditionsSectionState();
 }
 
 class _ConditionsSectionState extends State<ConditionsSection> {
-  final TextEditingController _conditionController = TextEditingController();
-  final List<TextEditingController> _controllers = [];
+  List<ConditionLineEdit> lines = [];
 
   @override
   void dispose() {
-    _conditionController.dispose();
-    for (var controller in _controllers) {
+    for (var controller in widget.controllers) {
       controller.dispose();
     }
     super.dispose();
   }
 
-  void _addCondition(String value) {
-    if (value.isNotEmpty) {
-      setState(() {
-        widget.conditions.add(value);
-        _controllers.add(TextEditingController(text: value));
-        _conditionController.clear();
-      });
-    }
+  void _addCondition() {
+    setState(() {
+      if (lines.length == widget.max) {
+        return;
+      }
+      TextEditingController controller = TextEditingController();
+      widget.controllers.add(controller);
+      lines.add(ConditionLineEdit(
+        controller: controller,
+        onFieldSubmitted: (_) => _removeCondition,
+      ));
+    });
   }
 
-  void _removeCondition(int index) {
-    print('index: $index');
-    print("conditions: ${widget.conditions}");
+  void _removeCondition(ConditionLineEdit line) {
     setState(() {
-      widget.conditions.removeAt(index);
-      _controllers[index].dispose();
-      _controllers.removeAt(index);
+      int index = lines.indexOf(line);
+      if (index != -1) {
+        lines.removeAt(index);
+        widget.controllers[index].dispose();
+        widget.controllers.removeAt(index);
+      }
     });
   }
 
@@ -48,56 +56,23 @@ class _ConditionsSectionState extends State<ConditionsSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Условия:'),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ...widget.conditions.asMap().entries.map((entry) {
-              int index = entry.key;
-              return Row(
-                children: [
-                  Expanded(
-                    child: ConditionLineEdit(
-                      controller: _controllers[index],
-                      onChanged: (value) {
-                        setState(() {
-                          widget.conditions[index] = value;
-                        });
-                      },
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => _removeCondition(index),
-                    icon: const Icon(Icons.remove),
-                  ),
-                ],
-              );
-            }),
-            if (widget.conditions.length <
-                ConditionsSection.max) // Ограничение до трех условий
-              Row(
-                children: [
-                  Expanded(
-                    child: ConditionLineEdit(
-                      controller: _conditionController,
-                      onFieldSubmitted: _addCondition,
-                    ),
-                  ),
-                  if (widget.conditions.length < ConditionsSection.max - 1)
-                    IconButton(
-                      onPressed: () => _addCondition(_conditionController.text),
-                      icon: const Icon(Icons.add),
-                    ),
-                  if (widget.conditions.length == ConditionsSection.max - 1)
-                    IconButton(
-                      onPressed: () =>
-                          _removeCondition(widget.conditions.length),
-                      icon: const Icon(Icons.remove),
-                    ),
-                ],
-              ),
-          ],
-        ),
+        Row(children: [
+          const Text('Условия:'),
+          const SizedBox(width: 10),
+          ElevatedButton(
+            onPressed: _addCondition,
+            child: Icon(Icons.add),
+          ),
+        ]),
+        ...lines.map((line) => Row(
+              children: [
+                Expanded(child: line),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () => _removeCondition(line),
+                ),
+              ],
+            )),
       ],
     );
   }

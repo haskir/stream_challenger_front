@@ -6,9 +6,9 @@ final selectedCurrencyProvider =
 );
 
 class CurrencyNotifier extends StateNotifier<String> {
-  CurrencyNotifier() : super('USD'); // Инициализация с начальной валютой
+  CurrencyNotifier() : super('USD');
 
   void updateCurrency(String newCurrency) {
-    state = newCurrency; // Обновление состояния
+    state = newCurrency;
   }
 }

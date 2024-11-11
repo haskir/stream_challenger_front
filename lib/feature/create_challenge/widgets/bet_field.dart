@@ -20,6 +20,7 @@ class BetField extends StatefulWidget {
 class _BetFieldState extends State<BetField> {
   @override
   Widget build(BuildContext context) {
+    widget.controller.text = widget.minimumBet.toString();
     return TextFormField(
       controller: widget.controller,
       keyboardType: TextInputType.number,
