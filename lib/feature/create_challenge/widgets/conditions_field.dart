@@ -79,8 +79,6 @@ class _ConditionsSectionState extends State<ConditionsSection> {
 }
 
 class ConditionLineEdit extends TextFormField {
-  final int maxLength = 255;
-
   ConditionLineEdit({
     super.key,
     super.onChanged,
@@ -96,5 +94,6 @@ class ConditionLineEdit extends TextFormField {
           decoration: const InputDecoration(
             hintText: "Введите условие",
           ),
+          maxLength: 255,
         );
 }
