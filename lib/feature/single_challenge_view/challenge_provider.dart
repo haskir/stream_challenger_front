@@ -9,10 +9,10 @@ class _ChallenegeGetter {
     required Requester client,
   }) async {
     final response = await client.get('/challenges/$id');
-    if (response.isLeft()) {
-      return null;
-    }
-    return Challenge.fromJson(response.getOrElse(() => {})["data"]);
+    return response.fold(
+      (left) => null,
+      (right) => Challenge.fromJson(right["data"]),
+    );
   }
 }
 

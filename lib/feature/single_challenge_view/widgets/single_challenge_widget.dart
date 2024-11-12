@@ -22,7 +22,18 @@ class _ChallengeView extends ConsumerState<ViewChallengeWidget> {
         if (challenge == null) {
           return const Center(child: Text('404 - Challenge not found'));
         }
-        return Center(child: Text(challenge.toString()));
+        return Center(
+            child: Container(
+          decoration: BoxDecoration(
+            color: Colors.blue.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: EdgeInsets.all(16),
+          child: Text(
+            challenge.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+        ));
       },
       loading: () => const Center(
         child: CircularProgressIndicator(),
