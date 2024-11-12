@@ -6,8 +6,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 abstract class AbstractChallengePanelRequester {
   Future<bool> connect();
-  Future<bool> isConnected();
-  Future<void> disconnect();
+  bool isConnected();
+  void disconnect();
   Stream<List<Challenge>> getChallengesStream();
 }
 
@@ -22,28 +22,26 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
   @override
   Future<bool> connect() async {
     try {
-      _channel = WebSocketChannel.connect(
-        wsUrl,
-      );
+      _channel = WebSocketChannel.connect(wsUrl);
       _channel.sink.add('{"token": "$token"}');
       _isConnected = true;
       return true;
+    } on WebSocketChannelException {
+      _isConnected = false;
+      return false;
     } catch (e) {
       _isConnected = false;
-      print('Error connecting to WebSocket: $e');
       return false;
     }
   }
 
   @override
-  Future<bool> isConnected() async {
-    return _isConnected;
-  }
+  bool isConnected() => _isConnected;
 
   @override
-  Future<void> disconnect() async {
+  void disconnect() {
     try {
-      await _channel.sink.close();
+      _channel.sink.close();
       _isConnected = false;
     } catch (e) {
       print('Error disconnecting: $e');

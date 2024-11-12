@@ -24,7 +24,7 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
     initStream();
   }
 
-  void initStream() async {
+  Future<void> initStream() async {
     final authNotifier = ref.read(authStateProvider.notifier);
 
     _wsconnection = ChallengesPanelWebSocket(token: authNotifier.token);
@@ -59,7 +59,7 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
           return ListView.builder(
             itemCount: challenges.length,
             itemBuilder: (context, index) {
-              return ChallengeWidget(challenge: challenges[index]);
+              return ChallengeWidgetWithActions(challenge: challenges[index]);
             },
           );
         }

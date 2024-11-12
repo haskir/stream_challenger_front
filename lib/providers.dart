@@ -14,8 +14,8 @@ final localeProvider = StateProvider<Locale>((ref) => const Locale('en'));
 final authStateProvider =
     StateNotifierProvider<AuthNotifier, AuthState>((ref) => AuthNotifier());
 final httpClientProvider = Provider<Requester>((ref) {
-  final token = ref.watch(authStateProvider.notifier).token;
-  return Requester(token: token);
+  String token = ref.watch(authStateProvider.notifier).token;
+  return Requester(token);
 });
 
 final routerProvider = Provider<GoRouter>((ref) {

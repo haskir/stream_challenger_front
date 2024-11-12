@@ -3,21 +3,23 @@ import 'package:stream_challenge/data/models/challenge.dart';
 
 import 'action_buttons.dart';
 
-class ChallengeWidget extends StatefulWidget {
+class ChallengeWidgetWithActions extends StatefulWidget {
   final Challenge challenge;
   //final AbstractChallengeRequester requester;
 
-  const ChallengeWidget({
+  const ChallengeWidgetWithActions({
     super.key,
     required this.challenge,
     //required this.requester,
   });
 
   @override
-  State<ChallengeWidget> createState() => _ChallengeWidgetState();
+  State<ChallengeWidgetWithActions> createState() =>
+      _ChallengeWidgetWithActionsState();
 }
 
-class _ChallengeWidgetState extends State<ChallengeWidget> {
+class _ChallengeWidgetWithActionsState
+    extends State<ChallengeWidgetWithActions> {
   late Challenge challenge;
 
   @override
