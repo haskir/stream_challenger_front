@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:stream_challenge/core/error/failure.dart';
 import 'package:stream_challenge/providers.dart';
 import 'response.dart';
 

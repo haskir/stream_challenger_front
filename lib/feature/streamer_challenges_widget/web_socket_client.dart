@@ -27,6 +27,9 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
 
   @override
   Future<bool> connect() async {
+    if (kDebugMode) {
+      print('Connecting to WebSocket...');
+    }
     _channel = WebSocketChannel.connect(wsUrl);
 
     try {
@@ -39,7 +42,10 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
       );
       _startPing();
       return true;
-    } on WebSocketChannelException catch (e) {
+    } on WebSocketChannelException {
+      if (kDebugMode) {
+        print('WebSocket connection failed.');
+      }
       _isConnected = false;
       _reconnect();
       return false;
@@ -57,7 +63,7 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
     try {
       final challengesJson = jsonDecode(data) as List;
       final challenges =
-          challengesJson.map((json) => Challenge.fromJson(json)).toList();
+          challengesJson.map((json) => Challenge.fromMap(json)).toList();
       _challengeController.add(challenges);
     } catch (e) {
       if (kDebugMode) {

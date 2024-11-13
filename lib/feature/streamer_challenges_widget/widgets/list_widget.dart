@@ -28,7 +28,8 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
   Future<void> initStream() async {
     final authNotifier = ref.read(authStateProvider.notifier);
 
-    _wsconnection = ChallengesPanelWebSocket(token: authNotifier.token);
+    _wsconnection =
+        ChallengesPanelWebSocket(token: await authNotifier.getTokenAsync());
     await _wsconnection.connect().then((connected) {
       if (connected) {
         setState(() {
