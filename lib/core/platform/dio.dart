@@ -3,18 +3,19 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stream_challenge/core/error/failure.dart';
 import 'package:stream_challenge/providers.dart';
+import 'response.dart';
 
 abstract class _Client {
-  Future<Either<Failure, Map<String, dynamic>>> get(
+  Future<Either<ErrorDTO, Map<String, dynamic>>> get(
     String url, [
     Map<String, dynamic> params = const {},
   ]);
 
-  Future<Either<Failure, bool>> post(String url, Map<String, dynamic> body);
+  Future<Either<ErrorDTO, bool>> post(String url, Map<String, dynamic> body);
 
-  Future<Either<Failure, bool>> delete(String url);
+  Future<Either<ErrorDTO, bool>> delete(String url);
 
-  Future<Either<Failure, bool>> put(String url, Map<String, dynamic> body);
+  Future<Either<ErrorDTO, bool>> put(String url, Map<String, dynamic> body);
 }
 
 class Requester implements _Client {
@@ -28,25 +29,16 @@ class Requester implements _Client {
       'Authorization': 'Bearer $token',
     };
     if (kDebugMode) {
-      _dio.interceptors.add(LogInterceptor(
-        request: true,
-        requestBody: true, // Печать тела запроса
-        responseBody: true, // Печать тела ответа
-      ));
+      _dio.interceptors.add(
+          LogInterceptor(request: true, requestBody: true, responseBody: true));
     }
   }
 
-  Failure _processResponse(Response response) {
-    Map<int, Failure> failures = {
-      401: AuthFailure(),
-      403: UserFailure(),
-      404: NotFoundFailure(),
-      500: ServerFailure(),
-    };
-    return failures[response.statusCode] ?? UnknownFailure();
+  ErrorDTO _processResponse(Response response) {
+    return ErrorDTO.fromMap(response.data);
   }
 
-  Future<Either<Failure, T>> _request<T>(
+  Future<Either<ErrorDTO, T>> _request<T>(
     String method,
     String url, {
     Map<String, dynamic> params = const {},
@@ -54,12 +46,11 @@ class Requester implements _Client {
     T Function(dynamic data)? parser,
   }) async {
     try {
-      final response = await _dio.request(
-        url,
-        data: body,
-        queryParameters: params,
-        options: Options(method: method),
-      );
+      final response = await _dio.request(url,
+          data: body,
+          queryParameters: params,
+          options: Options(method: method));
+
       if (response.statusCode == 200) {
         if (parser != null) {
           final parsed = parser(response.data);
@@ -72,52 +63,31 @@ class Requester implements _Client {
       }
       return Left(_processResponse(response));
     } on DioException catch (e) {
-      if (e.response != null) {
-        return Left(_processResponse(e.response!));
-      } else {
-        return Left(UnknownFailure());
-      }
-    } catch (e) {
-      return Left(UnknownFailure());
+      return Left(_processResponse(e.response!));
     }
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> get(
+  get(
     String url, [
     Map<String, dynamic> params = const {},
   ]) {
-    return _request<Map<String, dynamic>>(
-      'GET',
-      url,
-      params: params,
-      parser: (data) => Map<String, dynamic>.from(data),
-    );
+    return _request<Map<String, dynamic>>('GET', url,
+        params: params, parser: (data) => Map<String, dynamic>.from(data));
   }
 
   @override
-  Future<Either<Failure, bool>> post(String url, Map<String, dynamic> body) {
-    return _request<bool>(
-      'POST',
-      url,
-      body: body,
-    );
+  post(String url, Map<String, dynamic> body) {
+    return _request<bool>('POST', url, body: body);
   }
 
   @override
-  Future<Either<Failure, bool>> put(String url, Map<String, dynamic> body) {
-    return _request<bool>(
-      'PUT',
-      url,
-      body: body,
-    );
+  put(String url, Map<String, dynamic> body) {
+    return _request<bool>('PUT', url, body: body);
   }
 
   @override
-  Future<Either<Failure, bool>> delete(String url) {
-    return _request<bool>(
-      'DELETE',
-      url,
-    );
+  delete(String url) {
+    return _request<bool>('DELETE', url);
   }
 }

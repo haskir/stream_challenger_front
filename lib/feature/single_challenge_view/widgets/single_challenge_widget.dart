@@ -18,22 +18,23 @@ class _ChallengeView extends ConsumerState<ViewChallengeWidget> {
   Widget build(BuildContext context) {
     final challengeAsyncValue = ref.watch(challengeProvider(widget.id));
     return challengeAsyncValue.when(
-      data: (challenge) {
-        if (challenge == null) {
-          return const Center(child: Text('404 - Challenge not found'));
-        }
-        return Center(
+      data: (either) {
+        return either.fold(
+          (error) => Center(child: Text(error.toString())),
+          (challenge) => Center(
             child: Container(
-          decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(10),
+              decoration: BoxDecoration(
+                color: Colors.blue.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: EdgeInsets.all(16),
+              child: Text(
+                challenge.toString(),
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ),
-          padding: EdgeInsets.all(16),
-          child: Text(
-            challenge.toString(),
-            style: TextStyle(color: Colors.white),
-          ),
-        ));
+        );
       },
       loading: () => const Center(
         child: CircularProgressIndicator(),

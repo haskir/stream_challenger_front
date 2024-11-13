@@ -101,4 +101,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   String get token => _authService.token ?? '';
+
+  Future<String> getTokenAsync() async {
+    // Ждём, пока токен будет установлен
+    while (token.isEmpty) {
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+    return token;
+  }
 }

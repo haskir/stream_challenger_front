@@ -6,18 +6,28 @@ import 'package:stream_challenge/providers.dart';
 import 'appbar_widgets/auth_widget.dart';
 import 'appbar_widgets/logo.dart';
 
-class MainWidget extends StatelessWidget {
+class MainWidget extends ConsumerStatefulWidget {
   final Widget child;
   final Function(String) onLocaleChange;
 
-  const MainWidget(
-      {super.key, required this.child, required this.onLocaleChange});
+  const MainWidget({
+    super.key,
+    required this.child,
+    required this.onLocaleChange,
+  });
 
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return _MainWidgetState();
+  }
+}
+
+class _MainWidgetState extends ConsumerState<MainWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _AppBar(),
-      body: child,
+      body: widget.child,
     );
   }
 }

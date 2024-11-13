@@ -32,7 +32,7 @@ class ChallengesActions implements AbstractChallengeRequester {
     required CreateChallengeDTO challenge,
     required Requester client,
   }) async {
-    dynamic response = await client.post(url, challenge.toJson());
+    dynamic response = await client.post(url, challenge.toMap());
     if (response.isRight) {
       return true;
     }

@@ -91,7 +91,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                   );
                   await ChallengesActions().createChallenge(
                     challenge: challenge,
-                    client: ref.read(httpClientProvider),
+                    client: await ref.read(httpClientProvider.future),
                   );
                 }
               },

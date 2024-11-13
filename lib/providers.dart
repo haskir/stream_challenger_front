@@ -15,8 +15,9 @@ import 'main_widgets/router.dart';
 final localeProvider = StateProvider<Locale>((ref) => const Locale('en'));
 final authStateProvider =
     StateNotifierProvider<AuthNotifier, AuthState>((ref) => AuthNotifier());
-final httpClientProvider = Provider<Requester>((ref) {
-  String token = ref.watch(authStateProvider.notifier).token;
+final httpClientProvider = FutureProvider<Requester>((ref) async {
+  // Ждём, пока токен будет доступен
+  final token = await ref.watch(authStateProvider.notifier).getTokenAsync();
   return Requester(token);
 });
 

@@ -31,6 +31,9 @@ class ErrorDTO {
 
   factory ErrorDTO.fromJson(String source) =>
       ErrorDTO.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => JsonEncoder.withIndent('  ').convert(toMap());
 }
 
 class ResponseDTO {
