@@ -33,7 +33,6 @@ class ChallengesActions implements AbstractChallengeRequester {
     required Requester client,
   }) async {
     dynamic response = await client.post(url, challenge.toJson());
-    print(response);
     if (response.isRight) {
       return true;
     }

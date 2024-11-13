@@ -89,7 +89,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                     conditions: _controllers.map((e) => e.text).toList(),
                     performer_id: 76288410,
                   );
-                  print(challenge.toString());
                   await ChallengesActions().createChallenge(
                     challenge: challenge,
                     client: ref.read(httpClientProvider),

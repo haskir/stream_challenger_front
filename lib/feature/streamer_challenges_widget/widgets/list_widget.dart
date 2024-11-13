@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
@@ -34,7 +35,9 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
           challengesStream = _wsconnection.getChallengesStream();
         });
       } else {
-        print('Failed to connect to WebSocket.');
+        if (kDebugMode) {
+          print('Failed to connect to WebSocket.');
+        }
       }
     });
   }
@@ -48,10 +51,9 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
     return StreamBuilder<List<Challenge>>(
       stream: challengesStream,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting ||
+            snapshot.hasError) {
           return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(child: Text('No challenges available'));
         } else {
