@@ -187,7 +187,7 @@ class Challenge {
       Challenge.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => JsonEncoder.withIndent('  ').convert(toMap());
+  String toString() => prettyJson(toMap());
 }
 
 class CreateChallengeDTO {
@@ -237,4 +237,7 @@ class CreateChallengeDTO {
 
   factory CreateChallengeDTO.fromJson(String source) =>
       CreateChallengeDTO.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => prettyJson(toMap());
 }
