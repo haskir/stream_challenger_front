@@ -41,6 +41,9 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
         onDone: _handleDisconnect,
       );
       _startPing();
+      if (kDebugMode) {
+        print("WebSocket connected.");
+      }
       return true;
     } on WebSocketChannelException {
       if (kDebugMode) {

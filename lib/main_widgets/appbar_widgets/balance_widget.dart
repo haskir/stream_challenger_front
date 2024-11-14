@@ -1,4 +1,3 @@
-import 'package:stream_challenge/data/models/user_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/providers.dart';
 import 'package:flutter/material.dart';
