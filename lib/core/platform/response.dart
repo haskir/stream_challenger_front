@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'datetime_format.dart';
+
 class ErrorDTO {
   final int code;
   final String message;
@@ -33,7 +35,7 @@ class ErrorDTO {
       ErrorDTO.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => JsonEncoder.withIndent('  ').convert(toMap());
+  String toString() => prettyJson(toMap());
 }
 
 class ResponseDTO {
@@ -66,6 +68,9 @@ class ResponseDTO {
   }
 
   String toJson() => json.encode(toMap());
+
+  @override
+  String toString() => prettyJson(toMap());
 
   factory ResponseDTO.fromJson(String source) =>
       ResponseDTO.fromMap(json.decode(source) as Map<String, dynamic>);
