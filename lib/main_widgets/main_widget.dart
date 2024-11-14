@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/providers.dart';
 import 'appbar_widgets/auth_widget.dart';
+import 'appbar_widgets/balance_widget.dart';
 import 'appbar_widgets/logo.dart';
 
 class MainWidget extends ConsumerStatefulWidget {
@@ -71,7 +72,9 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
       leading: LogoWidget(onTap: () => context.go('/')),
       // Центральные элементы
       title: titleWidget,
+      // Правые элементы
       actions: [
+        BalanceWidget(),
         AuthWidget(),
         PopupMenuButton<String>(
           icon: const Icon(Icons.language),
