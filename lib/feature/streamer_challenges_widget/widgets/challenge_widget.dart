@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
+import 'package:stream_challenge/providers.dart';
 import 'action_buttons.dart';
 
-class ChallengeWidgetWithActions extends StatefulWidget {
+class ChallengeWidgetWithActions extends ConsumerStatefulWidget {
   final Challenge challenge;
-  //final AbstractChallengeRequester requester;
 
   const ChallengeWidgetWithActions({
     super.key,
@@ -14,12 +16,12 @@ class ChallengeWidgetWithActions extends StatefulWidget {
   });
 
   @override
-  State<ChallengeWidgetWithActions> createState() =>
+  ConsumerState<ChallengeWidgetWithActions> createState() =>
       _ChallengeWidgetWithActionsState();
 }
 
 class _ChallengeWidgetWithActionsState
-    extends State<ChallengeWidgetWithActions> {
+    extends ConsumerState<ChallengeWidgetWithActions> {
   late Challenge challenge;
 
   @override
@@ -66,7 +68,23 @@ class _ChallengeWidgetWithActionsState
             if (challenge.status == "PENDING") ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: getActionButtons(context),
+                children: getActionButtons(
+                  context: context,
+                  doAccept: () async {
+                    print("accept");
+                    final requester = await ref.read(httpClientProvider.future);
+                    await ChallengesActions().acceptChallenge(
+                      challenge,
+                      requester,
+                    );
+                  }, //() => acceptChallenge(challenge, widget.requester),
+                  doReject: () {
+                    print("reject");
+                  }, //() => rejectChallenge(challenge, widget.requester),
+                  doReport: () {
+                    print("report");
+                  }, //() => reportChallenge(challenge, widget.requester),
+                ),
               ),
             ] else if (challenge.status == "ACCEPTED") ...[
               Center(child: endChallengeButton(context)),

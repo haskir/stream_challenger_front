@@ -198,6 +198,7 @@ class CreateChallengeDTO {
   final double bet;
   final String currency;
   final DateTime due_at;
+  final bool is_visible = true;
 
   CreateChallengeDTO({
     required this.description,
@@ -209,6 +210,9 @@ class CreateChallengeDTO {
     required this.due_at,
   });
 
+  @override
+  String toString() => prettyJson(toMap());
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'description': description,
@@ -218,6 +222,7 @@ class CreateChallengeDTO {
       'bet': bet,
       'currency': currency,
       'due_at': due_at.millisecondsSinceEpoch,
+      'is_visible': is_visible,
     };
   }
 
@@ -237,7 +242,4 @@ class CreateChallengeDTO {
 
   factory CreateChallengeDTO.fromJson(String source) =>
       CreateChallengeDTO.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() => prettyJson(toMap());
 }

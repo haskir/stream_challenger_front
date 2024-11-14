@@ -10,7 +10,8 @@ abstract class _Client {
     Map<String, dynamic> params = const {},
   ]);
 
-  Future<Either<ErrorDTO, bool>> post(String url, Map<String, dynamic> body);
+  Future<Either<ErrorDTO, bool>> post(
+      String url, Map<String, dynamic> query, dynamic body);
 
   Future<Either<ErrorDTO, bool>> delete(String url);
 
@@ -26,6 +27,7 @@ class Requester implements _Client {
     _dio.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
+      'Access-Control-Allow-Origin': 'localhost',
     };
     if (kDebugMode) {
       _dio.interceptors.add(
@@ -41,7 +43,7 @@ class Requester implements _Client {
     String method,
     String url, {
     Map<String, dynamic> params = const {},
-    Map<String, dynamic> body = const {},
+    dynamic body = const {},
     T Function(dynamic data)? parser,
   }) async {
     try {
@@ -60,9 +62,20 @@ class Requester implements _Client {
           return Right(response.data as T);
         }
       }
+      if (response.statusCode == 500) {
+        return Left(ErrorDTO(
+          code: 500,
+          message: 'Server error',
+          type: 'error',
+        ));
+      }
       return Left(_processResponse(response));
     } on DioException catch (e) {
-      return Left(_processResponse(e.response!));
+      return Left(ErrorDTO(
+        code: e.response?.statusCode ?? 1,
+        message: e.message ?? 'Unknown error',
+        type: 'error',
+      ));
     }
   }
 
@@ -76,17 +89,17 @@ class Requester implements _Client {
   }
 
   @override
-  post(String url, Map<String, dynamic> body) {
-    return _request<bool>('POST', url, body: body);
+  post(url, query, body) {
+    return _request<bool>('POST', url, params: query, body: body);
   }
 
   @override
-  put(String url, Map<String, dynamic> body) {
+  put(url, body) {
     return _request<bool>('PUT', url, body: body);
   }
 
   @override
-  delete(String url) {
+  delete(url) {
     return _request<bool>('DELETE', url);
   }
 }

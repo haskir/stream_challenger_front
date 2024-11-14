@@ -1,12 +1,14 @@
+import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/providers.dart';
 
 abstract class AbstractChallengeRequester {
-/*   Future<void> acceptChallenge(Challenge challenge);
-  Future<void> rejectChallenge(Challenge challenge);
-  Future<void> reportChallenge(Challenge challenge);
-  Future<void> endChallenge(Challenge challenge); */
+  Future<void> acceptChallenge(Challenge challenge, Requester requester);
+  /* Future<void> rejectChallenge(Challenge challenge, Requester requester);
+  Future<void> reportChallenge(Challenge challenge, Requester requester);
+  static Future<void> endChallenge(Challenge challenge, Requester requester); */
   Future<bool> createChallenge({
     required CreateChallengeDTO challenge,
     required Requester client,
@@ -14,11 +16,21 @@ abstract class AbstractChallengeRequester {
 }
 
 class ChallengesActions implements AbstractChallengeRequester {
-  final String url = '${ApiPath.http}/challenges';
-/*   @override
-  Future<void> acceptChallenge(Challenge challenge) async {}
+  static String url = '${ApiPath.http}/challenges';
 
   @override
+  Future<void> acceptChallenge(Challenge challenge, Requester requester) async {
+    final result = await requester.post(
+      '/challenges/${challenge.id}',
+      {'status': 'ACCEPTED'},
+      null,
+    );
+    if (kDebugMode) {
+      print(result);
+    }
+  }
+
+/*    @override
   Future<void> rejectChallenge(Challenge challenge) async {}
 
   @override
@@ -32,10 +44,7 @@ class ChallengesActions implements AbstractChallengeRequester {
     required CreateChallengeDTO challenge,
     required Requester client,
   }) async {
-    dynamic response = await client.post(url, challenge.toMap());
-    if (response.isRight) {
-      return true;
-    }
-    return false;
+    Either response = await client.post(url, challenge.toMap(), {});
+    return response.isRight();
   }
 }

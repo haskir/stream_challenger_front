@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
+import '../challenges_actions.dart';
+
 ElevatedButton endChallengeButton(context) {
   return ElevatedButton(
     onPressed: () {},
@@ -17,12 +19,16 @@ ElevatedButton endChallengeButton(context) {
   );
 }
 
-List<Widget> getActionButtons(
-  BuildContext context,
-) {
+List<Widget> getActionButtons({
+  required BuildContext context,
+  required VoidCallback doAccept,
+  required VoidCallback doReject,
+  required VoidCallback doReport,
+}) {
   return [
+    // Reject Button
     TextButton(
-      onPressed: () {},
+      onPressed: doReject,
       style: ButtonStyle(
         minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40)),
         backgroundColor: WidgetStateProperty.all<Color>(
@@ -34,8 +40,9 @@ List<Widget> getActionButtons(
             style: TextStyle(color: Colors.white))
       ]),
     ),
+    // Accept Button
     TextButton(
-      onPressed: () {},
+      onPressed: doAccept,
       style: ButtonStyle(
         minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40)),
         backgroundColor: WidgetStateProperty.all<Color>(
@@ -47,8 +54,9 @@ List<Widget> getActionButtons(
             style: TextStyle(color: Colors.white))
       ]),
     ),
+    // Report Button
     TextButton(
-      onPressed: () {},
+      onPressed: doReport,
       style: ButtonStyle(
         minimumSize: WidgetStateProperty.all<Size>(const Size(80, 40)),
         backgroundColor: WidgetStateProperty.all<Color>(
