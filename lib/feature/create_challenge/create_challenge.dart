@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/auth_state.dart';
+import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
 import 'package:stream_challenge/providers.dart';
@@ -32,6 +34,13 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
     _betController.dispose();
     _dueAtController.dispose();
     super.dispose();
+  }
+
+  Future<String> _submit(CreateChallengeDTO challenge, Requester client) async {
+    return await ChallengesActions().challengeCreate(
+      challenge: challenge,
+      client: client,
+    );
   }
 
   @override
@@ -90,10 +99,10 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                     conditions: _controllers.map((e) => e.text).toList(),
                     performer_id: 76288410,
                   );
-                  await ChallengesActions().createChallenge(
-                    challenge: challenge,
-                    client: await ref.read(httpClientProvider.future),
-                  );
+                  final result = await _submit(
+                      challenge, await ref.watch(httpClientProvider.future));
+                  print("result: $result");
+                  Fluttertoast.showToast(msg: result);
                 }
               },
               child: Text(AppLocalizations.of(context).translate('Create')),

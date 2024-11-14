@@ -10,8 +10,11 @@ abstract class _Client {
     Map<String, dynamic> params = const {},
   ]);
 
-  Future<Either<ErrorDTO, bool>> post(
-      String url, Map<String, dynamic> query, dynamic body);
+  Future<Either<ErrorDTO, Map<String, dynamic>>> post(
+    String url, {
+    Map<String, dynamic> query,
+    Map<String, dynamic> body,
+  });
 
   Future<Either<ErrorDTO, bool>> delete(String url);
 
@@ -89,8 +92,13 @@ class Requester implements _Client {
   }
 
   @override
-  post(url, query, body) {
-    return _request<bool>('POST', url, params: query, body: body);
+  post(
+    url, {
+    Map<String, dynamic>? query,
+    Map<String, dynamic>? body,
+  }) {
+    return _request<Map<String, dynamic>>('POST', url,
+        params: query ?? {}, body: body ?? {});
   }
 
   @override

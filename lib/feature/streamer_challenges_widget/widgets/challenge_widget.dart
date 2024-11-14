@@ -1,6 +1,8 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
 import 'package:stream_challenge/providers.dart';
@@ -48,6 +50,12 @@ class _ChallengeWidgetWithActionsState
     }
   }
 
+  Future<Either> challengeAction(
+      Challenge challenge, Requester requester, String action) async {
+    return await ChallengesActions()
+        .challengeAction(challenge, requester, action);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -71,19 +79,17 @@ class _ChallengeWidgetWithActionsState
                 children: getActionButtons(
                   context: context,
                   doAccept: () async {
-                    print("accept");
                     final requester = await ref.read(httpClientProvider.future);
-                    await ChallengesActions().acceptChallenge(
-                      challenge,
-                      requester,
-                    );
-                  }, //() => acceptChallenge(challenge, widget.requester),
-                  doReject: () {
-                    print("reject");
-                  }, //() => rejectChallenge(challenge, widget.requester),
-                  doReport: () {
-                    print("report");
-                  }, //() => reportChallenge(challenge, widget.requester),
+                    await challengeAction(challenge, requester, "accept");
+                  },
+                  doReject: () async {
+                    final requester = await ref.read(httpClientProvider.future);
+                    await challengeAction(challenge, requester, "reject");
+                  },
+                  doReport: () async {
+                    final requester = await ref.read(httpClientProvider.future);
+                    await challengeAction(challenge, requester, "report");
+                  },
                 ),
               ),
             ] else if (challenge.status == "ACCEPTED") ...[
