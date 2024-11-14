@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 
 class BetField extends StatefulWidget {
   final TextEditingController controller;
@@ -26,22 +27,22 @@ class _BetFieldState extends State<BetField> {
       keyboardType: TextInputType.number,
       maxLength: widget.maximumBet.toString().length,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      decoration: const InputDecoration(
-        labelText: 'Ставка',
+      decoration: InputDecoration(
+        labelText: AppLocalizations.of(context).translate('Bet'),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Пожалуйста, введите ставку';
+          return AppLocalizations.of(context).translate("Please enter bet");
         }
         final double? parsedValue = double.tryParse(value);
         if (parsedValue == null) {
-          return 'Ставка должна быть числом';
+          return AppLocalizations.of(context).translate("Bet must be a number");
         }
         if (parsedValue < widget.minimumBet) {
-          return 'Ставка должна быть не меньше ${widget.minimumBet}';
+          return '${AppLocalizations.of(context).translate("Bet must be at least")} ${widget.minimumBet}';
         }
         if (parsedValue > widget.maximumBet) {
-          return 'Ставка не должна превышать ${widget.maximumBet}';
+          return '${AppLocalizations.of(context).translate("Bet must be at most")} ${widget.maximumBet}';
         }
         return null;
       },

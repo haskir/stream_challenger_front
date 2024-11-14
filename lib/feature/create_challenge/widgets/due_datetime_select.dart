@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 
 class DueDateTimeField extends StatefulWidget {
   final TextEditingController controller;
@@ -25,8 +26,8 @@ class _DueDateTimeFieldState extends State<DueDateTimeField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      decoration: const InputDecoration(
-        labelText: 'Due Date & Time',
+      decoration: InputDecoration(
+        labelText: AppLocalizations.of(context).translate('Due Date & Time'),
       ),
       readOnly: true,
       onTap: () async {
@@ -38,8 +39,7 @@ class _DueDateTimeFieldState extends State<DueDateTimeField> {
           lastDate: DateTime.now().add(const Duration(days: 7)),
         );
 
-        if (pickedDate != null) {
-          // Выбор времени
+        if (pickedDate != null && context.mounted) {
           TimeOfDay? pickedTime = await showTimePicker(
             context: context,
             initialTime: TimeOfDay.fromDateTime(_selectedDateTime!),

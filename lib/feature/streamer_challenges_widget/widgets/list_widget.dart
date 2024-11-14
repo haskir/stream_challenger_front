@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stream_challenge/core/platform/datetime_format.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/providers.dart';
 
@@ -10,6 +10,15 @@ import 'challenge_widget.dart';
 
 class PanelWidget extends ConsumerStatefulWidget {
   const PanelWidget({super.key});
+
+  static const Map<String, String> headers = {
+    'ACCEPTED': "Accepted Challenges",
+    'PENDING': "New Challenges",
+    'REJECTED': "Rejected Challenges",
+    'FAILED': "Failed Challenges",
+    'HIDDEN': "Hidden Challenges",
+    'SUCCESSFUL': "Successful Challenges",
+  };
 
   @override
   ConsumerState<PanelWidget> createState() => _PanelWidgetState();
@@ -62,7 +71,9 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
       return ExpansionPanel(
         headerBuilder: (BuildContext context, bool isExpanded) {
           return ListTile(
-            title: Text('$state (${challenges.length})'),
+            title: Text(AppLocalizations.of(context)
+                .translate(PanelWidget.headers[state]!)),
+            trailing: Text('(${challenges.length})'),
           );
         },
         body: Column(
@@ -90,7 +101,10 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
             snapshot.hasError) {
           return Center(child: CircularProgressIndicator());
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No challenges available'));
+          return Center(
+              child: Text(
+            AppLocalizations.of(context).translate('No challenges available'),
+          ));
         } else {
           final challenges = snapshot.data!;
           final challengesByState = _groupChallengesByState(challenges);

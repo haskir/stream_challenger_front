@@ -35,7 +35,6 @@ class AuthWidget extends ConsumerWidget {
         ),
       );
     }
-
     return Center(
       child: TextButton(
         child: Text(AppLocalizations.of(context).translate('Auth')),

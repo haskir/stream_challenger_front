@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-
 import 'action_buttons.dart';
 
 class ChallengeWidgetWithActions extends StatefulWidget {
@@ -31,16 +31,17 @@ class _ChallengeWidgetWithActionsState
   Text getStatusText(Challenge challenge) {
     switch (challenge.status) {
       case "COMPLETED":
-        return const Text("Status: Completed",
+        return Text(AppLocalizations.of(context).translate("Status: Completed"),
             style: TextStyle(color: Colors.green));
       case "REJECTED":
-        return const Text("Status: Rejected",
+        return Text(AppLocalizations.of(context).translate("Status: Rejected"),
             style: TextStyle(color: Colors.red));
       case "ACCEPTED":
-        return const Text("Status: In Progress",
+        return Text(
+            AppLocalizations.of(context).translate("Status: In Progress"),
             style: TextStyle(color: Colors.blue));
       default:
-        return const Text("Status: Hidden",
+        return Text(AppLocalizations.of(context).translate("Status: Hidden"),
             style: TextStyle(color: Colors.grey));
     }
   }
@@ -68,7 +69,7 @@ class _ChallengeWidgetWithActionsState
                 children: getActionButtons(context),
               ),
             ] else if (challenge.status == "ACCEPTED") ...[
-              Center(child: endChallengeButton()),
+              Center(child: endChallengeButton(context)),
             ],
             const SizedBox(height: 8),
             Row(

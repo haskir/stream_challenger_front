@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
-ElevatedButton endChallengeButton() {
+ElevatedButton endChallengeButton(context) {
   return ElevatedButton(
     onPressed: () {},
     style: ButtonStyle(
@@ -11,7 +12,8 @@ ElevatedButton endChallengeButton() {
       ),
       minimumSize: WidgetStateProperty.all<Size>(const Size(500, 40)),
     ),
-    child: const Text("End", style: TextStyle(color: Colors.white)),
+    child: Text(AppLocalizations.of(context).translate('End'),
+        style: TextStyle(color: Colors.white)),
   );
 }
 
@@ -26,9 +28,10 @@ List<Widget> getActionButtons(
         backgroundColor: WidgetStateProperty.all<Color>(
             const Color.fromARGB(255, 145, 144, 144)),
       ),
-      child: const Row(children: [
+      child: Row(children: [
         Icon(Icons.close),
-        Text("Reject", style: TextStyle(color: Colors.white))
+        Text(AppLocalizations.of(context).translate('Reject'),
+            style: TextStyle(color: Colors.white))
       ]),
     ),
     TextButton(
@@ -38,9 +41,10 @@ List<Widget> getActionButtons(
         backgroundColor: WidgetStateProperty.all<Color>(
             const Color.fromARGB(255, 127, 209, 130)),
       ),
-      child: const Row(children: [
+      child: Row(children: [
         Icon(Icons.check),
-        Text("Accept", style: TextStyle(color: Colors.white))
+        Text(AppLocalizations.of(context).translate('Accept'),
+            style: TextStyle(color: Colors.white))
       ]),
     ),
     TextButton(
@@ -50,9 +54,10 @@ List<Widget> getActionButtons(
         backgroundColor: WidgetStateProperty.all<Color>(
             const Color.fromARGB(186, 212, 3, 3)),
       ),
-      child: const Row(children: [
+      child: Row(children: [
         Icon(Icons.report_outlined),
-        Text("Report", style: TextStyle(color: Colors.white))
+        Text(AppLocalizations.of(context).translate('Report'),
+            style: TextStyle(color: Colors.white))
       ]),
     ),
   ];
@@ -77,15 +82,17 @@ class ChallengeInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(children: [
-        const Text('Bet:'),
+        Text('${AppLocalizations.of(context).translate('Bet')}:'),
         Text(
           ' ${challenge.bet} ${challenge.currency}',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ]),
-      Text('Due: ${DateFormat('dd.MM.yyyy HH:mm').format(challenge.due_at)}'),
+      Text(
+          '${AppLocalizations.of(context).translate('Due')}: ${DateFormat('dd.MM.yyyy HH:mm').format(challenge.due_at)}'),
       const SizedBox(height: 8),
-      Text('Conditions:', style: Theme.of(context).textTheme.titleMedium),
+      Text('${AppLocalizations.of(context).translate('Conditions')}:',
+          style: Theme.of(context).textTheme.titleMedium),
       ...challenge.conditions.map((condition) => Text('- $condition')),
       const SizedBox(height: 16),
     ]);

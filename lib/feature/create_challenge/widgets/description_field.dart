@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 
 class DescriptionField extends StatelessWidget {
   final TextEditingController controller;
@@ -10,12 +11,13 @@ class DescriptionField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       maxLength: 255,
-      decoration: const InputDecoration(
-        labelText: 'Описание',
+      decoration: InputDecoration(
+        labelText: AppLocalizations.of(context).translate("Description"),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Пожалуйста, введите описание';
+          return AppLocalizations.of(context)
+              .translate("Please enter description");
         }
         return null;
       },

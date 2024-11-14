@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 
 import 'package:stream_challenge/core/platform/auth_state.dart';
 import 'package:stream_challenge/data/models/currency.dart';
@@ -19,12 +20,13 @@ class CurrencyPickWidget extends ConsumerWidget {
               DropdownMenuItem(value: currency, child: Text(currency)))
           .toList(),
       onChanged: null,
-      decoration: const InputDecoration(
-        labelText: 'Валюта',
+      decoration: InputDecoration(
+        labelText: AppLocalizations.of(context).translate("Currency"),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Пожалуйста, выберите валюту';
+          return AppLocalizations.of(context)
+              .translate('Please select currency');
         }
         return null;
       },

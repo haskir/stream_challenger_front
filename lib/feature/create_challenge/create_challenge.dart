@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/auth_state.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
@@ -95,7 +96,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                   );
                 }
               },
-              child: const Text('Создать'),
+              child: Text(AppLocalizations.of(context).translate('Create')),
             ),
           ],
         ),

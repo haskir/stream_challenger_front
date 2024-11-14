@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 
 class ConditionsSection extends StatefulWidget {
   final List<TextEditingController> controllers;
@@ -36,6 +37,7 @@ class _ConditionsSectionState extends State<ConditionsSection> {
       lines.add(ConditionLineEdit(
         controller: controller,
         onFieldSubmitted: (_) => _removeCondition,
+        context: context,
       ));
     });
   }
@@ -57,7 +59,7 @@ class _ConditionsSectionState extends State<ConditionsSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(children: [
-          const Text('Условия:'),
+          Text('${AppLocalizations.of(context).translate('Conditions')}:'),
           const SizedBox(width: 10),
           ElevatedButton(
             onPressed: _addCondition,
@@ -84,15 +86,17 @@ class ConditionLineEdit extends TextFormField {
     super.onChanged,
     super.onFieldSubmitted,
     required super.controller,
+    context,
   }) : super(
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Пожалуйста, введите условие';
+              return AppLocalizations.of(context)
+                  .translate('Please enter condition');
             }
             return null;
           },
-          decoration: const InputDecoration(
-            hintText: "Введите условие",
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context).translate('Condition'),
           ),
           maxLength: 255,
         );
