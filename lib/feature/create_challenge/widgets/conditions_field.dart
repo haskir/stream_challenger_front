@@ -60,8 +60,7 @@ class _ConditionsSectionState extends State<ConditionsSection> {
       children: [
         Row(children: [
           Text('${AppLocalizations.of(context).translate('Conditions')}:'),
-          const SizedBox(width: 10),
-          ElevatedButton(
+          TextButton(
             onPressed: _addCondition,
             child: Icon(Icons.add),
           ),
