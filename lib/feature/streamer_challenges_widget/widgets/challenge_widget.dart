@@ -25,6 +25,7 @@ class ChallengeWidgetWithActions extends ConsumerStatefulWidget {
 class _ChallengeWidgetWithActionsState
     extends ConsumerState<ChallengeWidgetWithActions> {
   late Challenge challenge;
+  bool? _isLoading;
 
   @override
   void initState() {
@@ -52,73 +53,95 @@ class _ChallengeWidgetWithActionsState
 
   Future<Either> challengeAction(
       Challenge challenge, Requester requester, String action) async {
-    return await ChallengesActions()
-        .challengeAction(challenge, requester, action);
+    _isLoading = true;
+    setState(() {});
+    final result =
+        await ChallengesActions().challengeAction(challenge, requester, action);
+    _isLoading = false;
+    setState(() {});
+    return result;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              challenge.description,
-              style: Theme.of(context).textTheme.titleLarge,
+    return Stack(
+      children: [
+        if ((_isLoading ?? false))
+          Container(
+            color: Colors.black54,
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
-            const SizedBox(height: 8),
-            ChallengeInfoWidget(challenge: challenge),
-            const SizedBox(height: 8),
-            if (!["HIDDEN", "REJECTED", "COMPLETED", "FAILED"]
-                .contains(challenge.status)) ...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: getActionButtons(
-                  status: challenge.status,
-                  context: context,
-                  doAccept: () async {
-                    final requester = await ref.read(httpClientProvider.future);
-                    await challengeAction(challenge, requester, "accept");
-                  },
-                  doReject: () async {
-                    final requester = await ref.read(httpClientProvider.future);
-                    await challengeAction(challenge, requester, "reject");
-                  },
-                  doReport: () async {
-                    final requester = await ref.read(httpClientProvider.future);
-                    await challengeAction(challenge, requester, "report");
-                  },
-                  doEnd: () async {
-                    final requester = await ref.read(httpClientProvider.future);
-                    await challengeAction(challenge, requester, "end");
-                  },
-                ),
+          ),
+        if (!(_isLoading ?? false))
+          Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    challenge.description,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  ChallengeInfoWidget(challenge: challenge),
+                  const SizedBox(height: 8),
+                  if (!["HIDDEN", "REJECTED", "COMPLETED", "FAILED"]
+                      .contains(challenge.status)) ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: getActionButtons(
+                        status: challenge.status,
+                        context: context,
+                        doAccept: () async {
+                          final requester =
+                              await ref.read(httpClientProvider.future);
+                          await challengeAction(challenge, requester, "accept");
+                        },
+                        doReject: () async {
+                          final requester =
+                              await ref.read(httpClientProvider.future);
+                          await challengeAction(challenge, requester, "reject");
+                        },
+                        doReport: () async {
+                          final requester =
+                              await ref.read(httpClientProvider.future);
+                          await challengeAction(challenge, requester, "report");
+                        },
+                        doEnd: () async {
+                          final requester =
+                              await ref.read(httpClientProvider.future);
+                          await challengeAction(challenge, requester, "end");
+                        },
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: getStatusText(challenge),
+                        ),
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: getAuthorInfo(challenge.author),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
-            ],
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: getStatusText(challenge),
-                  ),
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: getAuthorInfo(challenge.author),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
+            ),
+          ),
+      ],
     );
   }
 }

@@ -50,6 +50,7 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
     if (authState.isAuthenticated) {
       titleWidget = Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           TextButton(
             onPressed: () => context.go('/challenge_create'),
@@ -68,6 +69,8 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
     }
     return AppBar(
       backgroundColor: Colors.blue[50],
+      centerTitle: true,
+
       // Левые элементы
       leading: LogoWidget(onTap: () => context.go('/')),
       // Центральные элементы
