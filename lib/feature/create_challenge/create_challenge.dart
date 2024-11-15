@@ -101,7 +101,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                   );
                   final result = await _submit(
                       challenge, await ref.watch(httpClientProvider.future));
-                  print("result: $result");
                   Fluttertoast.showToast(msg: result);
                 }
               },

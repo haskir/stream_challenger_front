@@ -22,7 +22,7 @@ List<GoRoute> routes = [
   ),
   GoRoute(
     path: '/challenges',
-    builder: (context, state) => const ChallengeListWidget(),
+    builder: (context, state) => const ConfirmationDialogExample(),
   ),
   GoRoute(
     path: '/profile',
