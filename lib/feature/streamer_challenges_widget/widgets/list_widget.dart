@@ -13,6 +13,7 @@ class PanelWidget extends ConsumerStatefulWidget {
 
   static const Map<String, String> headers = {
     'ACCEPTED': "Accepted Challenges",
+    "ENDED": "Waiting for voting",
     'PENDING': "New Challenges",
     'REJECTED': "Rejected Challenges",
     'FAILED': "Failed Challenges",
@@ -27,6 +28,7 @@ class PanelWidget extends ConsumerStatefulWidget {
 class _PanelWidgetState extends ConsumerState<PanelWidget> {
   final Map<String, bool> _expandedStates = {
     'ACCEPTED': false,
+    'ENDED': false,
     'PENDING': false,
     'REJECTED': false,
     'FAILED': false,
@@ -35,6 +37,7 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
   };
   static const Map<String, Color> _colors = {
     'ACCEPTED': Colors.blue,
+    'ENDED': Colors.yellow,
     'PENDING': Colors.orange,
     'REJECTED': Colors.black,
     'FAILED': Colors.red,
