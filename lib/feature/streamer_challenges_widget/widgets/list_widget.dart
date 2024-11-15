@@ -33,6 +33,14 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
     'HIDDEN': false,
     'SUCCESSFUL': false,
   };
+  static const Map<String, Color> _colors = {
+    'ACCEPTED': Colors.blue,
+    'PENDING': Colors.orange,
+    'REJECTED': Colors.black,
+    'FAILED': Colors.red,
+    'HIDDEN': Colors.grey,
+    'SUCCESSFUL': Colors.green,
+  };
 
   late ChallengesPanelWebSocket _wsconnection;
 
@@ -73,15 +81,18 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
           return ListTile(
             title: Text(AppLocalizations.of(context)
                 .translate(PanelWidget.headers[state]!)),
-            trailing: Text('(${challenges.length})'),
+            trailing: Text('(${challenges.length})',
+                style: TextStyle(
+                  color: _colors[state],
+                  fontSize: 18,
+                )),
           );
         },
         body: Column(
-          children: challenges
-              .map((challenge) =>
-                  ChallengeWidgetWithActions(challenge: challenge))
-              .toList(),
-        ),
+            children: challenges
+                .map((challenge) =>
+                    ChallengeWidgetWithActions(challenge: challenge))
+                .toList()),
         isExpanded: _expandedStates[state]!,
         canTapOnHeader: true,
       );
@@ -133,8 +144,8 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
       List<Challenge> challenges) {
     final Map<String, List<Challenge>> challengesByState = {
       'ACCEPTED': [],
-      'REJECTED': [],
       'PENDING': [],
+      'REJECTED': [],
       'SUCCESSFUL': [],
       'FAILED': [],
       'HIDDEN': [],

@@ -44,13 +44,4 @@ class ChallengesActions implements AbstractChallengeRequester {
     }
     return result;
   }
-
-/*    @override
-  Future<void> rejectChallenge(Challenge challenge) async {}
-
-  @override
-  Future<void> reportChallenge(Challenge challenge) async {}
-
-  @override
-  Future<void> endChallenge(Challenge challenge) async {} */
 }

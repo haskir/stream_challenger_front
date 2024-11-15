@@ -3,28 +3,30 @@ import 'package:intl/intl.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
-import '../challenges_actions.dart';
-
-ElevatedButton endChallengeButton(context) {
-  return ElevatedButton(
-    onPressed: () {},
-    style: ButtonStyle(
-      backgroundColor: WidgetStateProperty.all<Color>(
-        const Color.fromARGB(255, 23, 185, 104),
-      ),
-      minimumSize: WidgetStateProperty.all<Size>(const Size(500, 40)),
-    ),
-    child: Text(AppLocalizations.of(context).translate('End'),
-        style: TextStyle(color: Colors.white)),
-  );
-}
-
 List<Widget> getActionButtons({
+  required String status,
   required BuildContext context,
   required VoidCallback doAccept,
   required VoidCallback doReject,
   required VoidCallback doReport,
+  required VoidCallback doEnd,
 }) {
+  if (status == 'ACCEPTED') {
+    // End Button
+    return [
+      ElevatedButton(
+        onPressed: doEnd,
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all<Color>(
+            const Color.fromARGB(255, 23, 185, 104),
+          ),
+          minimumSize: WidgetStateProperty.all<Size>(const Size(500, 40)),
+        ),
+        child: Text(AppLocalizations.of(context).translate('End'),
+            style: TextStyle(color: Colors.white)),
+      )
+    ];
+  }
   return [
     // Reject Button
     TextButton(

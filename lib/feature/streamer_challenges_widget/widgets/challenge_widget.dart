@@ -73,10 +73,12 @@ class _ChallengeWidgetWithActionsState
             const SizedBox(height: 8),
             ChallengeInfoWidget(challenge: challenge),
             const SizedBox(height: 8),
-            if (challenge.status == "PENDING") ...[
+            if (!["HIDDEN", "REJECTED", "COMPLETED", "FAILED"]
+                .contains(challenge.status)) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: getActionButtons(
+                  status: challenge.status,
                   context: context,
                   doAccept: () async {
                     final requester = await ref.read(httpClientProvider.future);
@@ -90,10 +92,12 @@ class _ChallengeWidgetWithActionsState
                     final requester = await ref.read(httpClientProvider.future);
                     await challengeAction(challenge, requester, "report");
                   },
+                  doEnd: () async {
+                    final requester = await ref.read(httpClientProvider.future);
+                    await challengeAction(challenge, requester, "end");
+                  },
                 ),
               ),
-            ] else if (challenge.status == "ACCEPTED") ...[
-              Center(child: endChallengeButton(context)),
             ],
             const SizedBox(height: 8),
             Row(
