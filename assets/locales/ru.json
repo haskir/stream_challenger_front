@@ -4,7 +4,7 @@
   "Challenges": "Испытания",
   "Challenge": "Испытание",
   "Profile": "Профиль",
-  "Auth": "Авторизация через Twitch",
+  "Auth": "Авторизация",
   "logout": "Выйти",
   "My Panel": "Моя панель",
   "Please log in": "Пожалуйста, авторизуйтесь",
@@ -42,6 +42,7 @@
   "Rejected Challenges": "Отклонённые испытания",
   "Failed Challenges": "Невыполненные испытания",
   "Hidden Challenges": "Скрытые испытания",
-  "Successful Challenges": "Выполненные испытания"
+  "Successful Challenges": "Выполненные испытания",
+  "Start poll": "Начать голосование"
   }
   

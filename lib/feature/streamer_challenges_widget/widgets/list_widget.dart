@@ -129,9 +129,7 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
                 expansionCallback: (int index, bool isExpanded) {
                   setState(() {
                     final state = challengesByState.keys.elementAt(index);
-                    if (challengesByState[state]!.isNotEmpty) {
-                      _expandedStates[state] = isExpanded;
-                    }
+                    _expandedStates[state] = isExpanded;
                   });
                 },
                 children: _buildExpansionPanels(challengesByState),
@@ -155,6 +153,9 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
     };
 
     for (var challenge in challenges) {
+      if (challenge.status == 'ENDED') {
+        challengesByState['ACCEPTED']?.add(challenge);
+      }
       challengesByState[challenge.status]?.add(challenge);
     }
     return challengesByState;

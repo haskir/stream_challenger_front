@@ -6,71 +6,85 @@ import 'package:stream_challenge/data/models/challenge.dart';
 List<Widget> getActionButtons({
   required String status,
   required BuildContext context,
-  required VoidCallback doAccept,
-  required VoidCallback doReject,
-  required VoidCallback doReport,
-  required VoidCallback doEnd,
+  required Function(String action) actionCallback,
 }) {
-  if (status == 'ACCEPTED') {
-    // End Button
-    return [
-      ElevatedButton(
-        onPressed: doEnd,
-        style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all<Color>(
-            const Color.fromARGB(255, 23, 185, 104),
+  switch (status) {
+    case 'ACCEPTED':
+      return [
+        ElevatedButton(
+          onPressed: () => actionCallback("END"),
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all<Color>(
+              const Color.fromARGB(255, 23, 185, 104),
+            ),
+            minimumSize: WidgetStateProperty.all<Size>(const Size(500, 40)),
           ),
-          minimumSize: WidgetStateProperty.all<Size>(const Size(500, 40)),
+          child: Text(AppLocalizations.of(context).translate('End'),
+              style: TextStyle(color: Colors.white)),
+        )
+      ];
+    case 'ENDED':
+      return [
+        ElevatedButton(
+          onPressed: () => actionCallback("START_POLL"),
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all<Color>(
+              const Color.fromARGB(255, 23, 185, 104),
+            ),
+            minimumSize: WidgetStateProperty.all<Size>(const Size(500, 40)),
+          ),
+          child: Text(AppLocalizations.of(context).translate('Start poll'),
+              style: TextStyle(color: Colors.white)),
+        )
+      ];
+    case 'PENDING':
+      return [
+        // Reject Button
+        TextButton(
+          onPressed: () => actionCallback("REJECT"),
+          style: ButtonStyle(
+            minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40)),
+            backgroundColor: WidgetStateProperty.all<Color>(
+                const Color.fromARGB(255, 145, 144, 144)),
+          ),
+          child: Row(children: [
+            Icon(Icons.close),
+            Text(AppLocalizations.of(context).translate('Reject'),
+                style: TextStyle(color: Colors.white))
+          ]),
         ),
-        child: Text(AppLocalizations.of(context).translate('End'),
-            style: TextStyle(color: Colors.white)),
-      )
-    ];
+        // Accept Button
+        TextButton(
+          onPressed: () => actionCallback("ACCEPT"),
+          style: ButtonStyle(
+            minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40)),
+            backgroundColor: WidgetStateProperty.all<Color>(
+                const Color.fromARGB(255, 127, 209, 130)),
+          ),
+          child: Row(children: [
+            Icon(Icons.check),
+            Text(AppLocalizations.of(context).translate('Accept'),
+                style: TextStyle(color: Colors.white))
+          ]),
+        ),
+        // Report Button
+        TextButton(
+          onPressed: () => actionCallback("REPORT"),
+          style: ButtonStyle(
+            minimumSize: WidgetStateProperty.all<Size>(const Size(80, 40)),
+            backgroundColor: WidgetStateProperty.all<Color>(
+                const Color.fromARGB(186, 212, 3, 3)),
+          ),
+          child: Row(children: [
+            Icon(Icons.report_outlined),
+            Text(AppLocalizations.of(context).translate('Report'),
+                style: TextStyle(color: Colors.white))
+          ]),
+        ),
+      ];
+    default:
+      return [];
   }
-  return [
-    // Reject Button
-    TextButton(
-      onPressed: doReject,
-      style: ButtonStyle(
-        minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40)),
-        backgroundColor: WidgetStateProperty.all<Color>(
-            const Color.fromARGB(255, 145, 144, 144)),
-      ),
-      child: Row(children: [
-        Icon(Icons.close),
-        Text(AppLocalizations.of(context).translate('Reject'),
-            style: TextStyle(color: Colors.white))
-      ]),
-    ),
-    // Accept Button
-    TextButton(
-      onPressed: doAccept,
-      style: ButtonStyle(
-        minimumSize: WidgetStateProperty.all<Size>(const Size(180, 40)),
-        backgroundColor: WidgetStateProperty.all<Color>(
-            const Color.fromARGB(255, 127, 209, 130)),
-      ),
-      child: Row(children: [
-        Icon(Icons.check),
-        Text(AppLocalizations.of(context).translate('Accept'),
-            style: TextStyle(color: Colors.white))
-      ]),
-    ),
-    // Report Button
-    TextButton(
-      onPressed: doReport,
-      style: ButtonStyle(
-        minimumSize: WidgetStateProperty.all<Size>(const Size(80, 40)),
-        backgroundColor: WidgetStateProperty.all<Color>(
-            const Color.fromARGB(186, 212, 3, 3)),
-      ),
-      child: Row(children: [
-        Icon(Icons.report_outlined),
-        Text(AppLocalizations.of(context).translate('Report'),
-            style: TextStyle(color: Colors.white))
-      ]),
-    ),
-  ];
 }
 
 Row getAuthorInfo(ChallengeAuthor author) {

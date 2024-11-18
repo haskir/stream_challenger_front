@@ -97,7 +97,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                     due_at: DateFormat('dd.MM.yyyy HH:mm')
                         .parse(_dueAtController.text),
                     conditions: _controllers.map((e) => e.text).toList(),
-                    performer_id: 76288410,
+                    performer_id: user.id,
                   );
                   final result = await _submit(
                       challenge, await ref.watch(httpClientProvider.future));

@@ -5,11 +5,11 @@ import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/providers.dart';
 
 abstract class AbstractChallengeRequester {
-  Future<Either> challengeAction(
-    Challenge challenge,
-    Requester requester,
-    String action,
-  );
+  Future<Either> challengeAction({
+    required Challenge challenge,
+    required Requester requester,
+    required String action,
+  });
   Future<String> challengeCreate({
     required CreateChallengeDTO challenge,
     required Requester client,
@@ -32,11 +32,11 @@ class ChallengesActions implements AbstractChallengeRequester {
   }
 
   @override
-  Future<Either> challengeAction(
-    Challenge challenge,
-    Requester requester,
-    String action,
-  ) async {
+  Future<Either> challengeAction({
+    required Challenge challenge,
+    required Requester requester,
+    required String action,
+  }) async {
     final result = await requester.post('/challenges/${challenge.id}',
         query: {'action': action.toUpperCase()});
     if (kDebugMode) {
