@@ -36,27 +36,21 @@ class _ChallengeWidgetWithActionsState
   }
 
   Text getStatusText(Challenge challenge) {
-    switch (challenge.status) {
-      case "ENDED":
-        return Text(AppLocalizations.of(context).translate("Status: Ended"),
-            style: TextStyle(color: Colors.blueAccent));
-      case "COMPLETED":
-        return Text(AppLocalizations.of(context).translate("Status: Completed"),
-            style: TextStyle(color: Colors.green));
-      case "REJECTED":
-        return Text(AppLocalizations.of(context).translate("Status: Rejected"),
-            style: TextStyle(color: Colors.red));
-      case "ACCEPTED":
-        return Text(
-            AppLocalizations.of(context).translate("Status: In Progress"),
-            style: TextStyle(color: Colors.blue));
-      case "PENDING":
-        return Text(AppLocalizations.of(context).translate("Status: Pending"),
-            style: TextStyle(color: Colors.yellow));
-      default:
-        return Text(AppLocalizations.of(context).translate("Status: DEFAULT"),
-            style: TextStyle(color: Colors.grey));
-    }
+    String text = "${AppLocalizations.of(context).translate("Status")}: ";
+    text += AppLocalizations.of(context).translate(challenge.status);
+    const Map colors = {
+      "ENDED": Colors.blueAccent,
+      "SUCCESSFUL": Colors.green,
+      "FAILED": Colors.black,
+      "REJECTED": Colors.red,
+      "ACCEPTED": Colors.blue,
+      "PENDING": Colors.orange,
+    };
+    return Text(text,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: colors[challenge.status] ?? Colors.grey,
+        ));
   }
 
   Future<Either> challengeAction(
@@ -106,7 +100,7 @@ class _ChallengeWidgetWithActionsState
                 const SizedBox(height: 8),
                 ChallengeInfoWidget(challenge: challenge),
                 const SizedBox(height: 8),
-                if (!["HIDDEN", "REJECTED", "COMPLETED", "FAILED"]
+                if (!["HIDDEN", "REJECTED", "SUCCESSFUL", "FAILED"]
                     .contains(challenge.status)) ...[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,

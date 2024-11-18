@@ -39,8 +39,8 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
     'ACCEPTED': Colors.blue,
     'ENDED': Colors.yellow,
     'PENDING': Colors.orange,
-    'REJECTED': Colors.black,
-    'FAILED': Colors.red,
+    'REJECTED': Colors.red,
+    'FAILED': Colors.black,
     'HIDDEN': Colors.grey,
     'SUCCESSFUL': Colors.green,
   };

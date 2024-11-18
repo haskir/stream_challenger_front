@@ -11,10 +11,11 @@
   "No challenges.": "Список испытаний пуст",
   "Due Date": "Срок выполнения",
   "No challenges available": "Список испытаний пуст",
-  "Status: Completed": "Статус: Завершен",
-  "Status: Rejected": "Статус: Отклонён",
-  "Status: In Progress": "Статус: В процессе выполнения",
-  "Status: Hidden": "Статус: Скрыт",
+  "Status": "Статус",
+  "Completed": "Завершен",
+  "Rejected": "Отклонён",
+  "In Progress": "В процессе выполнения",
+  "Hidden": "Скрыт",
   "End": "Закончить",
   "Reject": "Отклонить",
   "Accept": "Принять",
@@ -43,6 +44,8 @@
   "Failed Challenges": "Невыполненные испытания",
   "Hidden Challenges": "Скрытые испытания",
   "Successful Challenges": "Выполненные испытания",
-  "Start poll": "Начать голосование"
+  "Start poll": "Начать голосование",
+  "SUCCESSFUL": "Выполнен :)",
+  "FAILED": "Провален :("
   }
   
