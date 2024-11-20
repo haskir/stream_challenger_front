@@ -1,25 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/feature/streamer_challenges_widget/web_socket_client.dart';
+import 'package:stream_challenge/feature/streamer_challenges_widget/widgets/challenges_panel_builder.dart';
 import 'package:stream_challenge/providers.dart';
-
-import '../web_socket_client.dart';
-import 'challenge_widget.dart';
 
 class PanelWidget extends ConsumerStatefulWidget {
   const PanelWidget({super.key});
-
-  static const Map<String, String> headers = {
-    'ACCEPTED': "Accepted Challenges",
-    "ENDED": "Waiting for voting",
-    'PENDING': "New Challenges",
-    'REJECTED': "Rejected Challenges",
-    'FAILED': "Failed Challenges",
-    'HIDDEN': "Hidden Challenges",
-    'SUCCESSFUL': "Successful Challenges",
-  };
 
   @override
   ConsumerState<PanelWidget> createState() => _PanelWidgetState();
@@ -35,18 +26,8 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
     'HIDDEN': false,
     'SUCCESSFUL': false,
   };
-  static const Map<String, Color> _colors = {
-    'ACCEPTED': Colors.blue,
-    'ENDED': Colors.yellow,
-    'PENDING': Colors.orange,
-    'REJECTED': Colors.red,
-    'FAILED': Colors.black,
-    'HIDDEN': Colors.grey,
-    'SUCCESSFUL': Colors.green,
-  };
 
   late ChallengesPanelWebSocket _wsconnection;
-
   Stream<List<Challenge>>? challengesStream;
 
   @override
@@ -73,33 +54,38 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
     });
   }
 
-  List<ExpansionPanel> _buildExpansionPanels(
-      Map<String, List<Challenge>> challengesByState) {
-    return challengesByState.entries.map((entry) {
-      final state = entry.key;
-      final challenges = entry.value;
+  Map<String, List<Challenge>> _groupChallengesByState(
+      List<Challenge> challenges) {
+    final Map<String, List<Challenge>> challengesByState = {
+      'ACCEPTED': [],
+      'PENDING': [],
+      'REJECTED': [],
+      'SUCCESSFUL': [],
+      'FAILED': [],
+      'HIDDEN': [],
+    };
 
-      return ExpansionPanel(
-        headerBuilder: (BuildContext context, bool isExpanded) {
-          return ListTile(
-            title: Text(AppLocalizations.of(context)
-                .translate(PanelWidget.headers[state]!)),
-            trailing: Text('(${challenges.length})',
-                style: TextStyle(
-                  color: _colors[state],
-                  fontSize: 18,
-                )),
-          );
-        },
-        body: Column(
-            children: challenges
-                .map((challenge) =>
-                    ChallengeWidgetWithActions(challenge: challenge))
-                .toList()),
-        isExpanded: challenges.isNotEmpty && _expandedStates[state]!,
-        canTapOnHeader: true,
-      );
-    }).toList();
+    for (var challenge in challenges) {
+      if (challengesByState[challenge.status] != null) {
+        challengesByState[challenge.status] = [
+          ...challengesByState[challenge.status]!,
+          challenge
+        ];
+      }
+    }
+
+/*     if (kDebugMode) {
+      for (var entry in challengesByState.entries) {
+        if (entry.value.isEmpty) continue;
+        String ids = "${entry.key}:";
+        for (var challenge in entry.value) {
+          ids += " ${challenge.id}";
+        }
+        print(ids);
+      }
+    } */
+
+    return challengesByState;
   }
 
   @override
@@ -123,6 +109,10 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
           final challenges = snapshot.data!;
           final challengesByState = _groupChallengesByState(challenges);
 
+          final panelBuilder = ChallengesPanelBuilder(
+            expandedStates: _expandedStates,
+          );
+
           return ListView(
             children: [
               ExpansionPanelList(
@@ -132,34 +122,16 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
                     _expandedStates[state] = isExpanded;
                   });
                 },
-                children: _buildExpansionPanels(challengesByState),
+                children: panelBuilder.buildExpansionPanels(
+                  context,
+                  challengesByState,
+                ),
               ),
             ],
           );
         }
       },
     );
-  }
-
-  Map<String, List<Challenge>> _groupChallengesByState(
-      List<Challenge> challenges) {
-    final Map<String, List<Challenge>> challengesByState = {
-      'ACCEPTED': [],
-      'PENDING': [],
-      'REJECTED': [],
-      'SUCCESSFUL': [],
-      'FAILED': [],
-      'HIDDEN': [],
-    };
-    if (kDebugMode) {
-      for (final challenge in challenges) {
-        print("${challenge.id}: ${challenge.status}");
-      }
-    }
-    for (var challenge in challenges) {
-      challengesByState[challenge.status]?.add(challenge);
-    }
-    return challengesByState;
   }
 
   @override

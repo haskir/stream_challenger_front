@@ -1,0 +1,85 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/feature/streamer_challenges_widget/widgets/challenge_widget.dart';
+
+class ChallengesPanelBuilder {
+  static const Map<String, String> headers = {
+    'ACCEPTED': "Accepted Challenges",
+    "ENDED": "Waiting for voting",
+    'PENDING': "New Challenges",
+    'REJECTED': "Rejected Challenges",
+    'FAILED': "Failed Challenges",
+    'HIDDEN': "Hidden Challenges",
+    'SUCCESSFUL': "Successful Challenges",
+  };
+  static const Map<String, Color> colors = {
+    'ACCEPTED': Colors.blue,
+    'ENDED': Colors.yellow,
+    'PENDING': Colors.orange,
+    'REJECTED': Colors.red,
+    'FAILED': Colors.black,
+    'HIDDEN': Colors.grey,
+    'SUCCESSFUL': Colors.green,
+  };
+
+  final Map<String, bool> expandedStates;
+
+  ChallengesPanelBuilder({
+    required this.expandedStates,
+  });
+
+  List<ExpansionPanel>? cachedPanels;
+
+  List<ExpansionPanel> buildExpansionPanels(
+      BuildContext context, Map<String, List<Challenge>> challengesByState) {
+    if (cachedPanels != null) {
+      return cachedPanels!;
+    }
+    if (kDebugMode) {
+      debugPanels(challengesByState);
+    }
+
+    cachedPanels = challengesByState.entries.map((entry) {
+      final state = entry.key;
+      final challenges = entry.value;
+
+      return ExpansionPanel(
+        headerBuilder: (BuildContext context, bool isExpanded) {
+          return ListTile(
+            title:
+                Text(AppLocalizations.of(context).translate(headers[state]!)),
+            trailing: Text('(${challenges.length})',
+                style: TextStyle(
+                  color: colors[state],
+                  fontSize: 18,
+                )),
+          );
+        },
+        body: Column(
+          children: challenges
+              .map((challenge) =>
+                  ChallengeWidgetWithActions(challenge: challenge))
+              .toList(),
+        ),
+        isExpanded: challenges.isNotEmpty && expandedStates[state]!,
+        canTapOnHeader: true,
+      );
+    }).toList();
+
+    return cachedPanels!;
+  }
+}
+
+void debugPanels(Map<String, List<Challenge>> challengesByState) {
+  for (var entry in challengesByState.entries) {
+    if (entry.value.isEmpty) continue;
+    String ids = "${entry.key}:";
+    for (var challenge in entry.value) {
+      ids += " ${challenge.id}";
+    }
+    print(ids);
+  }
+  print("-------");
+}
