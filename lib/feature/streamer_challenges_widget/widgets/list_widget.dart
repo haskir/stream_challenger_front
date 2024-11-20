@@ -74,17 +74,6 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
       }
     }
 
-/*     if (kDebugMode) {
-      for (var entry in challengesByState.entries) {
-        if (entry.value.isEmpty) continue;
-        String ids = "${entry.key}:";
-        for (var challenge in entry.value) {
-          ids += " ${challenge.id}";
-        }
-        print(ids);
-      }
-    } */
-
     return challengesByState;
   }
 
