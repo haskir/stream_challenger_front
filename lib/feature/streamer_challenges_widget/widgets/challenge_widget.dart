@@ -72,10 +72,11 @@ class _ChallengeWidgetWithActionsState
             textColor: Colors.white,
             timeInSecForIosWeb: 10),
         (right) => null);
-
-    setState(() {
-      _isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
 
     return result;
   }
@@ -92,16 +93,18 @@ class _ChallengeWidgetWithActionsState
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              // Description
               children: [
                 Text(
                   challenge.description,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 8),
+                // Bet - Due date - Conditions
                 ChallengeInfoWidget(challenge: challenge),
                 const SizedBox(height: 8),
-                if (!["HIDDEN", "REJECTED", "SUCCESSFUL", "FAILED"]
-                    .contains(challenge.status)) ...[
+                // Buttons
+                ...[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: getActionButtons(
@@ -118,11 +121,13 @@ class _ChallengeWidgetWithActionsState
                 const SizedBox(height: 8),
                 Row(children: [
                   Expanded(
+                    // Status
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: getStatusText(challenge)),
                   ),
                   Expanded(
+                    // Author
                     child: Align(
                         alignment: Alignment.centerRight,
                         child: getAuthorInfo(challenge.author)),
@@ -134,8 +139,9 @@ class _ChallengeWidgetWithActionsState
         ),
         if (_isLoading)
           BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-              child: const ModalBarrier()),
+            filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+            //child: const ModalBarrier(),
+          ),
         if (_isLoading) const Center(child: CircularProgressIndicator()),
       ],
     );

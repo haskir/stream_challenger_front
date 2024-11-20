@@ -96,7 +96,7 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
                 .map((challenge) =>
                     ChallengeWidgetWithActions(challenge: challenge))
                 .toList()),
-        isExpanded: _expandedStates[state]!,
+        isExpanded: challenges.isNotEmpty && _expandedStates[state]!,
         canTapOnHeader: true,
       );
     }).toList();
@@ -151,11 +151,12 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
       'FAILED': [],
       'HIDDEN': [],
     };
-
-    for (var challenge in challenges) {
-      if (challenge.status == 'ENDED') {
-        challengesByState['ACCEPTED']?.add(challenge);
+    if (kDebugMode) {
+      for (final challenge in challenges) {
+        print("${challenge.id}: ${challenge.status}");
       }
+    }
+    for (var challenge in challenges) {
       challengesByState[challenge.status]?.add(challenge);
     }
     return challengesByState;

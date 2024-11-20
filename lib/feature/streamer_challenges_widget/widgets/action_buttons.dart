@@ -115,8 +115,9 @@ class ChallengeInfoWidget extends StatelessWidget {
       Text(
           '${AppLocalizations.of(context).translate('Due')}: ${DateFormat('dd.MM.yyyy HH:mm').format(challenge.due_at)}'),
       const SizedBox(height: 8),
-      Text('${AppLocalizations.of(context).translate('Conditions')}:',
-          style: Theme.of(context).textTheme.titleMedium),
+      if (challenge.conditions.isNotEmpty)
+        Text('${AppLocalizations.of(context).translate('Conditions')}:',
+            style: Theme.of(context).textTheme.titleMedium),
       ...challenge.conditions.map((condition) => Text('- $condition')),
       const SizedBox(height: 16),
     ]);
