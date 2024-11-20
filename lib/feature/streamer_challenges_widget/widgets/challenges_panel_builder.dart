@@ -37,9 +37,7 @@ class ChallengesPanelBuilder {
     if (cachedPanels != null) {
       return cachedPanels!;
     }
-    if (kDebugMode) {
-      debugPanels(challengesByState);
-    }
+    debugPanels(challengesByState);
 
     cachedPanels = challengesByState.entries.map((entry) {
       final state = entry.key;
@@ -73,13 +71,20 @@ class ChallengesPanelBuilder {
 }
 
 void debugPanels(Map<String, List<Challenge>> challengesByState) {
+  if (!kDebugMode) {
+    return;
+  }
   for (var entry in challengesByState.entries) {
     if (entry.value.isEmpty) continue;
     String ids = "${entry.key}:";
     for (var challenge in entry.value) {
       ids += " ${challenge.id}";
     }
-    print(ids);
+    if (kDebugMode) {
+      print(ids);
+    }
   }
-  print("-------");
+  if (kDebugMode) {
+    print("-------");
+  }
 }
