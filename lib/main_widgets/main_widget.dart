@@ -53,6 +53,11 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextButton(
+            onPressed: () => context.go('/balance_slider'),
+            child:
+                Text(AppLocalizations.of(context).translate('balance slider')),
+          ),
+          TextButton(
             onPressed: () => context.go('/challenge_create'),
             child: Text(
                 AppLocalizations.of(context).translate('Create Challenge')),

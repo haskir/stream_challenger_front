@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/feature/create_challenge/create_challenge.dart';
 import 'package:stream_challenge/feature/single_challenge_view/widgets/single_challenge_widget.dart';
 import 'package:stream_challenge/feature/streamer_challenges_widget/widgets/list_widget.dart';
+import 'package:stream_challenge/main_widgets/body_widgets/balance_slider.dart';
 import 'package:stream_challenge/main_widgets/body_widgets/challenges_list.dart';
 import 'package:stream_challenge/main_widgets/body_widgets/profile.dart';
 
@@ -23,6 +24,10 @@ List<GoRoute> routes = [
   GoRoute(
     path: '/challenges',
     builder: (context, state) => const ConfirmationDialogExample(),
+  ),
+  GoRoute(
+    path: '/balance_slider',
+    builder: (context, state) => BalanceSlider(),
   ),
   GoRoute(
     path: '/profile',
