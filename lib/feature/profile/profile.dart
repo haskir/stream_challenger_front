@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
@@ -86,7 +87,7 @@ class ProfilePage extends ConsumerWidget {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 SizedBox(height: 20),
-                _buildContent(contentPath, user!),
+                _buildContent(contentPath, user),
               ],
             ),
           ),
@@ -147,6 +148,7 @@ class ProfileInfoCard extends StatelessWidget {
               value: user.login,
             ),
             InfoRow(label: 'Email', value: user.email),
+            if (kDebugMode) InfoRow(label: 'ID', value: user.id.toString()),
           ],
         ),
       ),
