@@ -17,7 +17,6 @@ class BalanceWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final balance = ref.watch(authStateProvider).user?.account;
     final Account? account = ref.watch(accountProvider);
     final player =
         AudioPlayer(); // Создаем аудиоплеер для воспроизведения звука
