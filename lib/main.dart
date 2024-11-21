@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:stream_challenge/data/models/user_preferences.dart';
+import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'core/platform/app_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // ignore: depend_on_referenced_packages
@@ -12,7 +14,7 @@ class StreamChallengeApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
+    final Preferences preferences = ref.watch(preferencesProvider);
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
@@ -20,7 +22,7 @@ class StreamChallengeApp extends ConsumerWidget {
       routerDelegate: router.routerDelegate,
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
-      locale: locale,
+      locale: Locale(preferences.language.toLowerCase()),
       theme: mainTheme,
       onGenerateTitle: (context) =>
           AppLocalizations.of(context).translate('title'),

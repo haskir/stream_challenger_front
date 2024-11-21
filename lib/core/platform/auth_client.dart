@@ -61,8 +61,6 @@ class _AuthServiceHTML implements AuthClient {
   @override
   AuthToken? getUserInfo() {
     if (_token == null) return null;
-    print(_token);
-    print(JwtDecoder.decode(token!));
     return AuthToken.fromMap(JwtDecoder.decode(_token!));
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 class AuthWidget extends ConsumerWidget {
@@ -42,6 +43,7 @@ class AuthWidget extends ConsumerWidget {
         onPressed: () async {
           // Вызов метода входа через провайдер
           await ref.read(authStateProvider.notifier).auth(context);
+          await ref.read(preferencesProvider.notifier).initialize();
         },
       ),
     );

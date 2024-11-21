@@ -35,6 +35,7 @@ class RestrictedWordsChecker {
           .any((word) => text.toLowerCase().contains(word.toLowerCase()));
     }
 
+    // ignore: unused_element
     bool listContains(List<String> text) {
       return text.any(wordIsRestricted);
     }

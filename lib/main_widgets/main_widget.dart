@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/data/models/user_preferences.dart';
+import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'appbar_widgets/auth_widget.dart';
 import 'appbar_widgets/balance_widget.dart';
@@ -9,12 +11,10 @@ import 'appbar_widgets/logo.dart';
 
 class MainWidget extends ConsumerStatefulWidget {
   final Widget child;
-  final Function(String) onLocaleChange;
 
   const MainWidget({
     super.key,
     required this.child,
-    required this.onLocaleChange,
   });
 
   @override
@@ -45,6 +45,8 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
+    final Preferences preferences = ref.watch(preferencesProvider);
+
     Row? titleWidget;
 
     if (authState.isAuthenticated) {
@@ -88,12 +90,14 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
           icon: const Icon(Icons.language),
           itemBuilder: (context) {
             return [
-              const PopupMenuItem(value: 'en', child: Text('English')),
-              const PopupMenuItem(value: 'ru', child: Text('Русский')),
+              const PopupMenuItem(value: 'EN', child: Text('English')),
+              const PopupMenuItem(value: 'RU', child: Text('Русский')),
             ];
           },
-          onSelected: (String value) =>
-              ref.read(localeProvider.notifier).state = Locale(value),
+          initialValue: preferences.language,
+          onSelected: (String value) async {
+            await ref.read(preferencesProvider.notifier).updateLanguage(value);
+          },
         ),
       ],
     );

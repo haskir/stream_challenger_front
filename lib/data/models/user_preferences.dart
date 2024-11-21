@@ -6,8 +6,8 @@ import 'package:stream_challenge/core/platform/datetime_format.dart';
 // ignore_for_file: non_constant_identifier_names
 
 class Account {
-  final double balance;
-  final String currency;
+  double balance;
+  String currency;
 
   Account({required this.balance, required this.currency});
 
@@ -35,9 +35,9 @@ class Account {
 }
 
 class Preferences {
-  final double minimum_reward_in_dollars;
-  final String language;
-  final String timezone;
+  double minimum_reward_in_dollars;
+  String language;
+  String timezone;
 
   Preferences({
     required this.minimum_reward_in_dollars,
@@ -68,4 +68,10 @@ class Preferences {
 
   factory Preferences.fromJson(String source) =>
       Preferences.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  factory Preferences.defaultPreferences() => Preferences(
+        minimum_reward_in_dollars: 1.0,
+        language: 'EN',
+        timezone: 'UTC',
+      );
 }

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/data/models/user_preferences.dart';
-import 'package:stream_challenge/providers/providers.dart';
+import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
