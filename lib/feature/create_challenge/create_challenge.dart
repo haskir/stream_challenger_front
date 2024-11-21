@@ -7,7 +7,7 @@ import 'package:stream_challenge/core/platform/auth_state.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
-import 'package:stream_challenge/providers.dart';
+import 'package:stream_challenge/providers/providers.dart';
 import 'widgets/view.dart';
 
 class CreateChallengeWidget extends ConsumerStatefulWidget {
@@ -68,7 +68,8 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
             BetField(
                 controller: _betController,
                 minimumBet: 100,
-                maximumBet: user.account.balance),
+                //maximumBet: user.account.balance),
+                maximumBet: 10000),
             const SizedBox(height: _margin),
 
             // Выпадающий список для выбора валюты
@@ -93,7 +94,8 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                     minimum_reward:
                         double.parse(_minimumRewardController.text) / 100,
                     bet: double.parse(_betController.text),
-                    currency: user.account.currency,
+                    // currency: user.account.currency,
+                    currency: "RUB",
                     due_at: DateFormat('dd.MM.yyyy HH:mm')
                         .parse(_dueAtController.text),
                     conditions: _controllers.map((e) => e.text).toList(),

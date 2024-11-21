@@ -27,7 +27,10 @@ List<GoRoute> routes = [
   ),
   GoRoute(
     path: '/balance_slider',
-    builder: (context, state) => BalanceSlider(),
+    builder: (context, state) => BalanceSlider(
+      balance: 10000.0,
+      minPercentage: 10,
+    ),
   ),
   GoRoute(
     path: '/profile',

@@ -1,50 +1,66 @@
-import 'package:stream_challenge/data/models/user_preferences.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: non_constant_identifier_names
+
+import 'dart:convert';
+
+import 'package:stream_challenge/core/platform/datetime_format.dart';
 
 class AuthToken {
   final int id;
   final String login;
-  final String profileImageUrl;
-  final String displayName;
+  final String profile_image_url;
+  final String display_name;
   final String email;
-  final DateTime expiresAt;
-  final Preferences preferences;
-  final Account account;
+  final DateTime expires_at;
+  final int account_id;
+  final int preferences_id;
 
   AuthToken({
     required this.id,
     required this.login,
-    required this.profileImageUrl,
-    required this.displayName,
+    required this.profile_image_url,
+    required this.display_name,
     required this.email,
-    required this.expiresAt,
-    required this.preferences,
-    required this.account,
+    required this.expires_at,
+    required this.account_id,
+    required this.preferences_id,
   });
 
-  // Метод для создания экземпляра User из JSON-ответа
-  factory AuthToken.fromJson(Map<String, dynamic> json) {
+  @override
+  String toString() => prettyJson(toMap());
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'login': login,
+      'profile_image_url': profile_image_url,
+      'display_name': display_name,
+      'email': email,
+      'expiresAt': expires_at.millisecondsSinceEpoch,
+      'account_id': account_id,
+      'preferences_id': preferences_id,
+    };
+  }
+
+  factory AuthToken.fromMap(Map<String, dynamic> map) {
     return AuthToken(
-      id: json['id'],
-      login: json['login'],
-      profileImageUrl: json['profile_image_url'],
-      displayName: json['display_name'],
-      email: json['email'],
-      expiresAt: DateTime.fromMillisecondsSinceEpoch(
-          json['expires_at'].toInt() * 1000),
-      preferences: Preferences.fromJson(json['preferences']),
-      account: Account.fromJson(json['account']),
+      id: map['id'] as int,
+      login: map['login'],
+      profile_image_url: map['profile_image_url'],
+      display_name: map['display_name'],
+      email: map['email'],
+      expires_at: DateTime.fromMillisecondsSinceEpoch(
+        double.parse(map['expires_at'].toString()).toInt(),
+      ),
+      account_id: map['account_id'],
+      preferences_id: map['preferences_id'],
     );
   }
 
-  @override
-  String toString() {
-    return 'AuthToken{'
-        '\nid: $id,\n login: $login,'
-        '\n profileImageUrl: $profileImageUrl,\n displayName: $displayName,'
-        '\n email: $email,\n expiresAt: $expiresAt,'
-        '\n preferences: $preferences,\n account: $account\n'
-        '}';
-  }
+  String toJson() => json.encode(toMap());
+
+  factory AuthToken.fromJson(String source) =>
+      AuthToken.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class AuthState {

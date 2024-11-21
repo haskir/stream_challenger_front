@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/core/platform/response.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/providers.dart';
+import 'package:stream_challenge/providers/providers.dart';
 
 class _ChallenegeGetter {
   static Future<Either<ErrorDTO, Challenge>> getChallenge({

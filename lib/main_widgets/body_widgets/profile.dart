@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/auth_state.dart';
-import 'package:stream_challenge/providers.dart';
+import 'package:stream_challenge/providers/providers.dart';
 
 class ProfileWidget extends ConsumerWidget {
   const ProfileWidget({super.key});

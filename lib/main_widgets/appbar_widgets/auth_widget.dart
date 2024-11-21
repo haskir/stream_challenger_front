@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/providers.dart';
+import 'package:stream_challenge/providers/providers.dart';
 
 class AuthWidget extends ConsumerWidget {
   const AuthWidget({super.key});
@@ -20,7 +20,8 @@ class AuthWidget extends ConsumerWidget {
               onTap: () => context.go('/profile'),
               child: CircleAvatar(
                 radius: 20,
-                backgroundImage: NetworkImage(authState.user!.profileImageUrl),
+                backgroundImage:
+                    NetworkImage(authState.user!.profile_image_url),
               ),
             ),
             const SizedBox(width: 15),

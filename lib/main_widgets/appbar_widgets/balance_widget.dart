@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stream_challenge/providers.dart';
+import 'package:stream_challenge/data/models/user_preferences.dart';
+import 'package:stream_challenge/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -16,16 +17,17 @@ class BalanceWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final balance = ref.watch(authStateProvider).user?.account;
+    // final balance = ref.watch(authStateProvider).user?.account;
+    final account = Account(balance: 0, currency: 'RUB');
     final player =
         AudioPlayer(); // Создаем аудиоплеер для воспроизведения звука
 
-    if (balance == null) {
+    if (account == null) {
       return Center();
     }
     return Row(
       children: [
-        Text('${balance.balance} ${_currency[balance.currency]}'),
+        Text('${account.balance} ${_currency[account.currency]}'),
         SizedBox(width: 3),
         TextButton(
           onPressed: () {},

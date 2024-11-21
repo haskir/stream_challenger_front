@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/providers.dart';
+import 'package:stream_challenge/providers/Api.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 abstract class AbstractChallengePanelRequester {

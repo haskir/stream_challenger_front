@@ -4,7 +4,7 @@ import 'core/platform/app_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'providers.dart';
+import 'providers/providers.dart';
 import 'theme.dart';
 
 class StreamChallengeApp extends ConsumerWidget {

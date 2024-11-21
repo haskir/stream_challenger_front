@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:stream_challenge/core/platform/token_repo.dart';
-import 'package:stream_challenge/providers.dart';
+import 'package:stream_challenge/providers/Api.dart';
 
 import 'auth_state.dart';
 
@@ -61,7 +61,9 @@ class _AuthServiceHTML implements AuthClient {
   @override
   AuthToken? getUserInfo() {
     if (_token == null) return null;
-    return AuthToken.fromJson(JwtDecoder.decode(_token!));
+    print(_token);
+    print(JwtDecoder.decode(token!));
+    return AuthToken.fromMap(JwtDecoder.decode(_token!));
   }
 
   @override

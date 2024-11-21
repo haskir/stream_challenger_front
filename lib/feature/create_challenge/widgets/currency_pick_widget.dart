@@ -14,7 +14,8 @@ class CurrencyPickWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DropdownButtonFormField<String>(
-      value: user.account.currency,
+      // value: user.account.currency,
+      value: "RUB",
       items: CurrencyConverter.getCurrencyList()
           .map((currency) =>
               DropdownMenuItem(value: currency, child: Text(currency)))

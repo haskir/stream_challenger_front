@@ -1,38 +1,43 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
+import 'package:stream_challenge/core/platform/datetime_format.dart';
+
 // ignore_for_file: non_constant_identifier_names
 
 class Account {
-  late final double balance;
-  late final String currency;
+  final double balance;
+  final String currency;
 
-  Account({
-    required this.balance,
-    required this.currency,
-  });
+  Account({required this.balance, required this.currency});
 
-  factory Account.fromJson(Map<String, dynamic> json) {
-    return Account(
-      balance: json['balance'] as double,
-      currency: json['currency'] as String,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'balance': balance,
       'currency': currency,
     };
   }
 
-  @override
-  String toString() {
-    return 'Account{balance: $balance, currency: $currency}';
+  factory Account.fromMap(Map<String, dynamic> map) {
+    return Account(
+      balance: map['balance'] as double,
+      currency: map['currency'] as String,
+    );
   }
+
+  String toJson() => json.encode(toMap());
+
+  @override
+  String toString() => prettyJson(toMap());
+
+  factory Account.fromJson(String source) =>
+      Account.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class Preferences {
-  late final double minimum_reward_in_dollars;
-  late final String language;
-  late final String timezone;
+  final double minimum_reward_in_dollars;
+  final String language;
+  final String timezone;
 
   Preferences({
     required this.minimum_reward_in_dollars,
@@ -40,7 +45,7 @@ class Preferences {
     required this.timezone,
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'minimum_reward_in_dollars': minimum_reward_in_dollars,
       'language': language,
@@ -48,16 +53,19 @@ class Preferences {
     };
   }
 
-  factory Preferences.fromJson(Map<String, dynamic> json) {
+  factory Preferences.fromMap(Map<String, dynamic> map) {
     return Preferences(
-      minimum_reward_in_dollars: json['minimum_reward_in_dollars'] as double,
-      language: json['language'] as String,
-      timezone: json['timezone'] as String,
+      minimum_reward_in_dollars: map['minimum_reward_in_dollars'] as double,
+      language: map['language'] as String,
+      timezone: map['timezone'] as String,
     );
   }
 
+  String toJson() => json.encode(toMap());
+
   @override
-  String toString() {
-    return 'Preferences{minimum_reward_in_dollars: $minimum_reward_in_dollars, language: $language, timezone: $timezone}';
-  }
+  String toString() => prettyJson(toMap());
+
+  factory Preferences.fromJson(String source) =>
+      Preferences.fromMap(json.decode(source) as Map<String, dynamic>);
 }

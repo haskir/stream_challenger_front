@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class BalanceSlider extends StatefulWidget {
-  final double balance = 100000;
-  final int minPercentage = 0;
-  // required this.balance,
-  // required this.minPercentage,
+  final double balance;
+  final int minPercentage;
 
-  const BalanceSlider({super.key});
+  const BalanceSlider({
+    super.key,
+    required this.balance,
+    required this.minPercentage,
+  });
 
   @override
   BalanceSliderState createState() => BalanceSliderState();

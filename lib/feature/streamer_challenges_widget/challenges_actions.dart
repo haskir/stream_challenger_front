@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/providers.dart';
+import 'package:stream_challenge/providers/api.dart';
 
 abstract class AbstractChallengeRequester {
   Future<Either> challengeAction({

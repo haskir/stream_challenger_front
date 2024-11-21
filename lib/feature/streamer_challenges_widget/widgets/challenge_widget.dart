@@ -8,7 +8,7 @@ import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/feature/streamer_challenges_widget/challenges_actions.dart';
-import 'package:stream_challenge/providers.dart';
+import 'package:stream_challenge/providers/providers.dart';
 import 'action_buttons.dart';
 
 class ChallengeWidgetWithActions extends ConsumerStatefulWidget {

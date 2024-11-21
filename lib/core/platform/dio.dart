@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:stream_challenge/providers.dart';
+import 'package:stream_challenge/providers/Api.dart';
 import 'response.dart';
 
 abstract class _Client {
