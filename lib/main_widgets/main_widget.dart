@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/data/models/account.dart';
 import 'package:stream_challenge/data/models/user_preferences.dart';
+import 'package:stream_challenge/providers/account_provider.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'appbar_widgets/auth_widget.dart';
@@ -46,6 +48,7 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final Preferences preferences = ref.watch(preferencesProvider);
+    //ref.read(accountProvider.notifier).initialize();
 
     Row? titleWidget;
 

@@ -4,36 +4,6 @@ import 'dart:convert';
 import 'package:stream_challenge/core/platform/datetime_format.dart';
 
 // ignore_for_file: non_constant_identifier_names
-
-class Account {
-  double balance;
-  String currency;
-
-  Account({required this.balance, required this.currency});
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'balance': balance,
-      'currency': currency,
-    };
-  }
-
-  factory Account.fromMap(Map<String, dynamic> map) {
-    return Account(
-      balance: map['balance'] as double,
-      currency: map['currency'] as String,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  @override
-  String toString() => prettyJson(toMap());
-
-  factory Account.fromJson(String source) =>
-      Account.fromMap(json.decode(source) as Map<String, dynamic>);
-}
-
 class Preferences {
   double minimum_reward_in_dollars;
   String language;

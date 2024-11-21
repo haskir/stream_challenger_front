@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stream_challenge/data/models/user_preferences.dart';
-import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:stream_challenge/data/models/account.dart';
+import 'package:stream_challenge/providers/account_provider.dart';
 
 final Map _currency = {
   "RUB": "₽",
@@ -18,13 +18,10 @@ class BalanceWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final balance = ref.watch(authStateProvider).user?.account;
-    final account = Account(balance: 0, currency: 'RUB');
+    final Account? account = ref.watch(accountProvider);
     final player =
         AudioPlayer(); // Создаем аудиоплеер для воспроизведения звука
-
-    if (account == null) {
-      return Center();
-    }
+    if (account == null) return const Text('0\$');
     return Row(
       children: [
         Text('${account.balance} ${_currency[account.currency]}'),
