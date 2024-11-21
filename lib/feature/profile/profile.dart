@@ -1,26 +1,31 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/auth_state.dart';
 import 'package:stream_challenge/feature/profile/widgets/challenges_list_widget.dart';
 import 'package:stream_challenge/feature/profile/widgets/transaction_list_widget.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
+final profilePageContentProvider =
+    StateNotifierProvider<ProfilePageContentNotifier, String>((ref) {
+  return ProfilePageContentNotifier('/');
+});
+
+class ProfilePageContentNotifier extends StateNotifier<String> {
+  ProfilePageContentNotifier(super.initialPath);
+
+  void setContent(String path) => state = path;
+}
+
 class ProfilePage extends ConsumerWidget {
   static const Map<String, String> titleHeaders = {
     '/': 'My profile',
     '/transactions': 'Transactions',
     '/my-challenges': 'My challenges',
-    '/challenges': 'Challenges',
   };
-  final String path;
-  const ProfilePage({
-    super.key,
-    required this.path,
-  });
+
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,6 +33,8 @@ class ProfilePage extends ConsumerWidget {
     if (user == null) {
       return const Center(child: Text('No user'));
     }
+
+    final contentPath = ref.watch(profilePageContentProvider);
 
     return Row(
       children: [
@@ -46,17 +53,23 @@ class ProfilePage extends ConsumerWidget {
               ListTile(
                 title:
                     Text(AppLocalizations.of(context).translate('My profile')),
-                onTap: () => context.go('/profile'),
+                onTap: () => ref
+                    .read(profilePageContentProvider.notifier)
+                    .setContent('/'),
               ),
               ListTile(
                 title: Text(
                     AppLocalizations.of(context).translate('Transactions')),
-                onTap: () => context.go('/profile/transactions'),
+                onTap: () => ref
+                    .read(profilePageContentProvider.notifier)
+                    .setContent('/transactions'),
               ),
               ListTile(
                 title: Text(
                     AppLocalizations.of(context).translate('My challenges')),
-                onTap: () => context.go('/profile/my-challenges'),
+                onTap: () => ref
+                    .read(profilePageContentProvider.notifier)
+                    .setContent('/my-challenges'),
               ),
             ],
           ),
@@ -68,20 +81,31 @@ class ProfilePage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppLocalizations.of(context)
-                      .translate(ProfilePage.titleHeaders[path] ?? path),
+                  AppLocalizations.of(context).translate(
+                      ProfilePage.titleHeaders[contentPath] ?? contentPath),
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 SizedBox(height: 20),
-                if (path == '/') ProfileInfoCard(user: user),
-                if (path == '/transactions') TransactionListWidget(),
-                if (path == '/my-challenges') ChallengesListWidget(),
+                _buildContent(contentPath, user!),
               ],
             ),
           ),
         ),
       ],
     );
+  }
+
+  Widget _buildContent(String contentPath, AuthToken user) {
+    switch (contentPath) {
+      case '/':
+        return ProfileInfoCard(user: user);
+      case '/transactions':
+        return TransactionListWidget();
+      case '/my-challenges':
+        return ChallengesListWidget();
+      default:
+        return Container(); // или какой-то другой виджет по умолчанию
+    }
   }
 }
 
@@ -150,8 +174,8 @@ class InfoRow extends StatelessWidget {
                   ?.copyWith(fontWeight: FontWeight.bold)),
           SizedBox(width: 8),
           Expanded(
-            child: Text(value, style: Theme.of(context).textTheme.bodyMedium),
-          ),
+              child:
+                  Text(value, style: Theme.of(context).textTheme.bodyMedium)),
         ],
       ),
     );
