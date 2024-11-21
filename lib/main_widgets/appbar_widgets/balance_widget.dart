@@ -21,7 +21,7 @@ class BalanceWidget extends ConsumerWidget {
     final Account? account = ref.watch(accountProvider);
     final player =
         AudioPlayer(); // Создаем аудиоплеер для воспроизведения звука
-    if (account == null) return const Text('0\$');
+    if (account == null) return Container();
     return Row(
       children: [
         Text('${account.balance} ${_currency[account.currency]}'),
