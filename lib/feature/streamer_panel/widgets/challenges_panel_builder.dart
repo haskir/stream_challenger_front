@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/feature/streamer_challenges_widget/widgets/challenge_widget.dart';
+import 'package:stream_challenge/feature/streamer_panel/widgets/challenge_widget.dart';
 
 class ChallengesPanelBuilder {
   static const Map<String, String> headers = {
@@ -33,24 +33,24 @@ class ChallengesPanelBuilder {
   List<ExpansionPanel>? cachedPanels;
 
   List<ExpansionPanel> buildExpansionPanels(
-      BuildContext context, Map<String, List<Challenge>> challengesByState) {
+      BuildContext context, Map<String, List<Challenge>> challengesByStatus) {
     if (cachedPanels != null) {
       return cachedPanels!;
     }
-    debugPanels(challengesByState);
+    debugPanels(challengesByStatus);
 
-    cachedPanels = challengesByState.entries.map((entry) {
-      final state = entry.key;
+    cachedPanels = challengesByStatus.entries.map((entry) {
+      final status = entry.key;
       final challenges = entry.value;
 
       return ExpansionPanel(
         headerBuilder: (BuildContext context, bool isExpanded) {
           return ListTile(
             title:
-                Text(AppLocalizations.of(context).translate(headers[state]!)),
+                Text(AppLocalizations.of(context).translate(headers[status]!)),
             trailing: Text('(${challenges.length})',
                 style: TextStyle(
-                  color: colors[state],
+                  color: colors[status],
                   fontSize: 18,
                 )),
           );
@@ -61,7 +61,7 @@ class ChallengesPanelBuilder {
                   ChallengeWidgetWithActions(challenge: challenge))
               .toList(),
         ),
-        isExpanded: challenges.isNotEmpty && expandedStates[state]!,
+        isExpanded: challenges.isNotEmpty && expandedStates[status]!,
         canTapOnHeader: true,
       );
     }).toList();

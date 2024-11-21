@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/feature/create_challenge/create_challenge.dart';
 import 'package:stream_challenge/feature/single_challenge_view/widgets/single_challenge_widget.dart';
-import 'package:stream_challenge/feature/streamer_challenges_widget/widgets/list_widget.dart';
+import 'package:stream_challenge/feature/streamer_panel/widgets/list_widget.dart';
 import 'package:stream_challenge/main_widgets/body_widgets/balance_slider.dart';
 import 'package:stream_challenge/main_widgets/body_widgets/challenges_list.dart';
-import 'package:stream_challenge/main_widgets/body_widgets/profile.dart';
+import 'package:stream_challenge/feature/profile/profile.dart';
 
 final GoRouter goRouter = GoRouter(
   initialLocation: '/',
@@ -34,7 +34,17 @@ List<GoRoute> routes = [
   ),
   GoRoute(
     path: '/profile',
-    builder: (context, state) => const ProfileWidget(),
+    builder: (context, state) => ProfilePage(path: "/"),
+    routes: [
+      GoRoute(
+        path: 'transactions',
+        builder: (context, state) => ProfilePage(path: "/transactions"),
+      ),
+      GoRoute(
+        path: 'my-challenges',
+        builder: (context, state) => ProfilePage(path: "/my-challenges"),
+      ),
+    ],
   ),
   GoRoute(
     path: '/panel',

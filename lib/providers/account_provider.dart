@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/account.dart';
@@ -41,13 +42,13 @@ class AccountNotifier extends StateNotifier<Account?> {
     final authState = ref.watch(authStateProvider);
     if (authState.isAuthenticated) {
       await _fetchAccount();
-      _startUpdateLoop();
+      _startUpdateLoop(kDebugMode ? 999 : 60);
     }
   }
 
   /// Асинхронный цикл обновления данных
-  void _startUpdateLoop() {
-    Timer.periodic(const Duration(seconds: 10), (_) async {
+  void _startUpdateLoop(int seconds) {
+    Timer.periodic(Duration(seconds: seconds), (_) async {
       try {
         await _fetchAccount();
       } catch (e) {

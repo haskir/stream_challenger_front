@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/feature/streamer_challenges_widget/web_socket_client.dart';
-import 'package:stream_challenge/feature/streamer_challenges_widget/widgets/challenges_panel_builder.dart';
+import 'package:stream_challenge/feature/streamer_panel/web_socket_client.dart';
+import 'package:stream_challenge/feature/streamer_panel/widgets/challenges_panel_builder.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 class PanelWidget extends ConsumerStatefulWidget {
