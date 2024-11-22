@@ -28,6 +28,14 @@ class _PreferencesClient {
       (right) => Preferences.fromMap(right),
     );
   }
+
+  Future<Preferences?> getPerformerPreferences(String login) async {
+    final response = await httpClient.get('$url/performer/$login');
+    return response.fold(
+      (left) => null,
+      (right) => Preferences.fromMap(right),
+    );
+  }
 }
 
 /// Провайдер для PreferencesClient
@@ -76,4 +84,12 @@ class PreferencesNotifier extends StateNotifier<Preferences> {
 final preferencesProvider =
     StateNotifierProvider<PreferencesNotifier, Preferences>(
   (ref) => PreferencesNotifier(ref),
+);
+
+final performerPreferencesProvider =
+    FutureProvider.family<Preferences?, String>(
+  (ref, login) async {
+    final client = await ref.read(preferencesClientProvider.future);
+    return await client.getPerformerPreferences(login);
+  },
 );

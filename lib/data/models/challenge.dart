@@ -193,7 +193,7 @@ class Challenge {
 class CreateChallengeDTO {
   final String description;
   final List<String> conditions;
-  final int performer_id;
+  final String performerLogin;
   final double minimum_reward;
   final double bet;
   final String currency;
@@ -203,7 +203,7 @@ class CreateChallengeDTO {
   CreateChallengeDTO({
     required this.description,
     required this.conditions,
-    required this.performer_id,
+    required this.performerLogin,
     required this.minimum_reward,
     required this.bet,
     required this.currency,
@@ -217,12 +217,11 @@ class CreateChallengeDTO {
     return <String, dynamic>{
       'description': description,
       'conditions': conditions,
-      'performer_id': performer_id,
+      'performerLogin': performerLogin,
       'minimum_reward': minimum_reward,
       'bet': bet,
       'currency': currency,
       'due_at': due_at.millisecondsSinceEpoch,
-      'is_visible': is_visible,
     };
   }
 
@@ -230,7 +229,7 @@ class CreateChallengeDTO {
     return CreateChallengeDTO(
       description: map['description'] as String,
       conditions: List<String>.from((map['conditions'] as List<String>)),
-      performer_id: map['performer_id'] as int,
+      performerLogin: map['performerLogin'] as String,
       minimum_reward: map['minimum_reward'] as double,
       bet: map['bet'] as double,
       currency: map['currency'] as String,

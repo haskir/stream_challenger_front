@@ -17,7 +17,7 @@ class _AccountClient {
     if (!authState.isAuthenticated) return null;
     final response = await httpClient.get(url);
     return response.fold(
-      (left) => null, // Возвращаем null при ошибке
+      (left) => null,
       (right) => Account.fromMap(right),
     );
   }
@@ -61,8 +61,8 @@ class AccountNotifier extends StateNotifier<Account?> {
   Future<void> _fetchAccount() async {
     final client = await ref.read(accountClientProvider);
     final account = await client.fetchAccount(ref);
-    state =
-        account; // Если запрос завершился с ошибкой, состояние остаётся null
+    state = account;
+    // Если запрос завершился с ошибкой, состояние остаётся null
   }
 }
 

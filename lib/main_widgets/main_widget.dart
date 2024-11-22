@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -28,7 +29,11 @@ class _MainWidgetState extends ConsumerState<MainWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _AppBar(),
-      body: widget.child,
+      body: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(
+            dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse}),
+        child: widget.child,
+      ),
     );
   }
 }
@@ -56,12 +61,7 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextButton(
-            onPressed: () => context.go('/balance_slider'),
-            child:
-                Text(AppLocalizations.of(context).translate('balance slider')),
-          ),
-          TextButton(
-            onPressed: () => context.go('/challenge_create'),
+            onPressed: () => context.go('/challenge/lapkinastol'),
             child: Text(
                 AppLocalizations.of(context).translate('Create Challenge')),
           ),

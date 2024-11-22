@@ -105,7 +105,7 @@ class ProfilePage extends ConsumerWidget {
       case '/my-challenges':
         return ChallengesListWidget();
       default:
-        return Container(); // или какой-то другой виджет по умолчанию
+        return Container();
     }
   }
 }

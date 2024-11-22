@@ -1,6 +1,4 @@
-// ignore_for_file: unused_import
-
-export 'bet_field.dart';
+export 'bet_slider.dart';
 export 'conditions_field.dart';
 export 'currency_pick_widget.dart';
 export 'description_field.dart';

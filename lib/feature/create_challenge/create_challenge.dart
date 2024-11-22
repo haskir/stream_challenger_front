@@ -2,16 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/core/platform/auth_state.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/data/models/currency.dart';
 import 'package:stream_challenge/feature/streamer_panel/challenges_actions.dart';
+import 'package:stream_challenge/providers/account_provider.dart';
+import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
+
 import 'widgets/view.dart';
 
 class CreateChallengeWidget extends ConsumerStatefulWidget {
-  const CreateChallengeWidget({super.key});
+  final String performerLogin;
+
+  const CreateChallengeWidget({
+    super.key,
+    required this.performerLogin,
+  });
 
   @override
   ConsumerState<CreateChallengeWidget> createState() =>
@@ -43,11 +52,22 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
     );
   }
 
+  double calcMinimumReward(double minInUSd, String authCurrency) {
+    return CurrencyConverter().convert(authCurrency, "USD", minInUSd);
+  }
+
   @override
   Widget build(BuildContext context) {
-    late final AuthToken? user = ref.watch(authStateProvider).user;
-    if (user == null) {
-      return const Center(child: Text('login required'));
+    final performerPref =
+        ref.watch(performerPreferencesProvider(widget.performerLogin));
+    final account = ref.watch(accountProvider);
+
+    if (account == null || performerPref.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final performerPreferences = performerPref.asData?.value;
+    if (performerPreferences == null) {
+      return const Center(child: Text("No such performer"));
     }
     return Form(
       key: _formKey,
@@ -60,20 +80,16 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
             DescriptionField(controller: _descriptionController),
             const SizedBox(height: _margin),
 
-            // Поле для минимального вознаграждения в процентах
-            MinimumRewardField(controller: _minimumRewardController),
-            const SizedBox(height: _margin),
-
-            // Поле для ставки
-            BetField(
-                controller: _betController,
-                minimumBet: 100,
-                //maximumBet: user.account.balance),
-                maximumBet: 10000),
-            const SizedBox(height: _margin),
-
-            // Выпадающий список для выбора валюты
-            CurrencyPickWidget(user: user),
+            // Поле для ставки и валюты
+            /* BetSlider(
+              controller: _betController,
+              minBet: calcMinimumReward(
+                performerPreferences.minimum_reward_in_dollars,
+                account.currency,
+              ),
+              balance: account.balance,
+              currency: "RUB",
+            ), */
             const SizedBox(height: _margin),
 
             // Поле для срока выполнения
@@ -91,15 +107,13 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                   _formKey.currentState!.save();
                   CreateChallengeDTO challenge = CreateChallengeDTO(
                     description: _descriptionController.text,
-                    minimum_reward:
-                        double.parse(_minimumRewardController.text) / 100,
+                    minimum_reward: 0.1,
                     bet: double.parse(_betController.text),
-                    // currency: user.account.currency,
                     currency: "RUB",
                     due_at: DateFormat('dd.MM.yyyy HH:mm')
                         .parse(_dueAtController.text),
                     conditions: _controllers.map((e) => e.text).toList(),
-                    performer_id: user.id,
+                    performerLogin: widget.performerLogin,
                   );
                   final result = await _submit(
                       challenge, await ref.watch(httpClientProvider.future));

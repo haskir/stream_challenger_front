@@ -17,6 +17,8 @@ class CurrencyConverter {
     return amount * fromRate / toRate;
   }
 
+  get currencyRates => _currencyRates;
+
   static List<String> getCurrencyList() {
     return ['EUR', 'KZT', 'RUB', 'UAH', 'USD'];
   }
