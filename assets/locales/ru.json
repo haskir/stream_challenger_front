@@ -54,6 +54,8 @@
   "Name": "Имя",
   "Login": "Логин",
   "Calculated value": "Рассчитанное значение",
-  "Percentage": "Процент"
+  "Percentage": "Процент",
+  "Dead line or Maximum time": "Дед лайн или Максимальное время",
+  "Maximum time": "Максимальное время"
   }
   

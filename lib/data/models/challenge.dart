@@ -46,7 +46,6 @@ class Challenge {
   final ChallengeAuthor author;
   final String performerLogin;
   final DateTime created_at;
-  final DateTime due_at;
 
   Challenge({
     required this.id,
@@ -60,7 +59,6 @@ class Challenge {
     required this.author,
     required this.performerLogin,
     required this.created_at,
-    required this.due_at,
   });
 
   Map<String, dynamic> toMap() {
@@ -76,24 +74,23 @@ class Challenge {
       'author': author.toMap(),
       'performerLogin': performerLogin,
       'created_at': created_at.millisecondsSinceEpoch,
-      'due_at': due_at.millisecondsSinceEpoch,
     };
   }
 
   factory Challenge.fromMap(Map<String, dynamic> map) {
+    print('map: $map');
     final c = Challenge(
-      id: map['id'] as int,
-      description: map['description'] as String,
+      id: map['id'],
+      description: map['description'],
       conditions: List<String>.from((map['conditions'])),
-      currency: map['currency'] as String,
-      minimum_reward: map['minimum_reward'] as double,
-      bet: map['bet'] as double,
-      status: map['status'] as String,
-      is_visible: map['is_visible'] as bool,
+      currency: map['currency'],
+      minimum_reward: map['minimum_reward'],
+      bet: map['bet'],
+      status: map['status'],
+      is_visible: map['is_visible'],
       author: ChallengeAuthor.fromMap(map['author']),
-      performerLogin: map['performer_id'],
-      created_at: dateTimeFormat.parse(map['created_at'] as String),
-      due_at: dateTimeFormat.parse(map['created_at'] as String),
+      performerLogin: map['performerLogin'],
+      created_at: dateTimeFormat.parse(map['created_at']),
     );
     return c;
   }
@@ -114,7 +111,6 @@ class CreateChallengeDTO {
   final double minimum_reward;
   final double bet;
   final String currency;
-  final DateTime due_at;
   final bool is_visible = true;
 
   CreateChallengeDTO({
@@ -124,7 +120,6 @@ class CreateChallengeDTO {
     required this.minimum_reward,
     required this.bet,
     required this.currency,
-    required this.due_at,
   });
 
   @override
@@ -138,7 +133,6 @@ class CreateChallengeDTO {
       'minimum_reward': minimum_reward,
       'bet': bet,
       'currency': currency,
-      'due_at': due_at.millisecondsSinceEpoch,
     };
   }
 
@@ -150,7 +144,6 @@ class CreateChallengeDTO {
       minimum_reward: map['minimum_reward'] as double,
       bet: map['bet'] as double,
       currency: map['currency'] as String,
-      due_at: DateTime.fromMillisecondsSinceEpoch(map['due_at'] as int),
     );
   }
 

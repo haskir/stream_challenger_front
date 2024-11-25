@@ -72,6 +72,8 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
       if (kDebugMode) {
         print('Error parsing challenges: $e');
       }
+      disconnect();
+      return _reconnect();
     }
   }
 

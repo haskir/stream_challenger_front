@@ -30,7 +30,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   final _descriptionController = TextEditingController();
   final _minimumRewardController = TextEditingController();
   final _betController = TextEditingController();
-  final _dueAtController = TextEditingController();
   final List<TextEditingController> _controllers = [];
   static const double _margin = 10.0;
 
@@ -39,7 +38,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
     _descriptionController.dispose();
     _minimumRewardController.dispose();
     _betController.dispose();
-    _dueAtController.dispose();
     super.dispose();
   }
 
@@ -88,12 +86,8 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                   ),
                   const SizedBox(height: _margin),
 
-                  // Поле для срока выполнения
-                  DueDateTimeField(controller: _dueAtController),
-                  const SizedBox(height: _margin),
-
                   // Поле для условий испытания
-                  ConditionsSection(controllers: _controllers, max: 3),
+                  ConditionsSection(controllers: _controllers, max: 5),
                   const SizedBox(height: _margin),
 
                   // Кнопка "Создать"
@@ -106,8 +100,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                           minimum_reward: 0.1,
                           bet: double.parse(_betController.text),
                           currency: "RUB",
-                          due_at: DateFormat('dd.MM.yyyy HH:mm')
-                              .parse(_dueAtController.text),
                           conditions: _controllers.map((e) => e.text).toList(),
                           performerLogin: widget.performerLogin,
                         );
