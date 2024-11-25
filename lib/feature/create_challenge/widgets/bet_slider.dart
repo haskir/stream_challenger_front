@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/feature/create_challenge/widgets/currency_pick_widget.dart';
+
+import '../create_challenge_use_case.dart';
 
 class BetSlider extends ConsumerStatefulWidget {
   final TextEditingController controller;
@@ -21,7 +22,7 @@ class BetSlider extends ConsumerStatefulWidget {
 }
 
 class BetSliderState extends ConsumerState<BetSlider> {
-  double _sliderValue = 0.0;
+  late double _sliderValue;
   final TextEditingController _percentageController = TextEditingController();
 
   double get _calculatedValue {
@@ -31,6 +32,8 @@ class BetSliderState extends ConsumerState<BetSlider> {
   @override
   void initState() {
     super.initState();
+    _onResultChanged(
+        calcMinimumReward(widget.minBet, widget.currency).toString());
     _updateControllers();
   }
 
@@ -90,13 +93,17 @@ class BetSliderState extends ConsumerState<BetSlider> {
                 onChanged: _onResultChanged,
               ),
             ),
-            CurrencyPickWidget(currency: widget.currency),
+            Text(widget.currency),
           ],
         ),
         const SizedBox(height: 20),
         Slider(
           value: _sliderValue,
-          min: 0,
+          min: calcMinimumRewardPercentage(
+            widget.minBet,
+            widget.balance,
+            widget.currency,
+          ),
           max: 100,
           label: _sliderValue.round().toString(),
           onChanged: (double value) {

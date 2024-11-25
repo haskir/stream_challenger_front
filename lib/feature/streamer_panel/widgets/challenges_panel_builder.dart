@@ -37,7 +37,6 @@ class ChallengesPanelBuilder {
     if (cachedPanels != null) {
       return cachedPanels!;
     }
-    debugPanels(challengesByStatus);
 
     cachedPanels = challengesByStatus.entries.map((entry) {
       final status = entry.key;
@@ -57,8 +56,8 @@ class ChallengesPanelBuilder {
         },
         body: Column(
           children: challenges
-              .map((challenge) =>
-                  ChallengeWidgetWithActions(challenge: challenge))
+              .map((challenge) => ChallengeWidgetWithActions(
+                  key: ObjectKey(challenge), challenge: challenge))
               .toList(),
         ),
         isExpanded: challenges.isNotEmpty && expandedStates[status]!,

@@ -12,6 +12,7 @@ import 'package:stream_challenge/providers/account_provider.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
+import 'create_challenge_use_case.dart';
 import 'widgets/view.dart';
 
 class CreateChallengeWidget extends ConsumerStatefulWidget {
@@ -52,10 +53,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
     );
   }
 
-  double calcMinimumReward(double minInUSd, String authCurrency) {
-    return CurrencyConverter().convert(authCurrency, "USD", minInUSd);
-  }
-
   @override
   Widget build(BuildContext context) {
     final performerPref =
@@ -66,6 +63,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
       return const Center(child: CircularProgressIndicator());
     }
     final performerPreferences = performerPref.asData?.value;
+    print('performerPreferences: $performerPreferences');
     if (performerPreferences == null) {
       return const Center(child: Text("No such performer"));
     }
@@ -81,15 +79,12 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
             const SizedBox(height: _margin),
 
             // Поле для ставки и валюты
-            /* BetSlider(
+            BetSlider(
               controller: _betController,
-              minBet: calcMinimumReward(
-                performerPreferences.minimum_reward_in_dollars,
-                account.currency,
-              ),
+              minBet: performerPreferences.minimum_reward_in_dollars,
               balance: account.balance,
-              currency: "RUB",
-            ), */
+              currency: account.currency,
+            ),
             const SizedBox(height: _margin),
 
             // Поле для срока выполнения

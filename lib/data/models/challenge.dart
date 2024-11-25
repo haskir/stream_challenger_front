@@ -44,7 +44,7 @@ class Challenge {
   final String status;
   final bool is_visible;
   final ChallengeAuthor author;
-  final int performer_id;
+  final String performerLogin;
   final DateTime created_at;
   final DateTime due_at;
 
@@ -58,93 +58,10 @@ class Challenge {
     required this.status,
     required this.is_visible,
     required this.author,
-    required this.performer_id,
+    required this.performerLogin,
     required this.created_at,
     required this.due_at,
   });
-
-  factory Challenge.testPending() {
-    return Challenge.fromMap({
-      "id": 1,
-      "description":
-          "Эй, тебе не свабо?Эй, тебе не свабо?Эй, тебе не свабо?Эй, тебе не свабо?Эй, тебе не свабо?Эй, тебе не свабо?Эй, тебе не свабо?Эй, тебе не свабо?Эй, тебе не свабо?Эй, тебе не свабо?",
-      "conditions": ["Гойдануть", "Побриться налысо"],
-      "currency": "RUB",
-      "minimum_reward": 10.0,
-      "bet": 300.0,
-      "status": "PENDING",
-      "is_visible": true,
-      "performer_id": 76288410,
-      "author": {
-        "name": "LapkiNaStol",
-        "urlImage":
-            "https://static-cdn.jtvnw.net/jtv_user_pictures/3692e68b-45b8-4ded-81ac-65af55627721-profile_image-300x300.png"
-      },
-      "created_at": "2024-11-08 18:37:05",
-      "due_at": "2024-11-29 12:00:00",
-    });
-  }
-  factory Challenge.testAccepted() {
-    return Challenge.fromMap({
-      "id": 1,
-      "description": "Эй, тебе не свабо?",
-      "conditions": ["Гойдануть", "Побриться налысо"],
-      "currency": "RUB",
-      "minimum_reward": 10.0,
-      "bet": 300.0,
-      "status": "ACCEPTED",
-      "is_visible": true,
-      "performer_id": 76288410,
-      "author": {
-        "name": "LapkiNaStol",
-        "urlImage":
-            "https://static-cdn.jtvnw.net/jtv_user_pictures/3692e68b-45b8-4ded-81ac-65af55627721-profile_image-300x300.png"
-      },
-      "created_at": "2024-11-08 18:37:05",
-      "due_at": "2024-11-29 12:00:00",
-    });
-  }
-  factory Challenge.testRejected() {
-    return Challenge.fromMap({
-      "id": 1,
-      "description": "Эй, тебе не свабо?",
-      "conditions": ["Гойдануть", "Побриться налысо"],
-      "currency": "RUB",
-      "minimum_reward": 10.0,
-      "bet": 300.0,
-      "status": "REJECTED",
-      "is_visible": true,
-      "performer_id": 76288410,
-      "author": {
-        "name": "LapkiNaStol",
-        "urlImage":
-            "https://static-cdn.jtvnw.net/jtv_user_pictures/3692e68b-45b8-4ded-81ac-65af55627721-profile_image-300x300.png"
-      },
-      "created_at": "2024-11-08 18:37:05",
-      "due_at": "2024-11-29 12:00:00",
-    });
-  }
-
-  factory Challenge.testReported() {
-    return Challenge.fromMap({
-      "id": 1,
-      "description": "Эй, тебе не свабо?",
-      "conditions": ["Гойдануть", "Побриться налысо"],
-      "currency": "RUB",
-      "minimum_reward": 10.0,
-      "bet": 300.0,
-      "status": "REPORTED",
-      "is_visible": false,
-      "performer_id": 76288410,
-      "author": {
-        "name": "LapkiNaStol",
-        "urlImage":
-            "https://static-cdn.jtvnw.net/jtv_user_pictures/3692e68b-45b8-4ded-81ac-65af55627721-profile_image-300x300.png"
-      },
-      "created_at": "2024-11-08 18:37:05",
-      "due_at": "2024-11-29 12:00:00",
-    });
-  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -157,7 +74,7 @@ class Challenge {
       'status': status,
       'is_visible': is_visible,
       'author': author.toMap(),
-      'performer_id': performer_id,
+      'performerLogin': performerLogin,
       'created_at': created_at.millisecondsSinceEpoch,
       'due_at': due_at.millisecondsSinceEpoch,
     };
@@ -174,7 +91,7 @@ class Challenge {
       status: map['status'] as String,
       is_visible: map['is_visible'] as bool,
       author: ChallengeAuthor.fromMap(map['author']),
-      performer_id: map['performer_id'] as int,
+      performerLogin: map['performer_id'],
       created_at: dateTimeFormat.parse(map['created_at'] as String),
       due_at: dateTimeFormat.parse(map['created_at'] as String),
     );
