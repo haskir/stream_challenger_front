@@ -57,6 +57,8 @@ class AccountNotifier extends StateNotifier<Account?> {
     });
   }
 
+  void refresh() => _fetchAccount();
+
   /// Обновление данных Account
   Future<void> _fetchAccount() async {
     final client = await ref.read(accountClientProvider);

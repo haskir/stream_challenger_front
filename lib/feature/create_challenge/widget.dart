@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
+import 'package:stream_challenge/core/platform/response.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/feature/streamer_panel/challenges_actions.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
@@ -41,11 +41,22 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
     super.dispose();
   }
 
-  Future<String> _submit(CreateChallengeDTO challenge, Requester client) async {
-    return await ChallengesActions().challengeCreate(
+  void _submit(CreateChallengeDTO challenge, Requester client) async {
+    dynamic result = await ChallengesActions().challengeCreate(
       challenge: challenge,
       client: client,
     );
+    if (result.runtimeType == Challenge) {
+      Fluttertoast.showToast(
+        msg: "Challenge created",
+      );
+      ref.read(accountProvider.notifier).refresh();
+    }
+    if (result.runtimeType == ErrorDTO) {
+      Fluttertoast.showToast(
+        msg: result.toString(),
+      );
+    }
   }
 
   @override
@@ -65,6 +76,11 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
         data: (minimum) {
           if (minimum == null) {
             return const Center(child: Text("Didn't get minimum reward Error"));
+          }
+          if (account.balance < minimum) {
+            return Center(
+                child: Text(AppLocalizations.of(context).translate(
+                    'Not enough balance, minimum is $minimum ${account.currency}')));
           }
           return Form(
             key: _formKey,
@@ -103,9 +119,10 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                           conditions: _controllers.map((e) => e.text).toList(),
                           performerLogin: widget.performerLogin,
                         );
-                        final result = await _submit(challenge,
-                            await ref.watch(httpClientProvider.future));
-                        Fluttertoast.showToast(msg: result);
+                        _submit(
+                          challenge,
+                          await ref.watch(httpClientProvider.future),
+                        );
                       }
                     },
                     child:

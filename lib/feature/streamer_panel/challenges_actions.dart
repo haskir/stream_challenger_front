@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
+import 'package:stream_challenge/core/platform/response.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/providers/api.dart';
 
@@ -10,7 +11,7 @@ abstract class AbstractChallengeRequester {
     required Requester requester,
     required String action,
   });
-  Future<String> challengeCreate({
+  dynamic challengeCreate({
     required CreateChallengeDTO challenge,
     required Requester client,
   });
@@ -20,7 +21,7 @@ class ChallengesActions implements AbstractChallengeRequester {
   static String url = '${ApiPath.http}/challenges';
 
   @override
-  Future<String> challengeCreate({
+  dynamic challengeCreate({
     required CreateChallengeDTO challenge,
     required Requester client,
   }) async {
@@ -28,7 +29,7 @@ class ChallengesActions implements AbstractChallengeRequester {
       url,
       body: challenge.toMap(),
     );
-    return result.fold((left) => left.toString(), (right) => right.toString());
+    return result.fold((left) => left, (right) => Challenge.fromMap(right));
   }
 
   @override
