@@ -59,9 +59,11 @@ class BetSliderState extends ConsumerState<BetSlider> {
     if (result == null) return;
     if (result <= widget.balance && result >= widget.minBet) {
       _percentageController.text = (result / widget.balance * 100).toString();
+      _sliderValue = result / widget.balance * 100;
     } else {
       setDefault();
     }
+    return setState(() {});
   }
 
   @override
