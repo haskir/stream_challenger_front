@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 
-import '../create_challenge_use_case.dart';
-
 class BetSlider extends ConsumerStatefulWidget {
   final TextEditingController controller;
   final double minBet;
@@ -17,6 +15,8 @@ class BetSlider extends ConsumerStatefulWidget {
     required this.currency,
   });
 
+  double get minInPercentage => minBet / balance * 100;
+
   @override
   BetSliderState createState() => BetSliderState();
 }
@@ -25,40 +25,42 @@ class BetSliderState extends ConsumerState<BetSlider> {
   late double _sliderValue;
   final TextEditingController _percentageController = TextEditingController();
 
-  double get _calculatedValue {
-    return widget.balance * (_sliderValue / 100);
+  void setDefault() {
+    _sliderValue = widget.minInPercentage;
+    _percentageController.text = widget.minInPercentage.toString();
+    widget.controller.text = widget.minBet.toString();
   }
 
   @override
   void initState() {
+    _sliderValue = widget.minInPercentage;
+    setDefault();
     super.initState();
-    _onResultChanged(
-        calcMinimumReward(widget.minBet, widget.currency).toString());
-    _updateControllers();
-  }
-
-  void _updateControllers() {
-    _percentageController.text = _sliderValue.toStringAsFixed(0);
-    widget.controller.text = _calculatedValue.toStringAsFixed(2);
   }
 
   void _onPercentageChanged(String value) {
     double? percentage = double.tryParse(value);
-    if (percentage != null) {
-      setState(() {
-        _sliderValue = percentage;
-        _updateControllers();
-      });
+    if (percentage == null) return;
+    if (percentage > 100) percentage = 100;
+    if (percentage > widget.minInPercentage && percentage <= 100) {
+      widget.controller.text = (widget.balance * percentage / 100).toString();
+      _percentageController.text = percentage.toString();
+    } else {
+      setDefault();
+      return setState(() {});
     }
+    setState(() {
+      _sliderValue = percentage!;
+    });
   }
 
   void _onResultChanged(String value) {
     double? result = double.tryParse(value);
-    if (result != null && result <= widget.balance && result >= 0) {
-      setState(() {
-        _sliderValue = (result / widget.balance) * 100;
-        _updateControllers();
-      });
+    if (result == null) return;
+    if (result <= widget.balance && result >= widget.minBet) {
+      _percentageController.text = (result / widget.balance * 100).toString();
+    } else {
+      setDefault();
     }
   }
 
@@ -98,21 +100,14 @@ class BetSliderState extends ConsumerState<BetSlider> {
         ),
         const SizedBox(height: 20),
         Slider(
-          value: _sliderValue,
-          min: calcMinimumRewardPercentage(
-            widget.minBet,
-            widget.balance,
-            widget.currency,
-          ),
-          max: 100,
-          label: _sliderValue.round().toString(),
-          onChanged: (double value) {
-            setState(() {
-              _sliderValue = value;
-              _updateControllers();
-            });
-          },
-        ),
+            min: widget.minInPercentage,
+            max: 100,
+            value: _sliderValue,
+            label: widget.controller.text,
+            onChanged: (double value) {
+              _onPercentageChanged(value.toString());
+              setState(() {});
+            }),
       ],
     );
   }

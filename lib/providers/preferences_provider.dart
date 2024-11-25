@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/user_preferences.dart';
+import 'package:stream_challenge/providers/account_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 /// Requester - клиент для выполнения HTTP-запросов
@@ -29,12 +30,15 @@ class _PreferencesClient {
     );
   }
 
-  Future<Preferences?> getPerformerPreferences(String login) async {
-    final response = await httpClient.get('$url/performer/$login');
-    return response.fold(
-      (left) => null,
-      (right) => Preferences.fromMap(right),
+  Future<double?> getMinimumInCurrency(String login, String currency) async {
+    final response = await httpClient.get(
+      '$url/minimum_in_currency',
+      {'login': login, 'currency': currency},
     );
+    return response.fold((left) => null, (right) {
+      final Map data = Map<String, dynamic>.from(right);
+      return double.tryParse(data['minimum'].toString());
+    });
   }
 }
 
@@ -86,10 +90,13 @@ final preferencesProvider =
   (ref) => PreferencesNotifier(ref),
 );
 
-final performerPreferencesProvider =
-    FutureProvider.family<Preferences?, String>(
+final minimumInCurrencyProvider =
+    FutureProvider.autoDispose.family<double?, String>(
   (ref, login) async {
+    final account = ref.watch(accountProvider);
+    if (account == null) return null;
+
     final client = await ref.read(preferencesClientProvider.future);
-    return await client.getPerformerPreferences(login);
+    return client.getMinimumInCurrency(login, account.currency);
   },
 );
