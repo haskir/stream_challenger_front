@@ -71,12 +71,9 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
 
     return minimumInCurrency.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) =>
-            const Center(child: Text("Didn't get minimum reward Error")),
+        error: (error, stack) => const Center(child: Text("No such user")),
         data: (minimum) {
-          if (minimum == null) {
-            return const Center(child: Text("Didn't get minimum reward Error"));
-          }
+          if (minimum == null) return const Center(child: Text("No such user"));
           if (account.balance < minimum) {
             return Center(
                 child: Text(AppLocalizations.of(context).translate(

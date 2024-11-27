@@ -33,8 +33,13 @@ class Requester implements _Client {
       'Access-Control-Allow-Origin': 'localhost',
     };
     if (kDebugMode) {
-      _dio.interceptors.add(
-          LogInterceptor(request: true, requestBody: true, responseBody: true));
+      _dio.interceptors.add(LogInterceptor(
+        request: true,
+        requestBody: true,
+        responseBody: true,
+        requestHeader: false,
+        responseHeader: false,
+      ));
     }
   }
 
