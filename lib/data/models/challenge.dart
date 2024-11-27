@@ -78,7 +78,6 @@ class Challenge {
   }
 
   factory Challenge.fromMap(Map<String, dynamic> map) {
-    print('map: $map');
     final c = Challenge(
       id: map['id'],
       description: map['description'],

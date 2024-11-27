@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stream_challenge/feature/single_challenge_view/challenge_provider.dart';
+import 'package:stream_challenge/providers/challenge_provider.dart';
 
 class ViewChallengeWidget extends ConsumerStatefulWidget {
   final int id;

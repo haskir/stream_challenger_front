@@ -1,12 +1,12 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/auth_state.dart';
-import 'package:stream_challenge/feature/profile/widgets/challenges_list_widget.dart';
+import 'package:stream_challenge/feature/profile/widgets/challenge_list_widget.dart';
 import 'package:stream_challenge/feature/profile/widgets/transaction_list_widget.dart';
 import 'package:stream_challenge/providers/providers.dart';
+
+import 'widgets/profile_info_widget.dart';
 
 final profilePageContentProvider =
     StateNotifierProvider<ProfilePageContentNotifier, String>((ref) {
@@ -24,6 +24,7 @@ class ProfilePage extends ConsumerWidget {
     '/': 'My profile',
     '/transactions': 'Transactions',
     '/my-challenges': 'My challenges',
+    '/challenges-to-me': 'Challenges to me',
   };
 
   const ProfilePage({super.key});
@@ -72,6 +73,13 @@ class ProfilePage extends ConsumerWidget {
                     .read(profilePageContentProvider.notifier)
                     .setContent('/my-challenges'),
               ),
+              ListTile(
+                title: Text(
+                    AppLocalizations.of(context).translate('Challenges to me')),
+                onTap: () => ref
+                    .read(profilePageContentProvider.notifier)
+                    .setContent('/challenges-to-me'),
+              ),
             ],
           ),
         ),
@@ -87,11 +95,20 @@ class ProfilePage extends ConsumerWidget {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 SizedBox(height: 20),
-                _buildContent(contentPath, user),
+                Expanded(
+                  child: Scrollbar(
+                    thumbVisibility: true,
+                    scrollbarOrientation: ScrollbarOrientation.right,
+                    child: SingleChildScrollView(
+                      primary: true, // Это важное изменение
+                      child: _buildContent(contentPath, user),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-        ),
+        )
       ],
     );
   }
@@ -103,83 +120,17 @@ class ProfilePage extends ConsumerWidget {
       case '/transactions':
         return TransactionListWidget();
       case '/my-challenges':
-        return ChallengesListWidget();
+        return ChallengesListWidget(
+          isAuthor: true,
+          key: ValueKey(true),
+        );
+      case '/challenges-to-me':
+        return ChallengesListWidget(
+          isAuthor: false,
+          key: ValueKey(false),
+        );
       default:
         return Container();
     }
-  }
-}
-
-class ProfileInfoCard extends StatelessWidget {
-  final AuthToken user;
-
-  const ProfileInfoCard({super.key, required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppLocalizations.of(context).translate('Main info'),
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            InfoRow(
-              label: AppLocalizations.of(context).translate('Name'),
-              value: user.display_name,
-            ),
-            InfoRow(
-              label: AppLocalizations.of(context).translate('Login'),
-              value: user.login,
-            ),
-            InfoRow(label: 'Email', value: user.email),
-            if (kDebugMode) InfoRow(label: 'ID', value: user.id.toString()),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class InfoRow extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const InfoRow({super.key, required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.bold)),
-          SizedBox(width: 8),
-          Expanded(
-              child:
-                  Text(value, style: Theme.of(context).textTheme.bodyMedium)),
-        ],
-      ),
-    );
   }
 }

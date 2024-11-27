@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/account.dart';
@@ -42,7 +41,7 @@ class AccountNotifier extends StateNotifier<Account?> {
     final authState = ref.watch(authStateProvider);
     if (authState.isAuthenticated) {
       await _fetchAccount();
-      _startUpdateLoop(kDebugMode ? 999 : 60);
+      _startUpdateLoop(60);
     }
   }
 
