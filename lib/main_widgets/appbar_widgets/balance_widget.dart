@@ -21,10 +21,16 @@ class BalanceWidget extends ConsumerWidget {
     final player =
         AudioPlayer(); // Создаем аудиоплеер для воспроизведения звука
     if (account == null) return Container();
-
+    int indexOfDot = account.balance.toString().indexOf(".");
+    late String balance;
+    if (indexOfDot == -1) {
+      balance = account.balance.toString();
+    } else {
+      balance = account.balance.toString().substring(0, indexOfDot + 3);
+    }
     return Row(
       children: [
-        Text('${account.balance} ${_currency[account.currency]}'),
+        Text('$balance ${_currency[account.currency]}'),
         SizedBox(width: 3),
         TextButton(
           onPressed: () {},
