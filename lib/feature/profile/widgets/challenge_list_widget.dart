@@ -6,7 +6,7 @@ import 'package:stream_challenge/providers/challenge_provider.dart';
 
 class ChallengesListWidget extends ConsumerStatefulWidget {
   final bool isAuthor;
-  late final challengesProvider;
+  final FutureProviderFamily<List<Challenge>?, GetStruct> challengesProvider;
   ChallengesListWidget({
     super.key,
     required this.isAuthor,
@@ -21,14 +21,21 @@ class ChallengesListWidget extends ConsumerStatefulWidget {
 
 class _ChallengesListWidgetState extends ConsumerState<ChallengesListWidget> {
   final Map<String, bool> _expandedStates = {
-    //'ACCEPTED': false,
     'PENDING': false,
+    'ACCEPTED': false,
     'REJECTED': false,
-    //'FAILED': false,
-    //'CANCELLED': false,
-    //'SUCCESSFUL': false,
+    'SUCCESSFUL': false,
+    'FAILED': false,
+    'CANCELLED': false,
   };
-  final Map<String, List<Challenge>> challengesByStatus = {};
+  final Map<String, List<Challenge>> challengesByStatus = {
+    "PENDING": [],
+    "ACCEPTED": [],
+    "REJECTED": [],
+    "SUCCESSFUL": [],
+    "FAILED": [],
+    "CANCELLED": [],
+  };
 
   @override
   Widget build(BuildContext context) {

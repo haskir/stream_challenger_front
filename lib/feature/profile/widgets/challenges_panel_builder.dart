@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/feature/profile/widgets/challenge_view_widget.dart';
@@ -20,93 +21,141 @@ class ChallengesPanel extends ConsumerStatefulWidget {
 }
 
 class _ChallengesPanelState extends ConsumerState<ChallengesPanel> {
+  final Map<String, PagingController<int, Challenge>> pagingControllers = {
+    "PENDING": PagingController(firstPageKey: 1),
+    "ACCEPTED": PagingController(firstPageKey: 1),
+    "REJECTED": PagingController(firstPageKey: 1),
+    "SUCCESSFUL": PagingController(firstPageKey: 1),
+    "FAILED": PagingController(firstPageKey: 1),
+    "CANCELLED": PagingController(firstPageKey: 1),
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    pagingControllers.forEach((status, controller) {
+      controller.addPageRequestListener((pageKey) {
+        _fetchPage(status, pageKey);
+      });
+    });
+  }
+
+  Future<void> _fetchPage(String status, int pageKey) async {
+    final provider = ref.read(widget
+        .challengesProvider(GetStruct(status: status, page: pageKey, size: 10))
+        .future);
+
+    try {
+      final challenges = await provider;
+
+      if (challenges == null || challenges.isEmpty) {
+        pagingControllers[status]!.appendLastPage([]);
+      } else {
+        final isLastPage = challenges.length < 10;
+        if (isLastPage) {
+          pagingControllers[status]!.appendLastPage(challenges);
+        } else {
+          pagingControllers[status]!.appendPage(challenges, pageKey + 1);
+        }
+      }
+    } catch (error) {
+      pagingControllers[status]!.error = error;
+    }
+  }
+
+  @override
+  void dispose() {
+    pagingControllers.forEach((_, controller) => controller.dispose());
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: ExpansionPanelList(
-        elevation: 1,
-        expansionCallback: (index, isExpanded) {
-          setState(() {
-            final status = ChallengesPanelBuilder.headers.keys.toList()[index];
-            widget.expandedStates[status] = !isExpanded;
-
-            // Загружаем данные только при открытии панели
-            if (!widget.expandedStates[status]!) {
-              ref.read(widget.challengesProvider(
-                  GetStruct(status: status, page: 1, size: 10)));
-            }
-          });
-        },
-        children: ChallengesPanelBuilder(
-          expandedStates: widget.expandedStates,
-        ).buildDynamicPanels(context, widget.challengesProvider, ref),
-      ),
+    return ExpansionPanelList(
+      elevation: 1,
+      expansionCallback: (index, isExpanded) {
+        final status = _ChallengesPanelBuilder.headers.keys.toList()[index];
+        setState(() {
+          widget.expandedStates[status] = isExpanded;
+        });
+      },
+      children: _ChallengesPanelBuilder(
+        expandedStates: widget.expandedStates,
+        pagingControllers: pagingControllers,
+      ).buildDynamicPanels(context),
     );
   }
 }
 
-class ChallengesPanelBuilder {
+class _ChallengesPanelBuilder {
   static const Map<String, String> headers = {
-    //'ACCEPTED': "Accepted Challenges",
     'PENDING': "New Challenges",
+    'ACCEPTED': "Accepted Challenges",
     'REJECTED': "Rejected Challenges",
-    //'FAILED': "Failed Challenges",
-    //'CANCELLED': "Cancelled Challenges",
-    //'SUCCESSFUL': "Successful Challenges",
+    'SUCCESSFUL': "Successful Challenges",
+    'FAILED': "Failed Challenges",
+    'CANCELLED': "Cancelled Challenges",
   };
 
   static const Map<String, Color> colors = {
-    //'ACCEPTED': Colors.blue,
-    'PENDING': Colors.orange,
-    'REJECTED': Colors.red,
-    //'FAILED': Colors.black,
-    //'CANCELLED': Colors.grey,
-    //'SUCCESSFUL': Colors.green,
+    "PENDING": Colors.orange,
+    "ACCEPTED": Colors.blue,
+    "REJECTED": Colors.red,
+    "SUCCESSFUL": Colors.green,
+    "FAILED": Colors.black,
+    "CANCELLED": Colors.grey,
   };
 
   final Map<String, bool> expandedStates;
+  final Map<String, PagingController<int, Challenge>> pagingControllers;
 
-  ChallengesPanelBuilder({
+  _ChallengesPanelBuilder({
     required this.expandedStates,
+    required this.pagingControllers,
   });
 
-  List<ExpansionPanel> buildDynamicPanels(
-    BuildContext context,
-    FutureProviderFamily challengesProvider,
-    WidgetRef ref,
-  ) {
+  List<ExpansionPanel> buildDynamicPanels(BuildContext context) {
     return headers.entries.map((entry) {
       final status = entry.key;
-
-      // Используем watch, чтобы слушать асинхронное состояние
-      final challengesAsyncValue = ref.watch(
-          challengesProvider(GetStruct(status: status, page: 1, size: 10)));
 
       return ExpansionPanel(
         headerBuilder: (BuildContext context, bool isExpanded) {
           return ListTile(
             title: Text(
               AppLocalizations.of(context).translate(headers[status]!),
-            ),
-            trailing: challengesAsyncValue.when(
-              data: (challenges) => Text('(${challenges.length})'),
-              loading: () => const CircularProgressIndicator(),
-              error: (_, __) => const Text('Error'),
+              style: TextStyle(color: colors[status], fontSize: 18),
             ),
           );
         },
-        body: challengesAsyncValue.when(
-          data: (challenges) => Column(
-            children: challenges
-                .map((challenge) => ChallengeView(
-                    key: ObjectKey(challenge), challenge: challenge))
-                .toList(),
-          ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (_, __) =>
-              const Center(child: Text('Failed to load challenges')),
-        ),
-        isExpanded: expandedStates[status]!,
+        body: expandedStates[status] == true
+            ? SizedBox(
+                height: 300, // Ограничиваем высоту списка
+                child: PagedListView<int, Challenge>(
+                  pagingController: pagingControllers[status]!,
+                  builderDelegate: PagedChildBuilderDelegate<Challenge>(
+                    itemBuilder: (context, challenge, index) => ChallengeView(
+                      key: ValueKey(challenge.id),
+                      challenge: challenge,
+                    ),
+                    firstPageProgressIndicatorBuilder: (context) =>
+                        const Center(child: CircularProgressIndicator()),
+                    newPageProgressIndicatorBuilder: (context) =>
+                        const Center(child: CircularProgressIndicator()),
+                    noItemsFoundIndicatorBuilder: (context) => Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .translate('No challenges available'),
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : const Center(
+                child: Text(
+                    'No data')), // Пустое пространство, если панель закрыта
+        isExpanded: expandedStates[status] ?? false,
         canTapOnHeader: true,
       );
     }).toList();

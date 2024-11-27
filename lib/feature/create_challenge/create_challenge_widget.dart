@@ -6,7 +6,7 @@ import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/core/platform/response.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/feature/streamer_panel/performer_panel_use_case.dart';
+import 'package:stream_challenge/feature/streamer_panel/challenges_actions.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';

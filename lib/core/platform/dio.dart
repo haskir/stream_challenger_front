@@ -5,7 +5,7 @@ import 'package:stream_challenge/providers/Api.dart';
 import 'response.dart';
 
 abstract class _Client {
-  Future<Either<ErrorDTO, Map<String, dynamic>>> get(
+  Future<Either<ErrorDTO, dynamic>> get(
     String url, [
     Map<String, dynamic> params = const {},
   ]);
@@ -92,8 +92,20 @@ class Requester implements _Client {
     String url, [
     Map<String, dynamic> params = const {},
   ]) {
-    return _request<Map<String, dynamic>>('GET', url,
-        params: params, parser: (data) => Map<String, dynamic>.from(data));
+    return _request<dynamic>(
+      'GET',
+      url,
+      params: params,
+      parser: (data) {
+        if (data is List) {
+          return List<dynamic>.from(data); // Если ответ — List
+        } else if (data is Map) {
+          return Map<String, dynamic>.from(data); // Если ответ — Map
+        } else {
+          throw TypeError(); // Если ответ неожиданный
+        }
+      },
+    );
   }
 
   @override

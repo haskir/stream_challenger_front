@@ -17,11 +17,11 @@ class GetStruct {
 
   GetStruct({required this.status, required this.page, required this.size});
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+  Map<String, String> toMap() {
+    return {
       'status': status,
-      'page': page,
-      'size': size,
+      'page': page.toString(),
+      'size': size.toString(),
     };
   }
 
@@ -60,39 +60,43 @@ class _ChallengeGetter {
       isAuthor ? '/challenges/author' : '/challenges/performer',
       getStruct.toMap(),
     );
-    return response.fold(
-      (left) => Left(left),
-      (right) =>
-          Right((right as List).map((e) => Challenge.fromMap(e)).toList()),
-    );
+    return response.fold((error) => Left(error), (array) {
+      if (array == null) {
+        return Right(List<Challenge>.empty());
+      }
+      final challenges = array.map((e) => Challenge.fromMap(e)).toList();
+      if (kDebugMode) {
+        print("challenges: $challenges");
+      }
+      return Right(challenges);
+    });
   }
 
   static Future<Either<ErrorDTO, List<Challenge>>> getPerformerChallenges(
       {required GetStruct getStruct, required Requester client}) async {
     return await getChallenges(
-        getStruct: getStruct, client: client, isAuthor: false);
+      getStruct: getStruct,
+      client: client,
+      isAuthor: false,
+    );
   }
 
   static Future<Either<ErrorDTO, List<Challenge>>> getAuthorChallenges(
       {required GetStruct getStruct, required Requester client}) async {
     return await getChallenges(
-        getStruct: getStruct, client: client, isAuthor: true);
+      getStruct: getStruct,
+      client: client,
+      isAuthor: true,
+    );
   }
 }
 
 final challengeProvider =
     FutureProvider.family<Either<ErrorDTO, Challenge>, int>((ref, id) async {
   final client = await ref.watch(httpClientProvider.future);
+  final result = await _ChallengeGetter.getChallenge(id: id, client: client);
 
-  final result = await _ChallengeGetter.getChallenge(
-    id: id,
-    client: client,
-  );
-
-  return result.fold(
-    (error) => left(error),
-    (challenge) => right(challenge),
-  );
+  return result;
 });
 
 final authorChallengesProvider =
@@ -107,7 +111,7 @@ final authorChallengesProvider =
 
     return result.fold(
       (error) {
-        if (kDebugMode) print(error);
+        if (kDebugMode) print("authorChallengesProvider $error");
         return null;
       },
       (challenges) => challenges,
@@ -124,10 +128,9 @@ final performerChallengesProvider =
       getStruct: getStruct,
       client: client,
     );
-
     return result.fold(
       (error) {
-        if (kDebugMode) print(error);
+        if (kDebugMode) print("performerChallengesProvider $error");
         return null;
       },
       (challenges) => challenges,
