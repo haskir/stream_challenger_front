@@ -16,13 +16,8 @@ class PanelWidget extends ConsumerStatefulWidget {
 
 class _PanelWidgetState extends ConsumerState<PanelWidget> {
   final Map<String, bool> _expandedStates = {
-    'ACCEPTED': false,
-    'ENDED': false,
-    'PENDING': false,
-    'REJECTED': false,
-    'FAILED': false,
-    'HIDDEN': false,
-    'SUCCESSFUL': false,
+    'ACCEPTED': true,
+    'PENDING': true,
   };
 
   late ChallengesPanelWebSocket _wsconnection;
@@ -57,12 +52,7 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
     final Map<String, List<Challenge>> challengesByState = {
       'ACCEPTED': [],
       'PENDING': [],
-      'REJECTED': [],
-      'SUCCESSFUL': [],
-      'FAILED': [],
-      'HIDDEN': [],
     };
-
     for (var challenge in challenges) {
       if (challengesByState[challenge.status] != null) {
         challengesByState[challenge.status] = [

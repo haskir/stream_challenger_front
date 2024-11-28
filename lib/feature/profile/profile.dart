@@ -37,7 +37,7 @@ class ProfilePage extends ConsumerWidget {
     }
 
     final contentPath = ref.watch(profilePageContentProvider);
-
+    // Левая панель-меню
     return Row(
       children: [
         Drawer(
@@ -83,6 +83,7 @@ class ProfilePage extends ConsumerWidget {
             ],
           ),
         ),
+        // Контент-панелька
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(16.0),

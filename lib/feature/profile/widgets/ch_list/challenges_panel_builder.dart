@@ -3,18 +3,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/feature/profile/widgets/challenge_view_widget.dart';
+import 'package:stream_challenge/feature/profile/widgets/ch_list/challenge_view_widget.dart';
 import 'package:stream_challenge/providers/challenge_provider.dart';
 
 class ChallengesPanel extends ConsumerStatefulWidget {
+  final bool isAuthor;
   final Map<String, bool> expandedStates;
-  final FutureProviderFamily<List<Challenge>?, GetStruct> challengesProvider;
+  late final FutureProviderFamily<List<Challenge>?, GetStruct>
+      challengesProvider;
 
-  const ChallengesPanel({
+  ChallengesPanel({
     super.key,
     required this.expandedStates,
-    required this.challengesProvider,
-  });
+    required this.isAuthor,
+  }) : challengesProvider =
+            isAuthor ? authorChallengesProvider : performerChallengesProvider;
 
   @override
   ConsumerState<ChallengesPanel> createState() => _ChallengesPanelState();
@@ -71,18 +74,21 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionPanelList(
-      elevation: 1,
-      expansionCallback: (index, isExpanded) {
-        final status = _ChallengesPanelBuilder.headers.keys.toList()[index];
-        setState(() {
-          widget.expandedStates[status] = isExpanded;
-        });
-      },
-      children: _ChallengesPanelBuilder(
-        expandedStates: widget.expandedStates,
-        pagingControllers: pagingControllers,
-      ).buildDynamicPanels(context),
+    return Container(
+      margin: EdgeInsets.only(right: 25),
+      child: ExpansionPanelList(
+        elevation: 1,
+        expansionCallback: (index, isExpanded) {
+          final status = _ChallengesPanelBuilder.headers.keys.toList()[index];
+          setState(() {
+            widget.expandedStates[status] = isExpanded;
+          });
+        },
+        children: _ChallengesPanelBuilder(
+          expandedStates: widget.expandedStates,
+          pagingControllers: pagingControllers,
+        ).buildDynamicPanels(context, widget.isAuthor),
+      ),
     );
   }
 }
@@ -114,10 +120,11 @@ class _ChallengesPanelBuilder {
     required this.pagingControllers,
   });
 
-  List<ExpansionPanel> buildDynamicPanels(BuildContext context) {
+  List<ExpansionPanel> buildDynamicPanels(BuildContext context, bool isAuthor) {
     return headers.entries.map((entry) {
       final status = entry.key;
-
+      final int? chLen = pagingControllers[status]?.itemList?.length;
+      String trailing = chLen != null ? "($chLen)" : "";
       return ExpansionPanel(
         headerBuilder: (BuildContext context, bool isExpanded) {
           return ListTile(
@@ -125,36 +132,38 @@ class _ChallengesPanelBuilder {
               AppLocalizations.of(context).translate(headers[status]!),
               style: TextStyle(color: colors[status], fontSize: 18),
             ),
+            trailing: Text(trailing,
+                style: TextStyle(
+                  color: colors[status],
+                  fontSize: 18,
+                )),
           );
         },
-        body: expandedStates[status] == true
-            ? SizedBox(
-                height: 300, // Ограничиваем высоту списка
-                child: PagedListView<int, Challenge>(
-                  pagingController: pagingControllers[status]!,
-                  builderDelegate: PagedChildBuilderDelegate<Challenge>(
-                    itemBuilder: (context, challenge, index) => ChallengeView(
-                      key: ValueKey(challenge.id),
-                      challenge: challenge,
-                    ),
-                    firstPageProgressIndicatorBuilder: (context) =>
-                        const Center(child: CircularProgressIndicator()),
-                    newPageProgressIndicatorBuilder: (context) =>
-                        const Center(child: CircularProgressIndicator()),
-                    noItemsFoundIndicatorBuilder: (context) => Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        AppLocalizations.of(context)
-                            .translate('No challenges available'),
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            : const Center(
+        body: SizedBox(
+          height: chLen != null ? 300 : 50,
+          child: PagedListView<int, Challenge>(
+            pagingController: pagingControllers[status]!,
+            builderDelegate: PagedChildBuilderDelegate<Challenge>(
+              itemBuilder: (context, challenge, index) => ChallengeView(
+                key: ValueKey(challenge.id),
+                challenge: challenge,
+                isAuthor: isAuthor,
+              ),
+              firstPageProgressIndicatorBuilder: (context) =>
+                  const Center(child: CircularProgressIndicator()),
+              newPageProgressIndicatorBuilder: (context) =>
+                  const Center(child: CircularProgressIndicator()),
+              noItemsFoundIndicatorBuilder: (context) => Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
-                    'No data')), // Пустое пространство, если панель закрыта
+                  AppLocalizations.of(context)
+                      .translate('No challenges available'),
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ),
+        ),
         isExpanded: expandedStates[status] ?? false,
         canTapOnHeader: true,
       );

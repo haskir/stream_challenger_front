@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/feature/streamer_panel/challenges_actions.dart';
+import 'package:stream_challenge/use_cases/challenges_actions.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'action_buttons.dart';
 

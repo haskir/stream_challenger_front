@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/feature/profile/widgets/challenges_panel_builder.dart';
-import 'package:stream_challenge/providers/challenge_provider.dart';
+import 'package:stream_challenge/feature/profile/widgets/ch_list/challenges_panel_builder.dart';
 
 class ChallengesListWidget extends ConsumerStatefulWidget {
   final bool isAuthor;
-  final FutureProviderFamily<List<Challenge>?, GetStruct> challengesProvider;
-  ChallengesListWidget({
+  const ChallengesListWidget({
     super.key,
     required this.isAuthor,
-  }) : challengesProvider =
-            isAuthor ? authorChallengesProvider : performerChallengesProvider;
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
@@ -41,7 +38,7 @@ class _ChallengesListWidgetState extends ConsumerState<ChallengesListWidget> {
   Widget build(BuildContext context) {
     return ChallengesPanel(
       expandedStates: _expandedStates,
-      challengesProvider: widget.challengesProvider,
+      isAuthor: widget.isAuthor,
     );
   }
 }
