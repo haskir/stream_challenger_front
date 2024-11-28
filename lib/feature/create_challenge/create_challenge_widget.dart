@@ -50,7 +50,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
       Fluttertoast.showToast(
         msg: "Challenge created",
       );
-      ref.read(accountProvider.notifier).refresh();
+      await ref.read(accountProvider.notifier).refresh();
     }
     if (result.runtimeType == ErrorDTO) {
       Fluttertoast.showToast(
