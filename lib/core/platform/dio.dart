@@ -34,8 +34,8 @@ class Requester implements _Client {
     };
     if (kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
-        request: true,
-        requestBody: true,
+        request: false,
+        requestBody: false,
         responseBody: true,
         requestHeader: false,
         responseHeader: false,

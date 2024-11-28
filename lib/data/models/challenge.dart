@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:convert';
 
 import 'package:stream_challenge/core/platform/datetime_format.dart';
@@ -17,14 +14,14 @@ class ChallengeAuthor {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'name': name,
-      'urlImage': urlImage,
+      'url_image': urlImage,
     };
   }
 
   factory ChallengeAuthor.fromMap(Map<String, dynamic> map) {
     return ChallengeAuthor(
       name: map['name'] as String,
-      urlImage: map['urlImage'] as String,
+      urlImage: map['url_image'] as String,
     );
   }
 
@@ -34,89 +31,20 @@ class ChallengeAuthor {
       ChallengeAuthor.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-class Challenge {
-  final int id;
-  final String description;
-  final List<String> conditions;
-  final String currency;
-  final double minimum_reward;
-  final double bet;
-  final String status;
-  final bool is_visible;
-  final ChallengeAuthor author;
-  final String performerLogin;
-  final DateTime created_at;
-
-  Challenge({
-    required this.id,
-    required this.description,
-    required this.conditions,
-    required this.currency,
-    required this.minimum_reward,
-    required this.bet,
-    required this.status,
-    required this.is_visible,
-    required this.author,
-    required this.performerLogin,
-    required this.created_at,
-  });
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'description': description,
-      'conditions': conditions,
-      'currency': currency,
-      'minimum_reward': minimum_reward,
-      'bet': bet,
-      'status': status,
-      'is_visible': is_visible,
-      'author': author.toMap(),
-      'performerLogin': performerLogin,
-      'created_at': created_at.millisecondsSinceEpoch,
-    };
-  }
-
-  factory Challenge.fromMap(Map<String, dynamic> map) {
-    final c = Challenge(
-      id: map['id'],
-      description: map['description'],
-      conditions: List<String>.from((map['conditions'])),
-      currency: map['currency'],
-      minimum_reward: map['minimum_reward'],
-      bet: map['bet'],
-      status: map['status'],
-      is_visible: map['is_visible'],
-      author: ChallengeAuthor.fromMap(map['author']),
-      performerLogin: map['performerLogin'],
-      created_at: dateTimeFormat.parse(map['created_at']),
-    );
-    return c;
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory Challenge.fromJson(String source) =>
-      Challenge.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() => prettyJson(toMap());
-}
-
 class CreateChallengeDTO {
   final String description;
   final List<String> conditions;
   final String performerLogin;
-  final double minimum_reward;
+  final double minimumReward;
   final double bet;
   final String currency;
-  final bool is_visible = true;
+  final bool isVisible = true;
 
   CreateChallengeDTO({
     required this.description,
     required this.conditions,
     required this.performerLogin,
-    required this.minimum_reward,
+    required this.minimumReward,
     required this.bet,
     required this.currency,
   });
@@ -128,8 +56,8 @@ class CreateChallengeDTO {
     return <String, dynamic>{
       'description': description,
       'conditions': conditions,
-      'performerLogin': performerLogin,
-      'minimum_reward': minimum_reward,
+      'performer_login': performerLogin,
+      'minimum_reward': minimumReward,
       'bet': bet,
       'currency': currency,
     };
@@ -139,8 +67,8 @@ class CreateChallengeDTO {
     return CreateChallengeDTO(
       description: map['description'] as String,
       conditions: List<String>.from((map['conditions'] as List<String>)),
-      performerLogin: map['performerLogin'] as String,
-      minimum_reward: map['minimum_reward'] as double,
+      performerLogin: map['performer_login'] as String,
+      minimumReward: map['minimum_reward'] as double,
       bet: map['bet'] as double,
       currency: map['currency'] as String,
     );
@@ -150,4 +78,72 @@ class CreateChallengeDTO {
 
   factory CreateChallengeDTO.fromJson(String source) =>
       CreateChallengeDTO.fromMap(json.decode(source) as Map<String, dynamic>);
+}
+
+class Challenge {
+  final int id;
+  final String description;
+  final List<String> conditions;
+  final String currency;
+  final double minimumReward;
+  final double bet;
+  final String status;
+  final bool isVisible;
+  final ChallengeAuthor author;
+  final String performerLogin;
+  final DateTime createdAt;
+
+  Challenge({
+    required this.id,
+    required this.description,
+    required this.conditions,
+    required this.currency,
+    required this.minimumReward,
+    required this.bet,
+    required this.status,
+    required this.isVisible,
+    required this.author,
+    required this.performerLogin,
+    required this.createdAt,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'description': description,
+      'conditions': conditions,
+      'currency': currency,
+      'minimum_reward': minimumReward,
+      'bet': bet,
+      'status': status,
+      'is_visible': isVisible,
+      'author': author.toMap(),
+      'performer_login': performerLogin,
+      'created_at': createdAt.millisecondsSinceEpoch,
+    };
+  }
+
+  factory Challenge.fromMap(Map<String, dynamic> map) {
+    return Challenge(
+      id: map['id'],
+      description: map['description'],
+      conditions: List<String>.from((map['conditions'])),
+      currency: map['currency'],
+      minimumReward: map['minimum_reward'],
+      bet: map['bet'],
+      status: map['status'],
+      isVisible: map['is_visible'],
+      author: ChallengeAuthor.fromMap(map['author']),
+      performerLogin: map['performer_login'],
+      createdAt: dateTimeFormat.parse(map['created_at']),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Challenge.fromJson(String source) =>
+      Challenge.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => prettyJson(toMap());
 }

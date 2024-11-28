@@ -1,9 +1,11 @@
+import 'dart:async';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
-import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+
 import 'package:stream_challenge/core/platform/token_repo.dart';
 import 'package:stream_challenge/providers/Api.dart';
 

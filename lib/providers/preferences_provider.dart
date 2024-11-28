@@ -52,6 +52,7 @@ final preferencesClientProvider =
 /// StateNotifier для управления состоянием Preferences
 class PreferencesNotifier extends StateNotifier<Preferences> {
   final Ref ref;
+  late Preferences defaultPreferences = Preferences.defaultPreferences();
 
   PreferencesNotifier(this.ref) : super(Preferences.defaultPreferences()) {
     initialize();
@@ -71,16 +72,12 @@ class PreferencesNotifier extends StateNotifier<Preferences> {
   }
 
   Future<void> updatePreferences(Preferences preferences) async {
+    state = preferences;
     final client = await ref.read(preferencesClientProvider.future);
     final updatedPreferences = await client.updatePreferences(preferences);
     if (updatedPreferences != null) {
       state = updatedPreferences;
     }
-  }
-
-  Future<void> updateLanguage(String language) async {
-    state.language = language;
-    await updatePreferences(state);
   }
 }
 

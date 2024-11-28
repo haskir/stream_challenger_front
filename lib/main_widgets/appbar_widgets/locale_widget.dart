@@ -29,14 +29,14 @@ class _LocaleState extends ConsumerState<LocaleWidget> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        GestureDetector(
-          onTap: () async {
+        IconButton(
+          onPressed: () async {
             preferences.language = switchLanguage(preferences.language);
             await ref
                 .read(preferencesProvider.notifier)
                 .updatePreferences(preferences);
           },
-          child: Container(
+          icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),

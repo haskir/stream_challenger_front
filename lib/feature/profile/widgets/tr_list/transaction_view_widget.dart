@@ -24,10 +24,10 @@ class TransactionView extends StatelessWidget {
               Text('Description: ${challenge.description}'),
               Text('Conditions: ${challenge.conditions.join(',\n')}'),
               Text('Currency: ${challenge.currency}'),
-              Text('Minimum Reward: ${challenge.minimum_reward}'),
+              Text('Minimum Reward: ${challenge.minimumReward}'),
               Text('Bet: ${challenge.bet}'),
               Text('Status: ${challenge.status}'),
-              Text('Visible: ${challenge.is_visible}'),
+              Text('Visible: ${challenge.isVisible}'),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -44,7 +44,7 @@ class TransactionView extends StatelessWidget {
             ]),
             Text('Performer Login: ${challenge.performerLogin}'),
             Text(
-                'Created At: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(challenge.created_at)}'),
+                'Created At: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(challenge.createdAt)}'),
             if (challenge.status == 'PENDING' && isAuthor)
               ElevatedButton(child: const Icon(Icons.cancel), onPressed: () {}),
           ],

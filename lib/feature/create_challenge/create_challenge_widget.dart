@@ -110,7 +110,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                         _formKey.currentState!.save();
                         CreateChallengeDTO challenge = CreateChallengeDTO(
                           description: _descriptionController.text,
-                          minimum_reward: 0.1,
+                          minimumReward: 0.1,
                           bet: double.parse(_betController.text),
                           currency: "RUB",
                           conditions: _controllers.map((e) => e.text).toList(),

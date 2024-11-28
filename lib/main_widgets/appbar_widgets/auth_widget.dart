@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 class AuthWidget extends ConsumerWidget {
@@ -17,34 +16,38 @@ class AuthWidget extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GestureDetector(
-              onTap: () => context.go('/profile'),
-              child: CircleAvatar(
+            IconButton(
+              onPressed: () => context.go('/profile'),
+              icon: CircleAvatar(
                 radius: 20,
                 backgroundImage:
                     NetworkImage(authState.user!.profile_image_url),
               ),
             ),
             const SizedBox(width: 15),
-            GestureDetector(
-              onTap: () async {
+            IconButton(
+              onPressed: () async {
                 context.go('/');
                 await ref.read(authStateProvider.notifier).logout();
               },
-              child: const Icon(Icons.logout),
+              icon: const Icon(Icons.logout),
             ),
+            const SizedBox(width: 8),
           ],
         ),
       );
     }
     return Center(
-      child: TextButton(
-        child: Text(AppLocalizations.of(context).translate('Auth')),
-        onPressed: () async {
-          // Вызов метода входа через провайдер
-          await ref.read(authStateProvider.notifier).auth(context);
-          await ref.read(preferencesProvider.notifier).initialize();
-        },
+      child: Row(
+        children: [
+          TextButton(
+            child: Text(AppLocalizations.of(context).translate('Auth')),
+            onPressed: () async {
+              await ref.read(authStateProvider.notifier).auth(context);
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
     );
   }

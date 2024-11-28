@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'appbar_widgets/auth_widget.dart';
 import 'appbar_widgets/balance_widget.dart';
@@ -56,6 +57,7 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
+    final preferences = ref.read(preferencesProvider);
     Row? titleWidget;
 
     if (authState.isAuthenticated) {
@@ -104,7 +106,6 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
         LocaleWidget(),
         ThemeWidget(),
         AuthWidget(),
-        const SizedBox(width: 8),
       ],
     );
   }

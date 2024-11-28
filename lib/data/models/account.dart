@@ -1,17 +1,14 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-// ignore_for_file: non_constant_identifier_names
 import 'dart:convert';
-
 import 'package:stream_challenge/core/platform/datetime_format.dart';
 
 class Account {
   final int id;
-  final int user_id;
+  final int userId;
   double balance;
   String currency;
   Account({
     required this.id,
-    required this.user_id,
+    required this.userId,
     required this.balance,
     required this.currency,
   });
@@ -19,7 +16,7 @@ class Account {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'user_id': user_id,
+      'user_id': userId,
       'balance': balance,
       'currency': currency,
     };
@@ -28,7 +25,7 @@ class Account {
   factory Account.fromMap(Map<String, dynamic> map) {
     return Account(
       id: map['id'] as int,
-      user_id: map['user_id'] as int,
+      userId: map['user_id'] as int,
       balance: map['balance'] as double,
       currency: map['currency'] as String,
     );
@@ -46,6 +43,6 @@ class Account {
         balance: 0,
         currency: 'USD',
         id: 0,
-        user_id: 0,
+        userId: 0,
       );
 }

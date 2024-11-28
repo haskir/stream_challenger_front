@@ -18,24 +18,18 @@ class _ThemeState extends ConsumerState<ThemeWidget> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        GestureDetector(
-          onTap: () async {
+        IconButton(
+          onPressed: () async {
             preferences.darkMode = !preferences.darkMode;
             await ref
                 .read(preferencesProvider.notifier)
                 .updatePreferences(preferences);
           },
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Icon(
-              preferences.darkMode
-                  ? Icons.nightlight_outlined
-                  : Icons.wb_sunny_outlined,
-              color: preferences.darkMode ? Colors.white : Colors.black,
-            ),
+          icon: Icon(
+            preferences.darkMode
+                ? Icons.nightlight_outlined
+                : Icons.wb_sunny_outlined,
+            color: preferences.darkMode ? Colors.white : Colors.black,
           ),
         ),
         const SizedBox(width: 8),

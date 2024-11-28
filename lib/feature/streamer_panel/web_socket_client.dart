@@ -64,6 +64,7 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
   // Обработка входящих данных
   void _handleData(dynamic data) {
     try {
+      if (data == null) return;
       final challengesJson = jsonDecode(data) as List;
       final challenges =
           challengesJson.map((json) => Challenge.fromMap(json)).toList();
