@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/user_preferences.dart';
-import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'appbar_widgets/auth_widget.dart';
 import 'appbar_widgets/balance_widget.dart';
+import 'appbar_widgets/locale_widget.dart';
 import 'appbar_widgets/logo.dart';
+import 'appbar_widgets/theme_widget.dart';
 import 'body_widgets/bottom_panel.dart';
 
 class MainWidget extends ConsumerStatefulWidget {
@@ -56,8 +56,6 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
-    final Preferences preferences = ref.watch(preferencesProvider);
-
     Row? titleWidget;
 
     if (authState.isAuthenticated) {
@@ -68,20 +66,32 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
           TextButton(
             onPressed: () => context.go('/challenge/lapkinastol'),
             child: Text(
-                AppLocalizations.of(context).translate('Create Challenge')),
+              AppLocalizations.of(context).translate('Create Challenge'),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color),
+            ),
           ),
           TextButton(
             onPressed: () => context.go('/challenges'),
-            child: Text(AppLocalizations.of(context).translate('Challenges')),
+            child: Text(
+              AppLocalizations.of(context).translate('Challenges'),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color),
+            ),
           ),
           TextButton(
-              onPressed: () => context.go('/panel'),
-              child: Text(AppLocalizations.of(context).translate('My Panel')))
+            onPressed: () => context.go('/panel'),
+            child: Text(
+              AppLocalizations.of(context).translate('My Panel'),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color),
+            ),
+          )
         ],
       );
     }
     return AppBar(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Theme.of(context).primaryColor,
       centerTitle: true,
 
       // Левые элементы
@@ -91,20 +101,10 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
       // Правые элементы
       actions: [
         BalanceWidget(),
+        LocaleWidget(),
+        ThemeWidget(),
         AuthWidget(),
-        PopupMenuButton<String>(
-          icon: const Icon(Icons.language),
-          itemBuilder: (context) {
-            return [
-              const PopupMenuItem(value: 'EN', child: Text('English')),
-              const PopupMenuItem(value: 'RU', child: Text('Русский')),
-            ];
-          },
-          initialValue: preferences.language,
-          onSelected: (String value) async {
-            await ref.read(preferencesProvider.notifier).updateLanguage(value);
-          },
-        ),
+        const SizedBox(width: 8),
       ],
     );
   }

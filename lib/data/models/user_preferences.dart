@@ -8,11 +8,13 @@ class Preferences {
   double minimum_reward_in_dollars;
   String language;
   String timezone;
+  bool darkMode;
 
   Preferences({
     required this.minimum_reward_in_dollars,
     required this.language,
     required this.timezone,
+    required this.darkMode,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +22,7 @@ class Preferences {
       'minimum_reward_in_dollars': minimum_reward_in_dollars,
       'language': language,
       'timezone': timezone,
+      'darkMode': darkMode,
     };
   }
 
@@ -28,6 +31,7 @@ class Preferences {
       minimum_reward_in_dollars: map['minimum_reward_in_dollars'] as double,
       language: map['language'] as String,
       timezone: map['timezone'] as String,
+      darkMode: map['darkMode'] as bool,
     );
   }
 
@@ -43,5 +47,6 @@ class Preferences {
         minimum_reward_in_dollars: 1.0,
         language: 'EN',
         timezone: 'UTC',
+        darkMode: false,
       );
 }

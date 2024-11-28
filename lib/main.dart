@@ -23,7 +23,7 @@ class StreamChallengeApp extends ConsumerWidget {
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
       locale: Locale(preferences.language.toLowerCase()),
-      theme: mainTheme,
+      theme: preferences.darkMode ? darkTheme : lightTheme,
       onGenerateTitle: (context) =>
           AppLocalizations.of(context).translate('title'),
       localizationsDelegates: const [

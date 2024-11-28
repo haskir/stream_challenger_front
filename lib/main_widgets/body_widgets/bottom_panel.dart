@@ -23,8 +23,7 @@ class BottomPanel extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 40,
-      color: Colors.blue[50],
-      //padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      color: Theme.of(context).colorScheme.secondaryContainer,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
