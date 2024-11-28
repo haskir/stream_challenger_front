@@ -9,6 +9,7 @@ import 'package:stream_challenge/providers/providers.dart';
 import 'appbar_widgets/auth_widget.dart';
 import 'appbar_widgets/balance_widget.dart';
 import 'appbar_widgets/logo.dart';
+import 'body_widgets/bottom_panel.dart';
 
 class MainWidget extends ConsumerStatefulWidget {
   final Widget child;
@@ -32,7 +33,12 @@ class _MainWidgetState extends ConsumerState<MainWidget> {
       body: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(
             dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse}),
-        child: widget.child,
+        child: Column(
+          children: [
+            Expanded(child: widget.child), // Основной контент
+            BottomPanel(), // Панель внизу
+          ],
+        ),
       ),
     );
   }
@@ -51,7 +57,6 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final Preferences preferences = ref.watch(preferencesProvider);
-    //ref.read(accountProvider.notifier).initialize();
 
     Row? titleWidget;
 

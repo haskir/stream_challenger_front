@@ -6,13 +6,13 @@ import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/feature/profile/widgets/ch_list/challenge_view_widget.dart';
 import 'package:stream_challenge/providers/challenge_provider.dart';
 
-class ChallengesPanel extends ConsumerStatefulWidget {
+class TransactionsPanel extends ConsumerStatefulWidget {
   final bool isAuthor;
   final Map<String, bool> expandedStates;
   late final FutureProviderFamily<List<Challenge>?, GetStruct>
       challengesProvider;
 
-  ChallengesPanel({
+  TransactionsPanel({
     super.key,
     required this.expandedStates,
     required this.isAuthor,
@@ -20,10 +20,10 @@ class ChallengesPanel extends ConsumerStatefulWidget {
             isAuthor ? authorChallengesProvider : performerChallengesProvider;
 
   @override
-  ConsumerState<ChallengesPanel> createState() => _ChallengesPanelState();
+  ConsumerState<TransactionsPanel> createState() => _ChallengesPanelState();
 }
 
-class _ChallengesPanelState extends ConsumerState<ChallengesPanel> {
+class _ChallengesPanelState extends ConsumerState<TransactionsPanel> {
   final Map<String, PagingController<int, Challenge>> pagingControllers = {
     "PENDING": PagingController(firstPageKey: 1),
     "ACCEPTED": PagingController(firstPageKey: 1),

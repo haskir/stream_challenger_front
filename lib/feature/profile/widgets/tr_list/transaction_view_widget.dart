@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
-class ChallengeView extends StatelessWidget {
+class TransactionView extends StatelessWidget {
   final bool isAuthor;
   final Challenge challenge;
-  const ChallengeView({
+  const TransactionView({
     super.key,
     required this.isAuthor,
     required this.challenge,
