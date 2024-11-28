@@ -60,34 +60,22 @@ class _ChallengeGetter {
       isAuthor ? '/challenges/author' : '/challenges/performer',
       getStruct.toMap(),
     );
-    return response.fold((error) => Left(error), (array) {
-      if (array == null) {
-        return Right(List<Challenge>.empty());
-      }
-      final challenges = array.map((e) => Challenge.fromMap(e)).toList();
-      if (kDebugMode) {
-        print("challenges: $challenges");
-      }
-      return Right(challenges);
-    });
-  }
+    try {
+      return response.fold((error) => Left(error), (array) {
+        if (array == null) {
+          return Right(List<Challenge>.empty());
+        }
+        final challenges =
+            (array as List<dynamic>).map((e) => Challenge.fromMap(e)).toList();
 
-  static Future<Either<ErrorDTO, List<Challenge>>> getPerformerChallenges(
-      {required GetStruct getStruct, required Requester client}) async {
-    return await getChallenges(
-      getStruct: getStruct,
-      client: client,
-      isAuthor: false,
-    );
-  }
-
-  static Future<Either<ErrorDTO, List<Challenge>>> getAuthorChallenges(
-      {required GetStruct getStruct, required Requester client}) async {
-    return await getChallenges(
-      getStruct: getStruct,
-      client: client,
-      isAuthor: true,
-    );
+        return Right(challenges);
+      });
+    } catch (e) {
+      return Left(ErrorDTO(
+          message: "Error fetching challenges: $e",
+          type: "clientError",
+          code: -500));
+    }
   }
 }
 
@@ -95,20 +83,18 @@ final challengeProvider =
     FutureProvider.family<Either<ErrorDTO, Challenge>, int>((ref, id) async {
   final client = await ref.watch(httpClientProvider.future);
   final result = await _ChallengeGetter.getChallenge(id: id, client: client);
-
   return result;
 });
 
 final authorChallengesProvider =
-    FutureProvider.family<List<Challenge>?, GetStruct>(
-  (ref, getStruct) async {
-    final client = await ref.watch(httpClientProvider.future);
-
-    final result = await _ChallengeGetter.getAuthorChallenges(
+    FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
+  try {
+    final result = await _ChallengeGetter.getChallenges(
       getStruct: getStruct,
-      client: client,
+      client: await ref.watch(httpClientProvider.future),
+      isAuthor: true,
     );
-
+    print("authorChallengesProvider result: $result");
     return result.fold(
       (error) {
         if (kDebugMode) print("authorChallengesProvider $error");
@@ -116,18 +102,21 @@ final authorChallengesProvider =
       },
       (challenges) => challenges,
     );
-  },
-);
+  } catch (error) {
+    print("authorChallengesProvider error: $error");
+    return null;
+  }
+});
 
 final performerChallengesProvider =
-    FutureProvider.family<List<Challenge>?, GetStruct>(
-  (ref, getStruct) async {
-    final client = await ref.watch(httpClientProvider.future);
-
-    final result = await _ChallengeGetter.getPerformerChallenges(
+    FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
+  try {
+    final result = await _ChallengeGetter.getChallenges(
       getStruct: getStruct,
-      client: client,
+      client: await ref.watch(httpClientProvider.future),
+      isAuthor: false,
     );
+    print("performerChallengesProvider result: $result");
     return result.fold(
       (error) {
         if (kDebugMode) print("performerChallengesProvider $error");
@@ -135,5 +124,8 @@ final performerChallengesProvider =
       },
       (challenges) => challenges,
     );
-  },
-);
+  } catch (error) {
+    print("performerChallengesProvider error: $error");
+    return null;
+  }
+});

@@ -22,11 +22,16 @@ class BalanceWidget extends ConsumerWidget {
         AudioPlayer(); // Создаем аудиоплеер для воспроизведения звука
     if (account == null) return Container();
     int indexOfDot = account.balance.toString().indexOf(".");
+    String balanceStr = account.balance.toString();
     late String balance;
     if (indexOfDot == -1) {
-      balance = account.balance.toString();
+      balance = balanceStr;
     } else {
-      balance = account.balance.toString().substring(0, indexOfDot + 3);
+      if (balanceStr.length - indexOfDot - 3 < 0) {
+        balance = balanceStr;
+      } else {
+        balance = account.balance.toString().substring(0, indexOfDot + 3);
+      }
     }
     return Row(
       children: [
