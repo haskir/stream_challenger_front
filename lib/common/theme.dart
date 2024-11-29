@@ -5,7 +5,7 @@ ThemeData lightTheme = ThemeData(
   primaryColor: Colors.lightBlue,
   primaryColorLight: Colors.blue[200],
   primaryColorDark: Colors.lightBlue,
-  dialogBackgroundColor: Colors.lightBlue,
+  dialogBackgroundColor: Colors.white,
 );
 
 ThemeData darkTheme = ThemeData(

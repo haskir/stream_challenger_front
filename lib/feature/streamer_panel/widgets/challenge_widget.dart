@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:stream_challenge/common/mixins.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
@@ -111,9 +112,11 @@ class _ChallengeWidgetWithActionsState
                       status: challenge.status,
                       context: context,
                       actionCallback: (action) async {
-                        final requester =
-                            await ref.read(httpClientProvider.future);
-                        await challengeAction(challenge, requester, action);
+                        if (await Mixins.showConfDialog(context) ?? false) {
+                          final requester =
+                              await ref.read(httpClientProvider.future);
+                          await challengeAction(challenge, requester, action);
+                        }
                       },
                     ),
                   ),

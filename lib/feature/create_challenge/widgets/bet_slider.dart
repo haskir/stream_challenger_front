@@ -27,8 +27,8 @@ class BetSliderState extends ConsumerState<BetSlider> {
 
   void setDefault() {
     _sliderValue = widget.minInPercentage;
-    _percentageController.text = widget.minInPercentage.toString();
-    widget.controller.text = widget.minBet.toString();
+    _percentageController.text = widget.minInPercentage.toStringAsFixed(2);
+    widget.controller.text = widget.minBet.toStringAsFixed(2);
   }
 
   @override

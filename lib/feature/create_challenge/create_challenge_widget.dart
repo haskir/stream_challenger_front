@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:stream_challenge/common/mixins.dart';
 
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
@@ -39,6 +40,24 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
     _minimumRewardController.dispose();
     _betController.dispose();
     super.dispose();
+  }
+
+  Future<void> _createChallenge() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      CreateChallengeDTO challenge = CreateChallengeDTO(
+        description: _descriptionController.text,
+        minimumReward: 0.1,
+        bet: double.parse(_betController.text),
+        currency: "RUB",
+        conditions: _controllers.map((e) => e.text).toList(),
+        performerLogin: widget.performerLogin,
+      );
+      _submit(
+        challenge,
+        await ref.watch(httpClientProvider.future),
+      );
+    }
   }
 
   void _submit(CreateChallengeDTO challenge, Requester client) async {
@@ -99,32 +118,21 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                   ),
                   const SizedBox(height: _margin),
 
-                  // Поле для условий испытания
-                  ConditionsSection(controllers: _controllers, max: 5),
-                  const SizedBox(height: _margin),
-
-                  // Кнопка "Создать"
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        CreateChallengeDTO challenge = CreateChallengeDTO(
-                          description: _descriptionController.text,
-                          minimumReward: 0.1,
-                          bet: double.parse(_betController.text),
-                          currency: "RUB",
-                          conditions: _controllers.map((e) => e.text).toList(),
-                          performerLogin: widget.performerLogin,
-                        );
-                        _submit(
-                          challenge,
-                          await ref.watch(httpClientProvider.future),
-                        );
-                      }
-                    },
-                    child:
-                        Text(AppLocalizations.of(context).translate('Create')),
-                  ),
+                  Column(children: [
+                    // Поле для условий испытания
+                    ConditionsSection(controllers: _controllers, max: 5),
+                    // Кнопка "Создать"
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (await Mixins.showConfDialog(context) ?? false) {
+                          await _createChallenge();
+                        }
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).translate('Create'),
+                      ),
+                    ),
+                  ])
                 ],
               ),
             ),

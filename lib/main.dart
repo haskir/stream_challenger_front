@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'providers/providers.dart';
-import 'theme.dart';
+import 'common/theme.dart';
 
 class StreamChallengeApp extends ConsumerWidget {
   const StreamChallengeApp({super.key});
