@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -5,7 +6,7 @@ import 'package:stream_challenge/common/mixins.dart';
 
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
-import 'package:stream_challenge/core/platform/response.dart';
+import 'package:stream_challenge/data/models/account.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/use_cases/challenges_actions.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
@@ -27,6 +28,7 @@ class CreateChallengeWidget extends ConsumerStatefulWidget {
 }
 
 class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
+  late Account account;
   final _formKey = GlobalKey<FormState>();
   final _descriptionController = TextEditingController();
   final _minimumRewardController = TextEditingController();
@@ -36,9 +38,13 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
 
   @override
   void dispose() {
+    print("disposing");
     _descriptionController.dispose();
     _minimumRewardController.dispose();
     _betController.dispose();
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -47,40 +53,39 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
       description: _descriptionController.text,
       minimumReward: 0.1,
       bet: double.parse(_betController.text),
-      currency: "RUB",
+      currency: account.currency.toUpperCase(),
       conditions: _controllers.map((e) => e.text).toList(),
       performerLogin: widget.performerLogin,
     );
-    _submit(
+    bool result = await _submit(
       challenge,
       await ref.watch(httpClientProvider.future),
     );
+    if (result) dispose();
   }
 
-  void _submit(CreateChallengeDTO challenge, Requester client) async {
-    dynamic result = await ChallengesActions().challengeCreate(
+  Future<bool> _submit(CreateChallengeDTO challenge, Requester client) async {
+    Either result = await ChallengesActions().challengeCreate(
       challenge: challenge,
       client: client,
     );
-    if (result.runtimeType == Challenge) {
-      Fluttertoast.showToast(
-        msg: "Challenge created",
-      );
-      await ref.read(accountProvider.notifier).refresh();
-    }
-    if (result.runtimeType == ErrorDTO) {
-      Fluttertoast.showToast(
-        msg: result.toString(),
-      );
-    }
+    result.fold((left) {
+      Fluttertoast.showToast(msg: result.toString());
+      return false;
+    }, (right) async {
+      Fluttertoast.showToast(msg: "Challenge created");
+      return true;
+    });
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final account = ref.watch(accountProvider);
-    if (account == null) {
+    final providedAccount = ref.watch(accountProvider);
+    if (providedAccount == null) {
       return const Center(child: CircularProgressIndicator());
     }
+    account = providedAccount;
 
     final minimumInCurrency =
         ref.watch(minimumInCurrencyProvider(widget.performerLogin));
@@ -99,8 +104,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
             key: _formKey,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
                 children: [
                   // Поле для описания
                   DescriptionField(controller: _descriptionController),
@@ -123,7 +127,8 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                       onPressed: () async {
                         if (!_formKey.currentState!.validate()) return;
                         _formKey.currentState!.save();
-                        if (await Mixins.showConfDialog(context) ?? false) {
+                        final bool? res = await Mixins.showConfDialog(context);
+                        if (res == true) {
                           await _createChallenge();
                         }
                       },
@@ -131,6 +136,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                         AppLocalizations.of(context).translate('Create'),
                       ),
                     ),
+                    const SizedBox(height: _margin),
                   ])
                 ],
               ),
