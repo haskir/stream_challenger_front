@@ -7,14 +7,10 @@ class BottomPanel extends StatelessWidget implements PreferredSizeWidget {
       "Copyright ©2k54 StreamChallenge. All rights reserved. Terms of service Privacy Policy Copyright Cookies Policy";
   static const String discord = "images/svg_logos/discord_logo.svg";
   static const String discordPathInvite = "https://discord.gg/58PYnXeeWK";
-  late final Uri discordUri;
   static const String telegram = "images/svg_logos/telegram_logo.svg";
   static const String telegramPathInvite = "https://t.me/lapki_na_stol";
-  late final Uri telegramUri;
 
-  BottomPanel({super.key})
-      : discordUri = Uri.parse(discordPathInvite),
-        telegramUri = Uri.parse(telegramPathInvite);
+  const BottomPanel({super.key});
 
   @override
   Size get preferredSize => const Size.fromHeight(60);
@@ -40,11 +36,11 @@ class BottomPanel extends StatelessWidget implements PreferredSizeWidget {
           Row(
             children: [
               IconButton(
-                onPressed: () => launchUrl(telegramUri),
+                onPressed: () => launchUrl(Uri.parse(telegramPathInvite)),
                 icon: SvgPicture.asset(telegram, height: 25),
               ),
               IconButton(
-                onPressed: () => launchUrl(discordUri),
+                onPressed: () => launchUrl(Uri.parse(discordPathInvite)),
                 icon: SvgPicture.asset(discord, height: 25),
               ),
             ],

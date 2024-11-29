@@ -43,21 +43,18 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   }
 
   Future<void> _createChallenge() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      CreateChallengeDTO challenge = CreateChallengeDTO(
-        description: _descriptionController.text,
-        minimumReward: 0.1,
-        bet: double.parse(_betController.text),
-        currency: "RUB",
-        conditions: _controllers.map((e) => e.text).toList(),
-        performerLogin: widget.performerLogin,
-      );
-      _submit(
-        challenge,
-        await ref.watch(httpClientProvider.future),
-      );
-    }
+    CreateChallengeDTO challenge = CreateChallengeDTO(
+      description: _descriptionController.text,
+      minimumReward: 0.1,
+      bet: double.parse(_betController.text),
+      currency: "RUB",
+      conditions: _controllers.map((e) => e.text).toList(),
+      performerLogin: widget.performerLogin,
+    );
+    _submit(
+      challenge,
+      await ref.watch(httpClientProvider.future),
+    );
   }
 
   void _submit(CreateChallengeDTO challenge, Requester client) async {
@@ -124,6 +121,8 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                     // Кнопка "Создать"
                     ElevatedButton(
                       onPressed: () async {
+                        if (!_formKey.currentState!.validate()) return;
+                        _formKey.currentState!.save();
                         if (await Mixins.showConfDialog(context) ?? false) {
                           await _createChallenge();
                         }

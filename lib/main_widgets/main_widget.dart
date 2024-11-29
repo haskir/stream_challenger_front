@@ -72,14 +72,6 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
             ),
           ),
           TextButton(
-            onPressed: () => context.go('/challenges'),
-            child: Text(
-              AppLocalizations.of(context).translate('Challenges'),
-              style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
-            ),
-          ),
-          TextButton(
             onPressed: () => context.go('/panel'),
             child: Text(
               AppLocalizations.of(context).translate('My Panel'),
@@ -95,7 +87,7 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
       centerTitle: true,
 
       // Левые элементы
-      leading: LogoWidget(onTap: () => context.go('/')),
+      leading: LogoWidget(),
       // Центральные элементы
       title: titleWidget,
       // Правые элементы

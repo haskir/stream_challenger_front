@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LogoWidget extends StatelessWidget {
-  final VoidCallback onTap;
-  const LogoWidget({super.key, required this.onTap});
+  const LogoWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: onTap,
-        child:
-            Image.asset('assets/images/logo_553.png', width: 50, height: 50));
+    return IconButton(
+      onPressed: () => context.go('/'),
+      icon: Image.asset('images/logo_553.png'),
+      iconSize: 70,
+    );
   }
 }
