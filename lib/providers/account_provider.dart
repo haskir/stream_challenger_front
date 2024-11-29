@@ -67,6 +67,6 @@ class AccountNotifier extends StateNotifier<Account?> {
   }
 }
 
-final accountProvider = StateNotifierProvider<AccountNotifier, Account?>(
-  (ref) => AccountNotifier(ref),
-);
+final accountProvider = StateNotifierProvider<AccountNotifier, Account?>((ref) {
+  return AccountNotifier(ref);
+});

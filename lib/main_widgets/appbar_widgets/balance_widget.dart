@@ -20,10 +20,12 @@ class BalanceWidget extends ConsumerWidget {
     final Account? account = ref.watch(accountProvider);
     final player = AudioPlayer();
     if (account == null) return Container();
+    final String balance = account.balance % 1 == 0
+        ? account.balance.toString()
+        : account.balance.toStringAsFixed(2);
     return Row(
       children: [
-        Text(
-            '${account.balance % 1 == 0 ? account.balance : account.balance.toStringAsFixed(2)} ${_currency[account.currency]}'),
+        Text('$balance ${_currency[account.currency]}'),
         SizedBox(width: 3),
         TextButton(
           onPressed: () {},

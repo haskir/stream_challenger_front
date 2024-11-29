@@ -32,6 +32,7 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AuthToken? user = ref.watch(authStateProvider).user;
+    final currentContent = ref.watch(profilePageContentProvider);
     if (user == null) {
       return const Center(child: Text('No user'));
     }
@@ -45,16 +46,12 @@ class ProfilePage extends ConsumerWidget {
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              UserAccountsDrawerHeader(
-                accountName: Text(user.display_name),
-                accountEmail: Text(user.email),
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage(user.profile_image_url),
-                ),
-              ),
               ListTile(
                 title:
                     Text(AppLocalizations.of(context).translate('My profile')),
+                selected: currentContent == '/',
+                selectedTileColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 onTap: () => ref
                     .read(profilePageContentProvider.notifier)
                     .setContent('/'),
@@ -62,6 +59,9 @@ class ProfilePage extends ConsumerWidget {
               ListTile(
                 title: Text(
                     AppLocalizations.of(context).translate('Transactions')),
+                selected: currentContent == '/transactions',
+                selectedTileColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 onTap: () => ref
                     .read(profilePageContentProvider.notifier)
                     .setContent('/transactions'),
@@ -69,6 +69,9 @@ class ProfilePage extends ConsumerWidget {
               ListTile(
                 title: Text(
                     AppLocalizations.of(context).translate('My challenges')),
+                selected: currentContent == '/my-challenges',
+                selectedTileColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 onTap: () => ref
                     .read(profilePageContentProvider.notifier)
                     .setContent('/my-challenges'),
@@ -76,6 +79,9 @@ class ProfilePage extends ConsumerWidget {
               ListTile(
                 title: Text(
                     AppLocalizations.of(context).translate('Challenges to me')),
+                selected: currentContent == '/challenges-to-me',
+                selectedTileColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 onTap: () => ref
                     .read(profilePageContentProvider.notifier)
                     .setContent('/challenges-to-me'),
@@ -83,6 +89,7 @@ class ProfilePage extends ConsumerWidget {
             ],
           ),
         ),
+
         // Контент-панелька
         Expanded(
           child: Padding(
@@ -90,12 +97,6 @@ class ProfilePage extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  AppLocalizations.of(context).translate(
-                      ProfilePage.titleHeaders[contentPath] ?? contentPath),
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                SizedBox(height: 20),
                 Expanded(
                   child: Scrollbar(
                     thumbVisibility: true,
