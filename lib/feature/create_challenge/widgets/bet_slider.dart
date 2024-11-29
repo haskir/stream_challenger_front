@@ -43,8 +43,9 @@ class BetSliderState extends ConsumerState<BetSlider> {
     if (percentage == null) return;
     if (percentage > 100) percentage = 100;
     if (percentage > widget.minInPercentage && percentage <= 100) {
-      widget.controller.text = (widget.balance * percentage / 100).toString();
-      _percentageController.text = percentage.toString();
+      widget.controller.text =
+          (widget.balance * percentage / 100).toStringAsFixed(2);
+      _percentageController.text = percentage.toStringAsFixed(2);
     } else {
       setDefault();
       return setState(() {});
@@ -58,7 +59,8 @@ class BetSliderState extends ConsumerState<BetSlider> {
     double? result = double.tryParse(value);
     if (result == null) return;
     if (result <= widget.balance && result >= widget.minBet) {
-      _percentageController.text = (result / widget.balance * 100).toString();
+      _percentageController.text =
+          (result / widget.balance * 100).toStringAsFixed(2);
       _sliderValue = result / widget.balance * 100;
     } else {
       setDefault();
@@ -102,6 +104,7 @@ class BetSliderState extends ConsumerState<BetSlider> {
         ),
         const SizedBox(height: 20),
         Slider(
+            divisions: 40,
             min: widget.minInPercentage,
             max: 100,
             value: _sliderValue,

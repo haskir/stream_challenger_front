@@ -33,6 +33,23 @@ class Account {
 
   String toJson() => json.encode(toMap());
 
+  static const double epsilon = 1e-9; // Допустимая погрешность
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other.runtimeType != runtimeType) return false;
+
+    return other is Account &&
+        other.id == id &&
+        other.userId == userId &&
+        other.balance == balance &&
+        other.currency == currency;
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^ userId.hashCode ^ balance.hashCode ^ currency.hashCode;
+
   factory Account.fromJson(String source) =>
       Account.fromMap(json.decode(source) as Map<String, dynamic>);
 

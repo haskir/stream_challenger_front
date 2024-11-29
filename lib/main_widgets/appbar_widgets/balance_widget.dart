@@ -18,24 +18,12 @@ class BalanceWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Account? account = ref.watch(accountProvider);
-    final player =
-        AudioPlayer(); // Создаем аудиоплеер для воспроизведения звука
+    final player = AudioPlayer();
     if (account == null) return Container();
-    int indexOfDot = account.balance.toString().indexOf(".");
-    String balanceStr = account.balance.toString();
-    late String balance;
-    if (indexOfDot == -1) {
-      balance = balanceStr;
-    } else {
-      if (balanceStr.length - indexOfDot - 3 < 0) {
-        balance = balanceStr;
-      } else {
-        balance = account.balance.toString().substring(0, indexOfDot + 3);
-      }
-    }
     return Row(
       children: [
-        Text('$balance ${_currency[account.currency]}'),
+        Text(
+            '${account.balance % 1 == 0 ? account.balance : account.balance.toStringAsFixed(2)} ${_currency[account.currency]}'),
         SizedBox(width: 3),
         TextButton(
           onPressed: () {},

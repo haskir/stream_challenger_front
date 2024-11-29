@@ -62,8 +62,8 @@ class AccountNotifier extends StateNotifier<Account?> {
   Future<void> _fetchAccount() async {
     final client = await ref.read(accountClientProvider);
     final account = await client.fetchAccount(ref);
+    if (account == state) return;
     state = account;
-    // Если запрос завершился с ошибкой, состояние остаётся null
   }
 }
 
