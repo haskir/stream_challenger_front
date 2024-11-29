@@ -40,6 +40,10 @@ class StreamChallengeApp extends ConsumerWidget {
 
 void main() {
   setUrlStrategy(PathUrlStrategy());
+  final container = ProviderContainer();
+  container.read(preferencesProvider.notifier);
+  container.read(authStateProvider.notifier);
+
   runApp(
     const ProviderScope(
       child: StreamChallengeApp(),

@@ -44,7 +44,6 @@ class _LocaleState extends ConsumerState<LocaleWidget> {
             child: Text(switchLanguage(preferences.language)),
           ),
         ),
-        const SizedBox(width: 8),
       ],
     );
   }

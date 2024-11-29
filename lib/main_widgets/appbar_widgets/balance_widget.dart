@@ -48,7 +48,6 @@ class BalanceWidget extends ConsumerWidget {
           style: ElevatedButton.styleFrom(maximumSize: Size(65, 65)),
           child: Icon(Icons.add),
         ),
-        SizedBox(width: 3),
       ],
     );
   }

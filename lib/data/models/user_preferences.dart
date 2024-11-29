@@ -1,9 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'package:equatable/equatable.dart';
 import 'package:stream_challenge/core/platform/datetime_format.dart';
 
-class Preferences extends Equatable {
+class Preferences {
   double minimumRewardInDollars;
   String language;
   String timezone;
@@ -49,11 +48,24 @@ class Preferences extends Equatable {
         darkMode: false,
       );
 
+  static const double epsilon = 1e-9; // Допустимая погрешность
   @override
-  List<Object?> get props => [
-        minimumRewardInDollars,
-        language,
-        timezone,
-        darkMode,
-      ];
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other.runtimeType != runtimeType) return false;
+    return other is Preferences &&
+        (other.minimumRewardInDollars - minimumRewardInDollars).abs() <
+            epsilon &&
+        other.language == language &&
+        other.timezone == timezone &&
+        other.darkMode == darkMode;
+  }
+
+  @override
+  int get hashCode {
+    return minimumRewardInDollars.hashCode ^
+        language.hashCode ^
+        darkMode.hashCode ^
+        timezone.hashCode;
+  }
 }

@@ -32,7 +32,6 @@ class _ThemeState extends ConsumerState<ThemeWidget> {
             color: preferences.darkMode ? Colors.white : Colors.black,
           ),
         ),
-        const SizedBox(width: 8),
       ],
     );
   }

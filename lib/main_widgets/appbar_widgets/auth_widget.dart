@@ -24,7 +24,7 @@ class AuthWidget extends ConsumerWidget {
                     NetworkImage(authState.user!.profile_image_url),
               ),
             ),
-            const SizedBox(width: 15),
+            const SizedBox(width: 5),
             IconButton(
               onPressed: () async {
                 context.go('/');
@@ -32,7 +32,6 @@ class AuthWidget extends ConsumerWidget {
               },
               icon: const Icon(Icons.logout),
             ),
-            const SizedBox(width: 8),
           ],
         ),
       );
@@ -46,7 +45,6 @@ class AuthWidget extends ConsumerWidget {
               await ref.read(authStateProvider.notifier).auth(context);
             },
           ),
-          const SizedBox(width: 8),
         ],
       ),
     );

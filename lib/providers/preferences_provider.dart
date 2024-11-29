@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/user_preferences.dart';
@@ -20,10 +22,7 @@ class _PreferencesClient {
   }
 
   Future<Preferences?> updatePreferences(Preferences preferences) async {
-    final response = await httpClient.post(
-      url,
-      body: preferences.toMap(),
-    );
+    final response = await httpClient.post(url, body: preferences.toMap());
     return response.fold(
       (left) => null,
       (right) => Preferences.fromMap(right),
@@ -52,7 +51,8 @@ final preferencesClientProvider =
 /// StateNotifier для управления состоянием Preferences
 class PreferencesNotifier extends StateNotifier<Preferences> {
   final Ref ref;
-  late Preferences defaultPreferences = Preferences.defaultPreferences();
+  late Preferences onServerPreferences;
+  Timer? _timer;
 
   PreferencesNotifier(this.ref) : super(Preferences.defaultPreferences()) {
     initialize();
@@ -67,28 +67,40 @@ class PreferencesNotifier extends StateNotifier<Preferences> {
 
   Future<void> _fetchPreferences() async {
     final client = await ref.read(preferencesClientProvider.future);
-    final preferences = await client.fetchPreferences();
-    state = preferences;
+    onServerPreferences = await client.fetchPreferences();
+    state = Preferences.fromMap(onServerPreferences.toMap());
+  }
+
+  Future<void> sendPreferences() async {
+    if (state == onServerPreferences) {
+      return;
+    }
+    final client = await ref.read(preferencesClientProvider.future);
+    onServerPreferences = await client.updatePreferences(state) ?? state;
+    print("new onServerPreferences: $onServerPreferences");
   }
 
   Future<void> updatePreferences(Preferences preferences) async {
-    state = preferences;
-    final client = await ref.read(preferencesClientProvider.future);
-    final updatedPreferences = await client.updatePreferences(preferences);
-    if (updatedPreferences != null) {
-      state = updatedPreferences;
+    state = Preferences.fromMap(preferences.toMap());
+    if (ref.watch(authStateProvider).isAuthenticated) {
+      _timer?.cancel();
+      _timer = Timer(const Duration(seconds: 5), () async {
+        await sendPreferences();
+        _timer = null;
+      });
     }
   }
 }
 
 /// Провайдер для PreferencesNotifier
 final preferencesProvider =
-    StateNotifierProvider<PreferencesNotifier, Preferences>(
-  (ref) => PreferencesNotifier(ref),
-);
+    StateNotifierProvider<PreferencesNotifier, Preferences>((ref) {
+  final notifier = PreferencesNotifier(ref);
+  notifier.initialize(); // Инициализация при старте приложения
+  return notifier;
+});
 
-final minimumInCurrencyProvider =
-    FutureProvider.autoDispose.family<double?, String>(
+final minimumInCurrencyProvider = FutureProvider.family<double?, String>(
   (ref, login) async {
     final account = ref.watch(accountProvider);
     if (account == null) return null;

@@ -43,6 +43,12 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel> {
     });
   }
 
+  @override
+  void dispose() {
+    pagingControllers.forEach((_, controller) => controller.dispose());
+    super.dispose();
+  }
+
   Future<void> _fetchPage(String status, int pageKey) async {
     final provider = ref.read(widget
         .challengesProvider(GetStruct(status: status, page: pageKey, size: 10))
@@ -64,12 +70,6 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel> {
     } catch (error) {
       pagingControllers[status]!.error = error;
     }
-  }
-
-  @override
-  void dispose() {
-    pagingControllers.forEach((_, controller) => controller.dispose());
-    super.dispose();
   }
 
   @override
