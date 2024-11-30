@@ -15,8 +15,8 @@ class _Info extends StatelessWidget {
     for (String condition in challenge.conditions) {
       condText += '- $condition\n';
     }
-    String holdText = '${AppLocale.of(context).translate('Hold until: ')}: ';
-    holdText += DateFormat('dd.MM.yyyy')
+    String holdText = '${AppLocale.of(context).translate('Hold until')}: ';
+    holdText += DateFormat('(dd.MM.yyyy)')
         .format(challenge.createdAt.add(Duration(days: 7)));
 
     return Column(
@@ -45,6 +45,9 @@ class _Info extends StatelessWidget {
                   ),
                   SizedBox(width: 5),
                   Icon(Icons.close, color: Colors.red),
+                  SizedBox(width: 5),
+                  Text(holdText),
+                  SizedBox(width: 5),
                 ],
               ),
             // Челендж оплачен

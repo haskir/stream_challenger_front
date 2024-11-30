@@ -147,32 +147,41 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
   }
 
   Widget _buildPage(String status) {
-    return PagedListView<int, Challenge>(
-      pagingController: pagingControllers[status]!,
-      builderDelegate: PagedChildBuilderDelegate<Challenge>(
-        itemBuilder: (context, challenge, index) {
-          if (widget.isAuthor) {
-            return ChallengeViewAuthor(
-              challenge: challenge,
-              key: ValueKey(challenge.id),
-            );
-          }
-          return ChallengeViewPerformer(
-            key: ValueKey(challenge.id),
-            challenge: challenge,
-          );
+    bool isRefreshing = false;
+    return RefreshIndicator(
+        onRefresh: () async {
+          isRefreshing = true;
+          pagingControllers[status]!.refresh();
+          hasLoaded[status] = [];
+          await _fetchPage(status, 1);
         },
-        firstPageProgressIndicatorBuilder: (context) =>
-            const Center(child: CircularProgressIndicator()),
-        newPageProgressIndicatorBuilder: (context) =>
-            const Center(child: CircularProgressIndicator()),
-        noItemsFoundIndicatorBuilder: (context) => Center(
-          child: Text(
-            AppLocale.of(context).translate('No challenges available'),
-            style: const TextStyle(fontSize: 16),
+        child: PagedListView<int, Challenge>(
+          pagingController: pagingControllers[status]!,
+          builderDelegate: PagedChildBuilderDelegate<Challenge>(
+            itemBuilder: (context, challenge, index) {
+              if (widget.isAuthor) {
+                return ChallengeViewAuthor(
+                  challenge: challenge,
+                  key: ValueKey(challenge.id),
+                );
+              }
+              return ChallengeViewPerformer(
+                key: ValueKey(challenge.id),
+                challenge: challenge,
+              );
+            },
+            firstPageProgressIndicatorBuilder: (context) => Center(
+              child: !isRefreshing ? CircularProgressIndicator() : Text(""),
+            ),
+            newPageProgressIndicatorBuilder: (context) =>
+                const Center(child: CircularProgressIndicator()),
+            noItemsFoundIndicatorBuilder: (context) => Center(
+              child: Text(
+                AppLocale.of(context).translate('No challenges available'),
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
