@@ -65,7 +65,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   }
 
   Future<bool> _submit(CreateChallengeDTO challenge, Requester client) async {
-    Either result = await ChallengesActions().challengeCreate(
+    Either result = await ChallengesActions.challengeCreate(
       challenge: challenge,
       client: client,
     );

@@ -39,7 +39,7 @@ class GetStruct {
       GetStruct.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-class _ChallengeGetter {
+class ChallengeGetter {
   static Future<Either<ErrorDTO, Challenge>> getChallenge({
     required int id,
     required Requester client,
@@ -82,19 +82,18 @@ class _ChallengeGetter {
 final challengeProvider =
     FutureProvider.family<Either<ErrorDTO, Challenge>, int>((ref, id) async {
   final client = await ref.watch(httpClientProvider.future);
-  final result = await _ChallengeGetter.getChallenge(id: id, client: client);
+  final result = await ChallengeGetter.getChallenge(id: id, client: client);
   return result;
 });
 
 final authorChallengesProvider =
     FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
   try {
-    final result = await _ChallengeGetter.getChallenges(
+    final result = await ChallengeGetter.getChallenges(
       getStruct: getStruct,
       client: await ref.watch(httpClientProvider.future),
       isAuthor: true,
     );
-    print("authorChallengesProvider result: $result");
     return result.fold(
       (error) {
         if (kDebugMode) print("authorChallengesProvider $error");
@@ -111,12 +110,11 @@ final authorChallengesProvider =
 final performerChallengesProvider =
     FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
   try {
-    final result = await _ChallengeGetter.getChallenges(
+    final result = await ChallengeGetter.getChallenges(
       getStruct: getStruct,
       client: await ref.watch(httpClientProvider.future),
       isAuthor: false,
     );
-    print("performerChallengesProvider result: $result");
     return result.fold(
       (error) {
         if (kDebugMode) print("performerChallengesProvider $error");

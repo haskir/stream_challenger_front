@@ -60,7 +60,7 @@ class _ChallengeWidgetWithActionsState
       _isLoading = true;
     });
 
-    final result = await ChallengesActions().challengeAction(
+    final result = await ChallengesActions.challengeAction(
       challenge: challenge,
       requester: requester,
       action: action,

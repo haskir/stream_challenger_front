@@ -86,13 +86,14 @@ class Challenge {
   final String currency;
   final double minimumReward;
   final double bet;
-  final String status;
+  String status;
+  double? payout;
   final bool isVisible;
-  final double? payout;
   final ChallengePerson author;
   final ChallengePerson performer;
   final String performerLogin;
   final DateTime createdAt;
+  final DateTime updatedAt;
 
   Challenge({
     required this.id,
@@ -108,6 +109,7 @@ class Challenge {
     required this.performer,
     required this.performerLogin,
     required this.createdAt,
+    required this.updatedAt,
   });
 
   Map<String, dynamic> toMap() {
@@ -125,6 +127,7 @@ class Challenge {
       'performer': performer.toMap(),
       'performer_login': performerLogin,
       'created_at': createdAt.millisecondsSinceEpoch,
+      'updated_at': updatedAt.millisecondsSinceEpoch,
     };
   }
 
@@ -143,6 +146,7 @@ class Challenge {
       performer: ChallengePerson.fromMap(map['performer']),
       performerLogin: map['performer_login'],
       createdAt: dateTimeFormat.parse(map['created_at']),
+      updatedAt: dateTimeFormat.parse(map['updated_at']),
     );
   }
 
