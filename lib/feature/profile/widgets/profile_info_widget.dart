@@ -22,7 +22,7 @@ class ProfileInfoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  AppLocalizations.of(context).translate('Main info'),
+                  AppLocale.of(context).translate('Main info'),
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 IconButton(
@@ -33,11 +33,11 @@ class ProfileInfoCard extends StatelessWidget {
             ),
             SizedBox(height: 16),
             InfoRow(
-              label: AppLocalizations.of(context).translate('Name'),
+              label: AppLocale.of(context).translate('Name'),
               value: user.display_name,
             ),
             InfoRow(
-              label: AppLocalizations.of(context).translate('Login'),
+              label: AppLocale.of(context).translate('Login'),
               value: user.login,
             ),
             InfoRow(label: 'Email', value: user.email),

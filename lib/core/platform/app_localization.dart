@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AppLocalizations {
-  AppLocalizations(this.locale);
+class AppLocale {
+  AppLocale(this.locale);
 
   final Locale locale;
   late Map<String, String> _localizedStrings;
 
   // Метод для доступа к локализации
-  static AppLocalizations of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
+  static AppLocale of(BuildContext context) {
+    return Localizations.of<AppLocale>(context, AppLocale)!;
   }
 
   // Загрузка JSON-файла с переводами
@@ -28,15 +28,15 @@ class AppLocalizations {
   String translate(String key) => _localizedStrings[key] ?? key;
 }
 
-class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocale> {
   const AppLocalizationsDelegate();
 
   @override
   bool isSupported(Locale locale) => ['en', 'ru'].contains(locale.languageCode);
 
   @override
-  Future<AppLocalizations> load(Locale locale) async {
-    AppLocalizations localizations = AppLocalizations(locale);
+  Future<AppLocale> load(Locale locale) async {
+    AppLocale localizations = AppLocale(locale);
     await localizations.load();
     return localizations;
   }

@@ -17,17 +17,16 @@ class MinimumRewardField extends StatelessWidget {
       maxLength: 3,
       decoration: InputDecoration(
         labelText:
-            '${AppLocalizations.of(context).translate('Minimum Reward')} (10% - 100%)',
+            '${AppLocale.of(context).translate('Minimum Reward')} (10% - 100%)',
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return AppLocalizations.of(context)
-              .translate('Please enter minimum reward');
+          return AppLocale.of(context).translate('Please enter minimum reward');
         }
         if (double.tryParse(value) == null ||
             double.parse(value) < 0 ||
             double.parse(value) > 100) {
-          return AppLocalizations.of(context)
+          return AppLocale.of(context)
               .translate('Minimum reward must be between 10% and 100%');
         }
         return null;

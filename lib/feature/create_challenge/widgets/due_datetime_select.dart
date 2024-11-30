@@ -27,7 +27,7 @@ class _DueDateTimeFieldState extends State<DueDateTimeField> {
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
-        labelText: AppLocalizations.of(context).translate('Due Date & Time'),
+        labelText: AppLocale.of(context).translate('Due Date & Time'),
       ),
       readOnly: true,
       onTap: () async {

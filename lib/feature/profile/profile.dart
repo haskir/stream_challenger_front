@@ -47,8 +47,7 @@ class ProfilePage extends ConsumerWidget {
             padding: EdgeInsets.zero,
             children: [
               ListTile(
-                title:
-                    Text(AppLocalizations.of(context).translate('My profile')),
+                title: Text(AppLocale.of(context).translate('My profile')),
                 selected: currentContent == '/',
                 selectedTileColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -57,8 +56,7 @@ class ProfilePage extends ConsumerWidget {
                     .setContent('/'),
               ),
               ListTile(
-                title: Text(
-                    AppLocalizations.of(context).translate('Transactions')),
+                title: Text(AppLocale.of(context).translate('Transactions')),
                 selected: currentContent == '/transactions',
                 selectedTileColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -67,8 +65,7 @@ class ProfilePage extends ConsumerWidget {
                     .setContent('/transactions'),
               ),
               ListTile(
-                title: Text(
-                    AppLocalizations.of(context).translate('My challenges')),
+                title: Text(AppLocale.of(context).translate('My challenges')),
                 selected: currentContent == '/my-challenges',
                 selectedTileColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -77,8 +74,8 @@ class ProfilePage extends ConsumerWidget {
                     .setContent('/my-challenges'),
               ),
               ListTile(
-                title: Text(
-                    AppLocalizations.of(context).translate('Challenges to me')),
+                title:
+                    Text(AppLocale.of(context).translate('Challenges to me')),
                 selected: currentContent == '/challenges-to-me',
                 selectedTileColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),

@@ -15,6 +15,12 @@ abstract class AbstractChallengeRequester {
     required CreateChallengeDTO challenge,
     required Requester client,
   });
+
+  Future<Either<ErrorDTO, Challenge?>> payFailedChallenge({
+    required int id,
+    required double percentage,
+    required Requester client,
+  });
 }
 
 class ChallengesActions implements AbstractChallengeRequester {
@@ -43,5 +49,22 @@ class ChallengesActions implements AbstractChallengeRequester {
       print(result);
     }
     return result;
+  }
+
+  @override
+  Future<Either<ErrorDTO, Challenge?>> payFailedChallenge({
+    required int id,
+    required double percentage,
+    required Requester client,
+  }) async {
+    final result = (await client.post(
+      '/challenges/$id/pay',
+      body: ({'percentage': percentage}),
+    ));
+    result.fold(
+      (left) => Left(left),
+      (right) => Right(Challenge.fromMap(right)),
+    );
+    return Right(null);
   }
 }

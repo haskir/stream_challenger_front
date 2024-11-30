@@ -40,7 +40,7 @@ class AuthWidget extends ConsumerWidget {
       child: Row(
         children: [
           TextButton(
-            child: Text(AppLocalizations.of(context).translate('Auth')),
+            child: Text(AppLocale.of(context).translate('Auth')),
             onPressed: () async {
               await ref.read(authStateProvider.notifier).auth(context);
             },

@@ -97,7 +97,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
           if (minimum == null) return const Center(child: Text("No such user"));
           if (account.balance < minimum) {
             return Center(
-                child: Text(AppLocalizations.of(context).translate(
+                child: Text(AppLocale.of(context).translate(
                     'Not enough balance, minimum is $minimum ${account.currency}')));
           }
           return Form(
@@ -133,7 +133,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                         }
                       },
                       child: Text(
-                        AppLocalizations.of(context).translate('Create'),
+                        AppLocale.of(context).translate('Create'),
                       ),
                     ),
                     const SizedBox(height: _margin),

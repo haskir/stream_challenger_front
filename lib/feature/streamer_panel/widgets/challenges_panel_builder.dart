@@ -45,8 +45,7 @@ class ChallengesPanelBuilder {
       return ExpansionPanel(
         headerBuilder: (BuildContext context, bool isExpanded) {
           return ListTile(
-            title:
-                Text(AppLocalizations.of(context).translate(headers[status]!)),
+            title: Text(AppLocale.of(context).translate(headers[status]!)),
             trailing: Text('(${challenges.length})',
                 style: TextStyle(
                   color: colors[status],

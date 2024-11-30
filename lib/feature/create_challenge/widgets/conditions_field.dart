@@ -59,7 +59,7 @@ class _ConditionsSectionState extends State<ConditionsSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(children: [
-          Text('${AppLocalizations.of(context).translate('Conditions')}:'),
+          Text('${AppLocale.of(context).translate('Conditions')}:'),
           TextButton(
             onPressed: _addCondition,
             child: Icon(Icons.add),
@@ -89,13 +89,12 @@ class ConditionLineEdit extends TextFormField {
   }) : super(
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return AppLocalizations.of(context)
-                  .translate('Please enter condition');
+              return AppLocale.of(context).translate('Please enter condition');
             }
             return null;
           },
           decoration: InputDecoration(
-            hintText: AppLocalizations.of(context).translate('Condition'),
+            hintText: AppLocale.of(context).translate('Condition'),
           ),
           maxLength: 255,
         );

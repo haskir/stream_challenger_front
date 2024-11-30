@@ -1,12 +1,11 @@
 import 'dart:convert';
-
 import 'package:stream_challenge/core/platform/datetime_format.dart';
 
-class ChallengeAuthor {
+class ChallengePerson {
   final String name;
   final String urlImage;
 
-  ChallengeAuthor({
+  ChallengePerson({
     required this.name,
     required this.urlImage,
   });
@@ -18,8 +17,8 @@ class ChallengeAuthor {
     };
   }
 
-  factory ChallengeAuthor.fromMap(Map<String, dynamic> map) {
-    return ChallengeAuthor(
+  factory ChallengePerson.fromMap(Map<String, dynamic> map) {
+    return ChallengePerson(
       name: map['name'] as String,
       urlImage: map['url_image'] as String,
     );
@@ -27,8 +26,8 @@ class ChallengeAuthor {
 
   String toJson() => json.encode(toMap());
 
-  factory ChallengeAuthor.fromJson(String source) =>
-      ChallengeAuthor.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ChallengePerson.fromJson(String source) =>
+      ChallengePerson.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class CreateChallengeDTO {
@@ -89,7 +88,9 @@ class Challenge {
   final double bet;
   final String status;
   final bool isVisible;
-  final ChallengeAuthor author;
+  final double? payout;
+  final ChallengePerson author;
+  final ChallengePerson performer;
   final String performerLogin;
   final DateTime createdAt;
 
@@ -102,7 +103,9 @@ class Challenge {
     required this.bet,
     required this.status,
     required this.isVisible,
+    required this.payout,
     required this.author,
+    required this.performer,
     required this.performerLogin,
     required this.createdAt,
   });
@@ -117,7 +120,9 @@ class Challenge {
       'bet': bet,
       'status': status,
       'is_visible': isVisible,
+      'payout': payout,
       'author': author.toMap(),
+      'performer': performer.toMap(),
       'performer_login': performerLogin,
       'created_at': createdAt.millisecondsSinceEpoch,
     };
@@ -133,7 +138,9 @@ class Challenge {
       bet: map['bet'],
       status: map['status'],
       isVisible: map['is_visible'],
-      author: ChallengeAuthor.fromMap(map['author']),
+      payout: map['payout'],
+      author: ChallengePerson.fromMap(map['author']),
+      performer: ChallengePerson.fromMap(map['performer']),
       performerLogin: map['performer_login'],
       createdAt: dateTimeFormat.parse(map['created_at']),
     );

@@ -82,7 +82,7 @@ class BetSliderState extends ConsumerState<BetSlider> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText:
-                      '${AppLocalizations.of(context).translate('Percentage')} (%)',
+                      '${AppLocale.of(context).translate('Percentage')} (%)',
                 ),
                 onChanged: _onPercentageChanged,
               ),
@@ -93,8 +93,8 @@ class BetSliderState extends ConsumerState<BetSlider> {
                 controller: widget.controller,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)
-                      .translate('Calculated value'),
+                  labelText:
+                      AppLocale.of(context).translate('Calculated value'),
                 ),
                 onChanged: _onResultChanged,
               ),

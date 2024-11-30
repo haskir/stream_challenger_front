@@ -66,7 +66,7 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
           TextButton(
             onPressed: () => context.go('/challenge/lapkinastol'),
             child: Text(
-              AppLocalizations.of(context).translate('Create Challenge'),
+              AppLocale.of(context).translate('Create Challenge'),
               style: TextStyle(
                   color: Theme.of(context).textTheme.bodyMedium?.color),
             ),
@@ -74,7 +74,7 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
           TextButton(
             onPressed: () => context.go('/panel'),
             child: Text(
-              AppLocalizations.of(context).translate('My Panel'),
+              AppLocale.of(context).translate('My Panel'),
               style: TextStyle(
                   color: Theme.of(context).textTheme.bodyMedium?.color),
             ),

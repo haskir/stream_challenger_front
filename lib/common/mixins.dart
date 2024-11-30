@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/data/models/challenge.dart';
 
 class Mixins {
   static Future<bool?> showConfDialog(BuildContext context) async {
@@ -7,25 +8,35 @@ class Mixins {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).translate('Confirmation')),
-          content:
-              Text(AppLocalizations.of(context).translate('Are you sure?')),
+          title: Text(AppLocale.of(context).translate('Confirmation')),
+          content: Text(AppLocale.of(context).translate('Are you sure?')),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false); // Отменить
               },
-              child: Text(AppLocalizations.of(context).translate('No')),
+              child: Text(AppLocale.of(context).translate('No')),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true); // Подтвердить
               },
-              child: Text(AppLocalizations.of(context).translate('Yes')),
+              child: Text(AppLocale.of(context).translate('Yes')),
             ),
           ],
         );
       },
     );
+  }
+
+  static Row personInfo(ChallengePerson person) {
+    return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+      Text(person.name),
+      const SizedBox(width: 5),
+      CircleAvatar(
+        radius: 15,
+        backgroundImage: NetworkImage(person.urlImage),
+      )
+    ]);
   }
 }

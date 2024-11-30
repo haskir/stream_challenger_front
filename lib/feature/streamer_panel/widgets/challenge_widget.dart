@@ -37,8 +37,8 @@ class _ChallengeWidgetWithActionsState
   }
 
   Text getStatusText(Challenge challenge) {
-    String text = "${AppLocalizations.of(context).translate("Status")}: ";
-    text += AppLocalizations.of(context).translate(challenge.status);
+    String text = "${AppLocale.of(context).translate("Status")}: ";
+    text += AppLocale.of(context).translate(challenge.status);
     const Map colors = {
       "ENDED": Colors.blueAccent,
       "SUCCESSFUL": Colors.green,
@@ -133,7 +133,7 @@ class _ChallengeWidgetWithActionsState
                     // Author
                     child: Align(
                         alignment: Alignment.centerRight,
-                        child: getAuthorInfo(challenge.author)),
+                        child: Mixins.personInfo(challenge.author)),
                   ),
                 ])
               ],

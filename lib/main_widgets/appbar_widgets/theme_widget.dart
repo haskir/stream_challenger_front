@@ -27,8 +27,8 @@ class _ThemeState extends ConsumerState<ThemeWidget> {
           },
           icon: Icon(
             preferences.darkMode
-                ? Icons.nightlight_outlined
-                : Icons.wb_sunny_outlined,
+                ? Icons.wb_sunny_outlined
+                : Icons.nightlight_outlined,
             color: preferences.darkMode ? Colors.white : Colors.black,
           ),
         ),

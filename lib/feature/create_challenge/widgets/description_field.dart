@@ -12,12 +12,11 @@ class DescriptionField extends StatelessWidget {
       controller: controller,
       maxLength: 255,
       decoration: InputDecoration(
-        labelText: AppLocalizations.of(context).translate("Description"),
+        labelText: AppLocale.of(context).translate("Description"),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return AppLocalizations.of(context)
-              .translate("Please enter description");
+          return AppLocale.of(context).translate("Please enter description");
         }
         return null;
       },

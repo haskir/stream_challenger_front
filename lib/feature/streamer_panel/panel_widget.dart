@@ -80,7 +80,7 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(
               child: Text(
-            AppLocalizations.of(context).translate('No challenges available'),
+            AppLocale.of(context).translate('No challenges available'),
           ));
         } else {
           final challenges = snapshot.data!;

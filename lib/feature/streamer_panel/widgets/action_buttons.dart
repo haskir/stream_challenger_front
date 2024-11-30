@@ -18,7 +18,7 @@ List<Widget> getActionButtons({
             ),
             minimumSize: WidgetStateProperty.all<Size>(const Size(500, 40)),
           ),
-          child: Text(AppLocalizations.of(context).translate('End'),
+          child: Text(AppLocale.of(context).translate('End'),
               style: TextStyle(color: Colors.white)),
         )
       ];
@@ -32,7 +32,7 @@ List<Widget> getActionButtons({
             ),
             minimumSize: WidgetStateProperty.all<Size>(const Size(500, 40)),
           ),
-          child: Text(AppLocalizations.of(context).translate('Start poll'),
+          child: Text(AppLocale.of(context).translate('Start poll'),
               style: TextStyle(color: Colors.white)),
         )
       ];
@@ -48,7 +48,7 @@ List<Widget> getActionButtons({
           ),
           child: Row(children: [
             Icon(Icons.close),
-            Text(AppLocalizations.of(context).translate('Reject'),
+            Text(AppLocale.of(context).translate('Reject'),
                 style: TextStyle(color: Colors.white))
           ]),
         ),
@@ -62,7 +62,7 @@ List<Widget> getActionButtons({
           ),
           child: Row(children: [
             Icon(Icons.check),
-            Text(AppLocalizations.of(context).translate('Accept'),
+            Text(AppLocale.of(context).translate('Accept'),
                 style: TextStyle(color: Colors.white))
           ]),
         ),
@@ -76,7 +76,7 @@ List<Widget> getActionButtons({
           ),
           child: Row(children: [
             Icon(Icons.report_outlined),
-            Text(AppLocalizations.of(context).translate('Report'),
+            Text(AppLocale.of(context).translate('Report'),
                 style: TextStyle(color: Colors.white))
           ]),
         ),
@@ -84,16 +84,6 @@ List<Widget> getActionButtons({
     default:
       return [];
   }
-}
-
-Row getAuthorInfo(ChallengeAuthor author) {
-  return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-    Text(author.name),
-    CircleAvatar(
-      radius: 15,
-      backgroundImage: NetworkImage(author.urlImage),
-    )
-  ]);
 }
 
 class ChallengeInfoWidget extends StatelessWidget {
@@ -105,7 +95,7 @@ class ChallengeInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(children: [
-        Text('${AppLocalizations.of(context).translate('Bet')}:'),
+        Text('${AppLocale.of(context).translate('Bet')}:'),
         Text(
           ' ${challenge.bet} ${challenge.currency}',
           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -113,7 +103,7 @@ class ChallengeInfoWidget extends StatelessWidget {
       ]),
       const SizedBox(height: 8),
       if (challenge.conditions.isNotEmpty)
-        Text('${AppLocalizations.of(context).translate('Conditions')}:',
+        Text('${AppLocale.of(context).translate('Conditions')}:',
             style: Theme.of(context).textTheme.titleMedium),
       ...challenge.conditions.map((condition) => Text('- $condition')),
       const SizedBox(height: 16),

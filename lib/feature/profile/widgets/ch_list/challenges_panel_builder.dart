@@ -121,7 +121,7 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
             tabs: headers.values
                 .map((title) => Tab(
                       child: Text(
-                        AppLocalizations.of(context).translate(title),
+                        AppLocale.of(context).translate(title),
                         style: TextStyle(fontSize: 16, color: colors[title]),
                       ),
                     ))
@@ -150,18 +150,25 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
     return PagedListView<int, Challenge>(
       pagingController: pagingControllers[status]!,
       builderDelegate: PagedChildBuilderDelegate<Challenge>(
-        itemBuilder: (context, challenge, index) => ChallengeView(
-          key: ValueKey(challenge.id),
-          challenge: challenge,
-          isAuthor: widget.isAuthor,
-        ),
+        itemBuilder: (context, challenge, index) {
+          if (widget.isAuthor) {
+            return ChallengeViewAuthor(
+              challenge: challenge,
+              key: ValueKey(challenge.id),
+            );
+          }
+          return ChallengeViewPerformer(
+            key: ValueKey(challenge.id),
+            challenge: challenge,
+          );
+        },
         firstPageProgressIndicatorBuilder: (context) =>
             const Center(child: CircularProgressIndicator()),
         newPageProgressIndicatorBuilder: (context) =>
             const Center(child: CircularProgressIndicator()),
         noItemsFoundIndicatorBuilder: (context) => Center(
           child: Text(
-            AppLocalizations.of(context).translate('No challenges available'),
+            AppLocale.of(context).translate('No challenges available'),
             style: const TextStyle(fontSize: 16),
           ),
         ),
