@@ -20,12 +20,14 @@ class AppLocale {
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 
     _localizedStrings = jsonMap.map((key, value) {
-      return MapEntry(key, value.toString());
+      return MapEntry(key.toLowerCase(), value.toString());
     });
   }
 
   // Получение перевода по ключу
-  String translate(String key) => _localizedStrings[key] ?? key;
+  String translate(String key) {
+    return _localizedStrings[key.toLowerCase()] ?? key;
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocale> {

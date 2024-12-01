@@ -29,14 +29,17 @@ class Mixins {
     );
   }
 
-  static Row personInfo(ChallengePerson person) {
-    return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-      Text(person.name),
-      const SizedBox(width: 5),
-      CircleAvatar(
-        radius: 15,
-        backgroundImage: NetworkImage(person.urlImage),
-      )
-    ]);
+  static Column personInfo(ChallengePerson person) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        CircleAvatar(
+          radius: 15,
+          backgroundImage: NetworkImage(person.urlImage),
+        ),
+        const SizedBox(width: 5),
+        Text(person.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+      ],
+    );
   }
 }

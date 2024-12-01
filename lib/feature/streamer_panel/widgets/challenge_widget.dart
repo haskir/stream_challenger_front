@@ -84,69 +84,56 @@ class _ChallengeWidgetWithActionsState
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              // Description
-              children: [
-                Text(
-                  challenge.description,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 8),
-                // Bet - Due date - Conditions
-                ChallengeInfoWidget(challenge: challenge),
-                const SizedBox(height: 8),
-                // Buttons
-                ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: getActionButtons(
-                      status: challenge.status,
-                      context: context,
-                      actionCallback: (action) async {
-                        if (await Mixins.showConfDialog(context) ?? false) {
-                          final requester =
-                              await ref.read(httpClientProvider.future);
-                          await challengeAction(challenge, requester, action);
-                        }
-                      },
-                    ),
-                  ),
+    return SizedBox(
+      height: 300,
+      width: 600,
+      child: Stack(
+        children: [
+          Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  ChallengeInfoWidget(challenge: challenge),
+                  // Buttons
+                  ...[
+                    Container(
+                      alignment: Alignment.bottomRight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: getActionButtons(
+                          status: challenge.status,
+                          context: context,
+                          actionCallback: (action) async {
+                            if (await Mixins.showConfDialog(context) ?? false) {
+                              await challengeAction(
+                                challenge,
+                                await ref.read(httpClientProvider.future),
+                                action,
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  ],
                 ],
-                const SizedBox(height: 8),
-                Row(children: [
-                  Expanded(
-                    // Status
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: getStatusText(challenge)),
-                  ),
-                  Expanded(
-                    // Author
-                    child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Mixins.personInfo(challenge.author)),
-                  ),
-                ])
-              ],
+              ),
             ),
           ),
-        ),
-        if (_isLoading)
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-            //child: const ModalBarrier(),
-          ),
-        if (_isLoading) const Center(child: CircularProgressIndicator()),
-      ],
+          if (_isLoading)
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+              //child: const ModalBarrier(),
+            ),
+          if (_isLoading) const Center(child: CircularProgressIndicator()),
+        ],
+      ),
     );
   }
 }
