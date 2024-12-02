@@ -6,7 +6,7 @@ import 'package:stream_challenge/data/models/auth_state.dart';
 import 'user_edit_widget.dart';
 
 class ProfileInfoCard extends StatelessWidget {
-  final AuthToken user;
+  final AuthedUser user;
 
   const ProfileInfoCard({super.key, required this.user});
 

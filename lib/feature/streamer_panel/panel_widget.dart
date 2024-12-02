@@ -25,8 +25,8 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
 
   @override
   void initState() {
-    super.initState();
     initStream();
+    super.initState();
   }
 
   Future<void> initStream() async {

@@ -5,7 +5,7 @@ import 'dart:convert';
 
 import 'package:stream_challenge/core/platform/datetime_format.dart';
 
-class AuthToken {
+class AuthedUser {
   final int id;
   final String login;
   final String profile_image_url;
@@ -15,7 +15,7 @@ class AuthToken {
   final int account_id;
   final int preferences_id;
 
-  AuthToken({
+  AuthedUser({
     required this.id,
     required this.login,
     required this.profile_image_url,
@@ -42,8 +42,8 @@ class AuthToken {
     };
   }
 
-  factory AuthToken.fromMap(Map<String, dynamic> map) {
-    return AuthToken(
+  factory AuthedUser.fromMap(Map<String, dynamic> map) {
+    return AuthedUser(
       id: map['id'] as int,
       login: map['login'],
       profile_image_url: map['profile_image_url'],
@@ -59,20 +59,16 @@ class AuthToken {
 
   String toJson() => json.encode(toMap());
 
-  factory AuthToken.fromJson(String source) =>
-      AuthToken.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory AuthedUser.fromJson(String source) =>
+      AuthedUser.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class AuthState {
-  final AuthToken? user;
-  final String? errorMessage;
+  final AuthedUser? user;
 
-  AuthState({
-    this.user,
-    this.errorMessage,
-  });
+  AuthState({this.user});
 
-  factory AuthState.authenticated(AuthToken user) {
+  factory AuthState.authenticated(AuthedUser user) {
     return AuthState(user: user);
   }
 

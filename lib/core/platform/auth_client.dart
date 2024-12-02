@@ -16,10 +16,11 @@ abstract class AuthClient {
   Future<void> auth(BuildContext context);
   Future<void> logout();
   AuthState getState();
-  AuthToken? getUserInfo();
+  AuthedUser? getUserInfo();
 }
 
 class _AuthServiceHTML implements AuthClient {
+  bool _validated = false;
   late final Uri authUrl;
   String? _token;
   final TokenRepo _tokenRepo = TokenRepo();
@@ -30,7 +31,9 @@ class _AuthServiceHTML implements AuthClient {
     String path = ApiPath.http;
     authUrl = Uri.parse('$path/api/auth');
     _token = await _tokenRepo.getToken();
-    if (!await validate()) _token = null;
+    if (!_validated) {
+      _token = await validate() ? _token : null;
+    }
     authStateNotifier.value =
         _token == null ? AuthState() : AuthState(user: getUserInfo());
   }
@@ -47,6 +50,7 @@ class _AuthServiceHTML implements AuthClient {
           "Access-Control-Allow-Origin": "*",
         }),
       );
+      _validated = response.statusCode == 200;
       return response.statusCode == 200;
     } catch (e) {
       print("Error validating token: $e");
@@ -82,14 +86,14 @@ class _AuthServiceHTML implements AuthClient {
   }
 
   @override
-  AuthToken? getUserInfo() {
+  AuthedUser? getUserInfo() {
     if (_token == null) return null;
-    return AuthToken.fromMap(JwtDecoder.decode(_token!));
+    return AuthedUser.fromMap(JwtDecoder.decode(_token!));
   }
 
   @override
   AuthState getState() {
-    AuthToken? token = getUserInfo();
+    AuthedUser? token = getUserInfo();
     return token == null ? AuthState() : AuthState(user: token);
   }
 

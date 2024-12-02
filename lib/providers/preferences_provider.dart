@@ -7,11 +7,11 @@ import 'package:stream_challenge/providers/account_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 /// Requester - клиент для выполнения HTTP-запросов
-class _PreferencesClient {
+class _PreferencesRequester {
   final String url = "/preferences";
   final Requester httpClient;
 
-  _PreferencesClient({required this.httpClient});
+  _PreferencesRequester({required this.httpClient});
 
   Future<Preferences> fetchPreferences() async {
     final response = await httpClient.get(url);
@@ -42,10 +42,9 @@ class _PreferencesClient {
 }
 
 /// Провайдер для PreferencesClient
-final preferencesClientProvider =
-    FutureProvider<_PreferencesClient>((ref) async {
+final prefRequesterProvider = FutureProvider((ref) async {
   final httpClient = await ref.watch(httpClientProvider.future);
-  return _PreferencesClient(httpClient: httpClient);
+  return _PreferencesRequester(httpClient: httpClient);
 });
 
 /// StateNotifier для управления состоянием Preferences
@@ -66,7 +65,7 @@ class PreferencesNotifier extends StateNotifier<Preferences> {
   }
 
   Future<void> _fetchPreferences() async {
-    final client = await ref.read(preferencesClientProvider.future);
+    final client = await ref.read(prefRequesterProvider.future);
     onServerPreferences = await client.fetchPreferences();
     state = Preferences.fromMap(onServerPreferences.toMap());
   }
@@ -75,9 +74,8 @@ class PreferencesNotifier extends StateNotifier<Preferences> {
     if (state == onServerPreferences) {
       return;
     }
-    final client = await ref.read(preferencesClientProvider.future);
+    final client = await ref.read(prefRequesterProvider.future);
     onServerPreferences = await client.updatePreferences(state) ?? state;
-    print("new onServerPreferences: $onServerPreferences");
   }
 
   Future<void> updatePreferences(Preferences preferences) async {
@@ -95,9 +93,7 @@ class PreferencesNotifier extends StateNotifier<Preferences> {
 /// Провайдер для PreferencesNotifier
 final preferencesProvider =
     StateNotifierProvider<PreferencesNotifier, Preferences>((ref) {
-  final notifier = PreferencesNotifier(ref);
-  notifier.initialize(); // Инициализация при старте приложения
-  return notifier;
+  return PreferencesNotifier(ref);
 });
 
 final minimumInCurrencyProvider = FutureProvider.family<double?, String>(
@@ -105,7 +101,7 @@ final minimumInCurrencyProvider = FutureProvider.family<double?, String>(
     final account = ref.watch(accountProvider);
     if (account == null) return null;
 
-    final client = await ref.read(preferencesClientProvider.future);
+    final client = await ref.read(prefRequesterProvider.future);
     return client.getMinimumInCurrency(login, account.currency);
   },
 );

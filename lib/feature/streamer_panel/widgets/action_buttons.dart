@@ -43,7 +43,10 @@ List<Widget> getActionButtons({
           message: AppLocale.of(context).translate("Accept"),
           child: ElevatedButton(
             onPressed: () => actionCallback("ACCEPT"),
-            child: Icon(Icons.check, color: Colors.green),
+            child: const Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
           ),
         ),
         SizedBox(width: 5),
@@ -53,7 +56,10 @@ List<Widget> getActionButtons({
           child: ElevatedButton(
             onPressed: () => actionCallback("REJECT"),
             style: ButtonStyle(),
-            child: Icon(Icons.close, color: Colors.red),
+            child: const Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
           ),
         ),
         SizedBox(width: 5),
@@ -62,8 +68,10 @@ List<Widget> getActionButtons({
           message: AppLocale.of(context).translate("Report"),
           child: ElevatedButton(
             onPressed: () => actionCallback("REPORT"),
-            child: Icon(Icons.report_problem_outlined,
-                color: const Color.fromARGB(255, 75, 6, 127)),
+            child: const Icon(
+              Icons.report_problem_outlined,
+              color: Colors.deepPurple,
+            ),
           ),
         ),
       ];

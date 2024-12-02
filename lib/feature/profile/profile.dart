@@ -31,7 +31,7 @@ class ProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AuthToken? user = ref.watch(authStateProvider).user;
+    final AuthedUser? user = ref.watch(authStateProvider).user;
     final currentContent = ref.watch(profilePageContentProvider);
     if (user == null) {
       return const Center(child: Text('No user'));
@@ -112,7 +112,7 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildContent(String contentPath, AuthToken user) {
+  Widget _buildContent(String contentPath, AuthedUser user) {
     switch (contentPath) {
       case '/':
         return ProfileInfoCard(user: user);
