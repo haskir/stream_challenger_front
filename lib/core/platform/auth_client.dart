@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:html' as html;
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -31,7 +32,7 @@ class _AuthServiceHTML implements AuthClient {
     String path = ApiPath.http;
     authUrl = Uri.parse('$path/api/auth');
     _token = await _tokenRepo.getToken();
-    if (!_validated) {
+    if (!_validated && !kDebugMode) {
       _token = await validate() ? _token : null;
     }
     authStateNotifier.value =
