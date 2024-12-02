@@ -17,7 +17,7 @@ class Mixins {
               },
               child: Text(AppLocale.of(context).translate('No')),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop(true); // Подтвердить
               },

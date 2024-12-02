@@ -30,13 +30,14 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
   final Map<String, List<int>> hasLoaded = {}; // Для отслеживания загрузки
   final PageController _pageController = PageController();
 
-  static const Map<String, String> headers = {
+  static Map<String, String> headers = {
     'PENDING': "New Challenges",
     'ACCEPTED': "Accepted Challenges",
     'REJECTED': "Rejected Challenges",
     'SUCCESSFUL': "Successful Challenges",
     'FAILED': "Failed Challenges",
     'CANCELLED': "Cancelled Challenges",
+    'REPORTED': "Reported Challenges",
   };
 
   static const Map<String, Color> colors = {
@@ -46,6 +47,7 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
     "SUCCESSFUL": Colors.green,
     "FAILED": Colors.black,
     "CANCELLED": Colors.grey,
+    "REPORTED": Colors.purple
   };
 
   final Map<String, PagingController<int, Challenge>> pagingControllers = {
@@ -55,10 +57,15 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
     "SUCCESSFUL": PagingController(firstPageKey: 1),
     "FAILED": PagingController(firstPageKey: 1),
     "CANCELLED": PagingController(firstPageKey: 1),
+    "REPORTED": PagingController(firstPageKey: 1),
   };
 
   @override
   void initState() {
+/*     if (!widget.isAuthor) {
+      headers.remove("PENDING");
+      headers.remove("ACCEPTED");
+    } */
     tabController = TabController(length: headers.length, vsync: this);
     for (final status in headers.keys) {
       hasLoaded[status] = [];
@@ -111,38 +118,36 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(right: 25),
-      child: Column(
-        children: [
-          TabBar(
-            controller: tabController,
-            isScrollable: true,
-            tabs: headers.values
-                .map((title) => Tab(
-                      child: Text(
-                        AppLocale.of(context).translate(title),
-                        style: TextStyle(fontSize: 16, color: colors[title]),
-                      ),
-                    ))
-                .toList(),
-            onTap: (index) => _pageController.jumpToPage(index),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        TabBar(
+          controller: tabController,
+          isScrollable: true,
+          tabs: headers.values
+              .map((title) => Tab(
+                    child: Text(
+                      AppLocale.of(context).translate(title),
+                      style: TextStyle(fontSize: 16, color: colors[title]),
+                    ),
+                  ))
+              .toList(),
+          onTap: (index) => _pageController.jumpToPage(index),
+        ),
+        Container(
+          alignment: Alignment.topCenter,
+          height: 700,
+          child: PageView(
+            controller: _pageController,
+            children: headers.keys.map((status) => _buildPage(status)).toList(),
+            onPageChanged: (index) {
+              final status = headers.keys.toList()[index];
+              tabController.animateTo(index);
+              _fetchPage(status, 1);
+            },
           ),
-          SizedBox(
-            height: 1000,
-            child: PageView(
-              controller: _pageController,
-              children:
-                  headers.keys.map((status) => _buildPage(status)).toList(),
-              onPageChanged: (index) {
-                final status = headers.keys.toList()[index];
-                tabController.animateTo(index);
-                _fetchPage(status, 1);
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

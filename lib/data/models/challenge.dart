@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
 import 'package:stream_challenge/core/platform/datetime_format.dart';
 
 class ChallengePerson {
@@ -88,12 +90,13 @@ class Challenge {
   final double bet;
   String status;
   double? payout;
-  final bool isVisible;
+  final String? reportStatus;
   final ChallengePerson author;
   final ChallengePerson performer;
   final String performerLogin;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final Report? report;
 
   Challenge({
     required this.id,
@@ -103,13 +106,14 @@ class Challenge {
     required this.minimumReward,
     required this.bet,
     required this.status,
-    required this.isVisible,
+    required this.reportStatus,
     required this.payout,
     required this.author,
     required this.performer,
     required this.performerLogin,
     required this.createdAt,
     required this.updatedAt,
+    this.report,
   });
 
   Map<String, dynamic> toMap() {
@@ -121,13 +125,14 @@ class Challenge {
       'minimum_reward': minimumReward,
       'bet': bet,
       'status': status,
-      'is_visible': isVisible,
+      'report_status': reportStatus,
       'payout': payout,
       'author': author.toMap(),
       'performer': performer.toMap(),
       'performer_login': performerLogin,
       'created_at': createdAt.millisecondsSinceEpoch,
       'updated_at': updatedAt.millisecondsSinceEpoch,
+      'report': report?.toMap(),
     };
   }
 
@@ -140,13 +145,14 @@ class Challenge {
       minimumReward: map['minimum_reward'],
       bet: map['bet'],
       status: map['status'],
-      isVisible: map['is_visible'],
+      reportStatus: map['report_status'],
       payout: map['payout'],
       author: ChallengePerson.fromMap(map['author']),
       performer: ChallengePerson.fromMap(map['performer']),
       performerLogin: map['performer_login'],
       createdAt: dateTimeFormat.parse(map['created_at']),
       updatedAt: dateTimeFormat.parse(map['updated_at']),
+      report: map['report'] != null ? Report.fromMap(map['report']) : null,
     );
   }
 
@@ -154,6 +160,90 @@ class Challenge {
 
   factory Challenge.fromJson(String source) =>
       Challenge.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => prettyJson(toMap());
+}
+
+class CreateReportDTO {
+  final int challengeId;
+  String reason;
+  final String? comment;
+
+  CreateReportDTO({
+    required this.challengeId,
+    required this.reason,
+    this.comment,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'challenge_id': challengeId,
+      'reason': reason,
+      'comment': comment,
+    };
+  }
+
+  factory CreateReportDTO.fromMap(Map<String, dynamic> map) {
+    return CreateReportDTO(
+      challengeId: map['challenge_id'] as int,
+      reason: map['reason'] as String,
+      comment: map['comment'] != null ? map['comment'] as String : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory CreateReportDTO.fromJson(String source) =>
+      CreateReportDTO.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => prettyJson(toMap());
+}
+
+class Report {
+  final int id;
+  final int challengeId;
+  final String reason;
+  final String? comment;
+  final DateTime createdAt;
+  String status;
+
+  Report({
+    required this.id,
+    required this.challengeId,
+    required this.reason,
+    required this.comment,
+    required this.createdAt,
+    required this.status,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'challenge_id': challengeId,
+      'reason': reason,
+      'comment': comment,
+      'created_at': createdAt.millisecondsSinceEpoch,
+      'status': status,
+    };
+  }
+
+  factory Report.fromMap(Map<String, dynamic> map) {
+    return Report(
+      id: map['id'],
+      challengeId: map['challenge_id'],
+      reason: map['reason'],
+      comment: map['comment'] != null ? map['comment'] as String : null,
+      createdAt: dateTimeFormat.parse(map['created_at']),
+      status: map['status'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Report.fromJson(String source) =>
+      Report.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() => prettyJson(toMap());

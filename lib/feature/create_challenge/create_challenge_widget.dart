@@ -38,7 +38,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
 
   @override
   void dispose() {
-    print("disposing");
     _descriptionController.dispose();
     _minimumRewardController.dispose();
     _betController.dispose();

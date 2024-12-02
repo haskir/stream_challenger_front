@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +10,7 @@ import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/use_cases/challenges_actions.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'action_buttons.dart';
+import 'report_widget.dart';
 
 class ChallengeWidgetWithActions extends ConsumerStatefulWidget {
   final Challenge challenge;
@@ -54,7 +54,7 @@ class _ChallengeWidgetWithActionsState
         ));
   }
 
-  Future<Either> challengeAction(
+  Future challengeAction(
       Challenge challenge, Requester requester, String action) async {
     setState(() {
       _isLoading = true;
@@ -78,8 +78,32 @@ class _ChallengeWidgetWithActionsState
         _isLoading = false;
       });
     }
-
     return result;
+  }
+
+  Future? reportChallenge(
+    Challenge challenge,
+    Requester client,
+  ) async {
+    CreateReportDTO? report = await showDialog<CreateReportDTO?>(
+      context: context,
+      builder: (context) => ReportWidget(challengeId: challenge.id),
+    );
+    if (report == null) {
+      return null;
+    }
+    final Either result = await ChallengesActions.reportChallege(
+      challenge: challenge,
+      client: client,
+      report: report,
+    );
+
+    if (mounted) {
+      return result.fold(
+          (left) => Fluttertoast.showToast(msg: result.toString()),
+          (right) => Fluttertoast.showToast(
+              msg: AppLocale.of(context).translate("Reported")));
+    }
   }
 
   @override
@@ -103,13 +127,19 @@ class _ChallengeWidgetWithActionsState
                   // Buttons
                   ...[
                     Container(
-                      alignment: Alignment.bottomRight,
+                      alignment: Alignment.bottomCenter,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: getActionButtons(
                           status: challenge.status,
                           context: context,
                           actionCallback: (action) async {
+                            if (action == "REPORT") {
+                              return await reportChallenge(
+                                challenge,
+                                await ref.read(httpClientProvider.future),
+                              );
+                            }
                             if (await Mixins.showConfDialog(context) ?? false) {
                               await challengeAction(
                                 challenge,

@@ -5,12 +5,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Image.asset(
-        "images/gifs/stray228-tinker.gif",
-        height: 500,
-        width: 500,
-      ),
-    );
+    return const Center(child: Text('HomePage\n'));
   }
 }

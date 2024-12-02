@@ -41,4 +41,20 @@ class ChallengesActions {
       (right) => Right(Challenge.fromMap(right)),
     );
   }
+
+  static Future<Either<ErrorDTO, Report?>> reportChallege({
+    required Challenge challenge,
+    required Requester client,
+    required CreateReportDTO report,
+  }) async {
+    report.reason = report.reason.toUpperCase();
+    final result = (await client.post(
+      '/reports',
+      body: report.toMap(),
+    ));
+    return result.fold(
+      (left) => Left(left),
+      (right) => Right(Report.fromMap(right)),
+    );
+  }
 }

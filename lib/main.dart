@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// ignore: unnecessary_import
+import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stream_challenge/data/models/user_preferences.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
@@ -38,6 +40,7 @@ class StreamChallengeApp extends ConsumerWidget {
 }
 
 void main() {
+  //debugPaintSizeEnabled = true;
   setUrlStrategy(PathUrlStrategy());
   final container = ProviderContainer();
   container.read(preferencesProvider.notifier);

@@ -10,6 +10,20 @@ import 'package:stream_challenge/providers/challenge_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'package:stream_challenge/use_cases/challenges_actions.dart';
 
+class _ReportInfo extends StatelessWidget {
+  final Report report;
+  const _ReportInfo({super.key, required this.report});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(report.toString()),
+      ],
+    );
+  }
+}
+
 class _Info extends StatelessWidget {
   final Challenge challenge;
   const _Info({super.key, required this.challenge});
@@ -129,6 +143,8 @@ class _ChallengeViewAuthorState extends ConsumerState<ChallengeViewAuthor> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _Info(challenge: challenge),
+                if (challenge.report != null)
+                  _ReportInfo(report: challenge.report!),
                 if (controller != null)
                   SizedBox(
                     height: 150,

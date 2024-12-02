@@ -9,6 +9,7 @@ import 'appbar_widgets/balance_widget.dart';
 import 'appbar_widgets/locale_widget.dart';
 import 'appbar_widgets/logo.dart';
 import 'appbar_widgets/theme_widget.dart';
+// ignore: unused_import
 import 'body_widgets/bottom_panel.dart';
 
 class MainWidget extends ConsumerStatefulWidget {
@@ -36,7 +37,7 @@ class _MainWidgetState extends ConsumerState<MainWidget> {
         child: Column(
           children: [
             Expanded(child: widget.child), // Основной контент
-            BottomPanel(), // Панель внизу
+            //BottomPanel(), // Панель внизу
           ],
         ),
       ),
