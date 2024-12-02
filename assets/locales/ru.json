@@ -10,6 +10,7 @@
   "Please log in": "Пожалуйста, авторизуйтесь",
   "No challenges.": "Список испытаний пуст",
   "Due Date": "Срок выполнения",
+  "Can't create challenge for this user": "Нельзя создать испытание для этого пользователя",
   "No challenges available": "Список испытаний пуст",
   "Status": "Статус",
   "Completed": "Завершен",
@@ -77,6 +78,7 @@
   "Please specify": "Пожалуйста, укажите причину",
   "Confirm": "Подтвердить",
   "Reported sent": "Жалоба отправлена",
-  "Reported Challenges": "Жалобы"
+  "Reported Challenges": "Жалобы",
+  "Broadcaster type": "Тип канала"
   }
   

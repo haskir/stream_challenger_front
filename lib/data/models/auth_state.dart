@@ -9,8 +9,8 @@ class AuthToken {
   final int id;
   final String login;
   final String profile_image_url;
-  final String display_name;
   final String email;
+  final String broadcasterType;
   final DateTime expires_at;
   final int account_id;
   final int preferences_id;
@@ -19,8 +19,8 @@ class AuthToken {
     required this.id,
     required this.login,
     required this.profile_image_url,
-    required this.display_name,
     required this.email,
+    required this.broadcasterType,
     required this.expires_at,
     required this.account_id,
     required this.preferences_id,
@@ -34,9 +34,9 @@ class AuthToken {
       'id': id,
       'login': login,
       'profile_image_url': profile_image_url,
-      'display_name': display_name,
       'email': email,
-      'expiresAt': expires_at.millisecondsSinceEpoch,
+      'broadcaster_type': broadcasterType,
+      'expires_at': expires_at.millisecondsSinceEpoch,
       'account_id': account_id,
       'preferences_id': preferences_id,
     };
@@ -47,8 +47,8 @@ class AuthToken {
       id: map['id'] as int,
       login: map['login'],
       profile_image_url: map['profile_image_url'],
-      display_name: map['display_name'],
       email: map['email'],
+      broadcasterType: map['broadcaster_type'],
       expires_at: DateTime.fromMillisecondsSinceEpoch(
         double.parse(map['expires_at'].toString()).toInt(),
       ),

@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +9,7 @@ import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/use_cases/challenges_actions.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'action_buttons.dart';
-import 'report_widget.dart';
+import 'report_dialog.dart';
 
 class ChallengeWidgetWithActions extends ConsumerStatefulWidget {
   final Challenge challenge;
@@ -28,7 +27,7 @@ class ChallengeWidgetWithActions extends ConsumerStatefulWidget {
 class _ChallengeWidgetWithActionsState
     extends ConsumerState<ChallengeWidgetWithActions> {
   late Challenge challenge;
-  bool _isLoading = false;
+  //bool _isLoading = false;
 
   @override
   void initState() {
@@ -57,7 +56,7 @@ class _ChallengeWidgetWithActionsState
   Future challengeAction(
       Challenge challenge, Requester requester, String action) async {
     setState(() {
-      _isLoading = true;
+      //_isLoading = true;
     });
 
     final result = await ChallengesActions.challengeAction(
@@ -75,7 +74,7 @@ class _ChallengeWidgetWithActionsState
         (right) => null);
     if (mounted) {
       setState(() {
-        _isLoading = false;
+        //_isLoading = false;
       });
     }
     return result;
@@ -87,7 +86,7 @@ class _ChallengeWidgetWithActionsState
   ) async {
     CreateReportDTO? report = await showDialog<CreateReportDTO?>(
       context: context,
-      builder: (context) => ReportWidget(challengeId: challenge.id),
+      builder: (context) => ReportDialog(challengeId: challenge.id),
     );
     if (report == null) {
       return null;
@@ -108,62 +107,67 @@ class _ChallengeWidgetWithActionsState
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 300,
-      width: 600,
-      child: Stack(
-        children: [
-          Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  ChallengeInfoWidget(challenge: challenge),
-                  // Buttons
-                  ...[
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: getActionButtons(
-                          status: challenge.status,
-                          context: context,
-                          actionCallback: (action) async {
-                            if (action == "REPORT") {
-                              return await reportChallenge(
-                                challenge,
-                                await ref.read(httpClientProvider.future),
-                              );
-                            }
-                            if (await Mixins.showConfDialog(context) ?? false) {
-                              await challengeAction(
-                                challenge,
-                                await ref.read(httpClientProvider.future),
-                                action,
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    )
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minHeight: 300,
+        maxHeight: 500,
+        minWidth: 500,
+        maxWidth: 1300,
+      ),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ChallengeInfoWidget(challenge: challenge),
+              // Buttons
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${challenge.bet} ${challenge.currency}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Spacer(flex: 1),
+                    ...getActionButtons(
+                      status: challenge.status,
+                      context: context,
+                      actionCallback: (action) async {
+                        if (action == "REPORT") {
+                          return await reportChallenge(
+                            challenge,
+                            await ref.read(httpClientProvider.future),
+                          );
+                        }
+                        if (await Mixins.showConfDialog(context) ?? false) {
+                          await challengeAction(
+                            challenge,
+                            await ref.read(httpClientProvider.future),
+                            action,
+                          );
+                        }
+                      },
+                    ),
                   ],
-                ],
-              ),
-            ),
+                ),
+              )
+            ],
           ),
-          if (_isLoading)
+        ),
+      ),
+      /* if (_isLoading)
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
               //child: const ModalBarrier(),
             ),
-          if (_isLoading) const Center(child: CircularProgressIndicator()),
-        ],
-      ),
+          if (_isLoading) const Center(child: CircularProgressIndicator()), */
     );
   }
 }

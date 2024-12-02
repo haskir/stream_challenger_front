@@ -36,7 +36,6 @@ class CreateChallengeDTO {
   final String description;
   final List<String> conditions;
   final String performerLogin;
-  final double minimumReward;
   final double bet;
   final String currency;
   final bool isVisible = true;
@@ -45,7 +44,6 @@ class CreateChallengeDTO {
     required this.description,
     required this.conditions,
     required this.performerLogin,
-    required this.minimumReward,
     required this.bet,
     required this.currency,
   });
@@ -58,7 +56,6 @@ class CreateChallengeDTO {
       'description': description,
       'conditions': conditions,
       'performer_login': performerLogin,
-      'minimum_reward': minimumReward,
       'bet': bet,
       'currency': currency,
     };
@@ -69,7 +66,6 @@ class CreateChallengeDTO {
       description: map['description'] as String,
       conditions: List<String>.from((map['conditions'] as List<String>)),
       performerLogin: map['performer_login'] as String,
-      minimumReward: map['minimum_reward'] as double,
       bet: map['bet'] as double,
       currency: map['currency'] as String,
     );
@@ -86,7 +82,6 @@ class Challenge {
   final String description;
   final List<String> conditions;
   final String currency;
-  final double minimumReward;
   final double bet;
   String status;
   double? payout;
@@ -103,7 +98,6 @@ class Challenge {
     required this.description,
     required this.conditions,
     required this.currency,
-    required this.minimumReward,
     required this.bet,
     required this.status,
     required this.reportStatus,
@@ -122,7 +116,6 @@ class Challenge {
       'description': description,
       'conditions': conditions,
       'currency': currency,
-      'minimum_reward': minimumReward,
       'bet': bet,
       'status': status,
       'report_status': reportStatus,
@@ -142,7 +135,6 @@ class Challenge {
       description: map['description'],
       conditions: List<String>.from((map['conditions'])),
       currency: map['currency'],
-      minimumReward: map['minimum_reward'],
       bet: map['bet'],
       status: map['status'],
       reportStatus: map['report_status'],

@@ -53,27 +53,13 @@ class ChallengesPanelBuilder {
                 )),
           );
         },
-        body: challenges.isNotEmpty
-            ? GridView.builder(
-                shrinkWrap: true, // Чтобы GridView не занимал весь экран
-                // Отключение прокрутки внутри GridView
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // Количество элементов в строке
-                  mainAxisSpacing: 10, // Отступ между строками
-                  crossAxisSpacing: 10, // Отступ между столбцами
-                  childAspectRatio: 5 / 3, // Пропорции элементов
-                ),
-                itemCount: challenges.length,
-                itemBuilder: (context, index) {
-                  final challenge = challenges[index];
-                  return ChallengeWidgetWithActions(
-                    key: ObjectKey(challenge),
-                    challenge: challenge,
-                  );
-                },
-              )
-            : const SizedBox.shrink(),
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: challenges
+              .map((challenge) => ChallengeWidgetWithActions(
+                  key: ObjectKey(challenge), challenge: challenge))
+              .toList(),
+        ),
         isExpanded: challenges.isNotEmpty && expandedStates[status]!,
         canTapOnHeader: true,
       );

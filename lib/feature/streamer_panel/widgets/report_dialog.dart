@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
-class ReportWidget extends StatefulWidget {
+class ReportDialog extends StatefulWidget {
   final int challengeId;
 
-  const ReportWidget({
+  const ReportDialog({
     super.key,
     required this.challengeId,
   });
 
   @override
-  ReportWidgetState createState() => ReportWidgetState();
+  ReportDialogState createState() => ReportDialogState();
 }
 
-class ReportWidgetState extends State<ReportWidget> {
+class ReportDialogState extends State<ReportDialog> {
   String? _selectedReason;
   final TextEditingController _textController = TextEditingController();
 

@@ -29,12 +29,12 @@ class Mixins {
     );
   }
 
-  static Column personInfo(ChallengePerson person) {
+  static Column personInfo(ChallengePerson person, [double radius = 15]) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         CircleAvatar(
-          radius: 15,
+          radius: radius,
           backgroundImage: NetworkImage(person.urlImage),
         ),
         const SizedBox(width: 5),

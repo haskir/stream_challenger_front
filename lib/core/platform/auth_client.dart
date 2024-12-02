@@ -9,7 +9,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:stream_challenge/core/platform/token_repo.dart';
 import 'package:stream_challenge/providers/Api.dart';
 
-import 'auth_state.dart';
+import '../../data/models/auth_state.dart';
 
 abstract class AuthClient {
   Future<void> auth(BuildContext context);

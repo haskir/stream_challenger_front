@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/core/platform/auth_state.dart';
+import 'package:stream_challenge/data/models/auth_state.dart';
 import 'package:stream_challenge/feature/profile/widgets/challenge_list_widget.dart';
 import 'package:stream_challenge/feature/profile/widgets/transaction_list_widget.dart';
 import 'package:stream_challenge/providers/providers.dart';

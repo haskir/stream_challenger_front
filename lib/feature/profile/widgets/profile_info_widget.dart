@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/core/platform/auth_state.dart';
+import 'package:stream_challenge/data/models/auth_state.dart';
+
+import 'user_edit_widget.dart';
 
 class ProfileInfoCard extends StatelessWidget {
   final AuthToken user;
@@ -27,20 +29,25 @@ class ProfileInfoCard extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(Icons.edit),
-                  onPressed: () {},
+                  onPressed: () async {
+                    await showDialog<void>(
+                      context: context,
+                      builder: (context) => UserEditDialog(),
+                    );
+                  },
                 ),
               ],
             ),
             SizedBox(height: 16),
             InfoRow(
-              label: AppLocale.of(context).translate('Name'),
-              value: user.display_name,
-            ),
-            InfoRow(
               label: AppLocale.of(context).translate('Login'),
               value: user.login,
             ),
             InfoRow(label: 'Email', value: user.email),
+            InfoRow(
+              label: AppLocale.of(context).translate('Broadcaster type'),
+              value: user.broadcasterType,
+            ),
             if (kDebugMode) InfoRow(label: 'ID', value: user.id.toString()),
           ],
         ),

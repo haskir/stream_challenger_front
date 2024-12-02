@@ -96,6 +96,6 @@ class ConditionLineEdit extends TextFormField {
           decoration: InputDecoration(
             hintText: AppLocale.of(context).translate('Condition'),
           ),
-          maxLength: 255,
+          maxLength: 127,
         );
 }

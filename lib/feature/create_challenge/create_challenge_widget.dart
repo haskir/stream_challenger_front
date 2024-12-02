@@ -50,7 +50,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   Future<void> _createChallenge() async {
     CreateChallengeDTO challenge = CreateChallengeDTO(
       description: _descriptionController.text,
-      minimumReward: 0.1,
       bet: double.parse(_betController.text),
       currency: account.currency.toUpperCase(),
       conditions: _controllers.map((e) => e.text).toList(),
@@ -93,7 +92,10 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => const Center(child: Text("No such user")),
         data: (minimum) {
-          if (minimum == null) return const Center(child: Text("No such user"));
+          if (minimum == null) {
+            return const Center(
+                child: Text("Can't create challenge for this user"));
+          }
           if (account.balance < minimum) {
             return Center(
                 child: Text(AppLocale.of(context).translate(

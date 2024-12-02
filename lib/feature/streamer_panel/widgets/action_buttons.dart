@@ -79,44 +79,35 @@ class ChallengeInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Mixins.personInfo(challenge.author),
-              const SizedBox(height: 100, width: 15),
-              Column(
-                children: [
-                  Text(
-                    challenge.description,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ],
-              ),
-            ],
-          ),
-          if (challenge.conditions.isNotEmpty)
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${AppLocale.of(context).translate('Conditions')}:',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  ...challenge.conditions
-                      .map((condition) => Text('- $condition')),
-                ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 15, 15),
+              child: Mixins.personInfo(challenge.author, 25),
+            ),
+            Flexible(
+              child: Text(
+                challenge.description,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
-          Text(
-            '${challenge.bet} ${challenge.currency}',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+          ],
+        ),
+        if (challenge.conditions.isNotEmpty)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${AppLocale.of(context).translate('Conditions')}:',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              ...challenge.conditions.map((condition) => Text('- $condition')),
+            ],
           ),
-        ],
-      ),
+      ],
     );
   }
 }
