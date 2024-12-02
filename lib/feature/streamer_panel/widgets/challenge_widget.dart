@@ -109,34 +109,30 @@ class _ChallengeWidgetWithActionsState
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(
-        minHeight: 300,
         maxHeight: 500,
-        minWidth: 500,
         maxWidth: 1300,
       ),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: const EdgeInsets.all(10),
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.min,
             children: [
               ChallengeInfoWidget(challenge: challenge),
-              // Buttons
-              Container(
-                alignment: Alignment.bottomCenter,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${challenge.bet} ${challenge.currency}',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Spacer(flex: 1),
-                    ...getActionButtons(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Bet
+                  Text(
+                    '${challenge.bet} ${challenge.currency}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  // Buttons
+                  Row(
+                    children: getActionButtons(
                       status: challenge.status,
                       context: context,
                       actionCallback: (action) async {
@@ -155,9 +151,9 @@ class _ChallengeWidgetWithActionsState
                         }
                       },
                     ),
-                  ],
-                ),
-              )
+                  ),
+                ],
+              ),
             ],
           ),
         ),
