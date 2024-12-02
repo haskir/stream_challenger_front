@@ -2,6 +2,7 @@ import 'dart:async';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -29,8 +30,28 @@ class _AuthServiceHTML implements AuthClient {
     String path = ApiPath.http;
     authUrl = Uri.parse('$path/api/auth');
     _token = await _tokenRepo.getToken();
+    if (!await validate()) _token = null;
     authStateNotifier.value =
         _token == null ? AuthState() : AuthState(user: getUserInfo());
+  }
+
+  Future<bool> validate() async {
+    if (token == null) return false;
+    try {
+      Dio dio = Dio();
+      Response response = await dio.get(
+        "${ApiPath.http}/api/auth/validate",
+        options: Options(headers: {
+          "Authorization": "Bearer $_token",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        }),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      print("Error validating token: $e");
+      return false;
+    }
   }
 
   final ValueNotifier<AuthState> authStateNotifier = ValueNotifier(
