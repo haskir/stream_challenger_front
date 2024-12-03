@@ -11,21 +11,14 @@ List<Widget> getActionButtons({
   switch (status) {
     case 'ACCEPTED':
       return [
-        TextButton(
-          onPressed: () => actionCallback("END"),
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all<Color>(
-              const Color.fromARGB(255, 23, 185, 104),
-            ),
-            minimumSize: WidgetStateProperty.all<Size>(const Size(500, 40)),
-          ),
-          child: Row(
-            children: [
-              Text(AppLocale.of(context).translate('End'),
-                  style: TextStyle(color: Colors.white)),
-              Icon(Icons.check_box_outlined)
-            ],
-          ),
+        Tooltip(
+          message: AppLocale.of(context).translate('End'),
+          child: ElevatedButton(
+              onPressed: () => actionCallback("END"),
+              child: Icon(
+                Icons.check_box_outlined,
+                color: Colors.green,
+              )),
         )
       ];
     case 'ENDED':

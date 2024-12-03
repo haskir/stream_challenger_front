@@ -109,6 +109,7 @@ class _ChallengeWidgetWithActionsState
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(
+        minHeight: 100,
         maxHeight: 500,
         maxWidth: 1300,
       ),
@@ -116,7 +117,7 @@ class _ChallengeWidgetWithActionsState
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         margin: const EdgeInsets.all(10),
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(25),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.min,

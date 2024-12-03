@@ -45,7 +45,8 @@ class ChallengesPanelBuilder {
       return ExpansionPanel(
         headerBuilder: (BuildContext context, bool isExpanded) {
           return ListTile(
-            title: Text(AppLocale.of(context).translate(headers[status]!)),
+            title: Center(
+                child: Text(AppLocale.of(context).translate(headers[status]!))),
             trailing: Text('(${challenges.length})',
                 style: TextStyle(
                   color: colors[status],
@@ -54,16 +55,9 @@ class ChallengesPanelBuilder {
           );
         },
         body: challenges.isNotEmpty
-            ? GridView.builder(
-                shrinkWrap: true, // Чтобы GridView не занимал весь экран
-                physics:
-                    const NeverScrollableScrollPhysics(), // Отключение прокрутки внутри GridView
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Количество элементов в строке
-                  mainAxisSpacing: 10, // Отступ между строками
-                  crossAxisSpacing: 10, // Отступ между столбцами
-                  childAspectRatio: 3 / 2, // Пропорции элементов
-                ),
+            ? ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: challenges.length,
                 itemBuilder: (context, index) {
                   final challenge = challenges[index];
@@ -78,19 +72,6 @@ class ChallengesPanelBuilder {
         canTapOnHeader: true,
       );
     }).toList();
-
-/*         body: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: challenges
-              .map((challenge) => ChallengeWidgetWithActions(
-                  key: ObjectKey(challenge), challenge: challenge))
-              .toList(),
-        ), 
-        isExpanded: challenges.isNotEmpty && expandedStates[status]!,
-        canTapOnHeader: true,
-      );
-    }).toList();*/
-
     return cachedPanels!;
   }
 }

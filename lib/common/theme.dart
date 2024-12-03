@@ -21,9 +21,10 @@ ThemeData darkTheme = ThemeData(
     bodyMedium: TextStyle(color: Colors.grey[300]), // Цвет второго текста
     bodySmall: TextStyle(color: Colors.grey[300]), // Цвет основного текста
   ),
-  cardColor: Colors.grey[800], // Цвет карточек
+  cardColor: Colors.black12,
+  cardTheme: CardTheme(color: Colors.black12), // Цвет карточек
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    backgroundColor: Colors.grey[900], // Цвет нижней навигационной панели
+    backgroundColor: Colors.grey[400], // Цвет нижней навигационной панели
     selectedItemColor: Colors.white, // Цвет выбранного элемента навигации
     unselectedItemColor:
         Colors.grey[500], // Цвет невыбранного элемента навигации
