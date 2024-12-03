@@ -28,8 +28,7 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(
-        minHeight: 100,
-        maxHeight: 350,
+        maxHeight: 380,
         maxWidth: 700,
       ),
       child: Stack(
@@ -44,7 +43,7 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Flexible(
                     flex: 5,
@@ -53,7 +52,8 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
                   Spacer(),
                   if (challenge.report != null)
                     Flexible(
-                        child: ReportInfoWidget(report: challenge.report!)),
+                      child: ReportInfoWidget(report: challenge.report!),
+                    ),
                   Spacer(),
                   // Кнопки действий
                   ActionsBuilder(

@@ -13,6 +13,7 @@ class InfoWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // mainAxisSize: MainAxisSize.min,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,6 +41,7 @@ class InfoWidget extends StatelessWidget {
               // Условия
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     '${AppLocale.of(context).translate('Conditions')}:',
@@ -51,6 +53,7 @@ class InfoWidget extends StatelessWidget {
               ),
           ],
         ),
+        SizedBox(height: 35),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [

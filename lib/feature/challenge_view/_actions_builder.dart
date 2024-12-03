@@ -91,11 +91,10 @@ class _ChallengeActionBuilderState extends ConsumerState<ActionsBuilder> {
               ElevatedButton(
                 onPressed: () async {
                   if (await Mixins.showConfDialog(context) ?? false) {
-                    await _payChallenge(
-                      ref,
-                      double.parse(controller!.text) / challenge.bet,
-                    );
+                    double amount =
+                        double.parse(controller.text) / challenge.bet;
                     controller.dispose();
+                    await _payChallenge(ref, amount);
                   }
                 },
                 child: Row(
