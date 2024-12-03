@@ -3,9 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/feature/challenge_view/challenge_card.dart';
 import 'package:stream_challenge/providers/challenge_provider.dart';
-
-import 'challenge_view_widget.dart';
 
 class ChallengesPanel extends ConsumerStatefulWidget {
   final bool isAuthor;
@@ -164,15 +163,10 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
           pagingController: pagingControllers[status]!,
           builderDelegate: PagedChildBuilderDelegate<Challenge>(
             itemBuilder: (context, challenge, index) {
-              if (widget.isAuthor) {
-                return ChallengeViewAuthor(
-                  challenge: challenge,
-                  key: ValueKey(challenge.id),
-                );
-              }
-              return ChallengeViewPerformer(
-                key: ValueKey(challenge.id),
+              return ChallengeCard(
                 challenge: challenge,
+                isAuthor: widget.isAuthor,
+                key: ValueKey(challenge.id),
               );
             },
             firstPageProgressIndicatorBuilder: (context) => Center(

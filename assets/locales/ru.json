@@ -50,6 +50,8 @@
   "SUCCESSFUL": "Выполнен :)",
   "FAILED": "Провален :(",
   "PENDING": "Новый",
+  "CANCELLED": "Отменён",
+  "REJECTED": "Отклонён",
   "My profile": "Мой профиль",
   "Transactions": "Транзакции",
   "My challenges": "Мои вызовы",
