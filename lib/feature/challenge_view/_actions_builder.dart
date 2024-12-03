@@ -12,6 +12,7 @@ import 'package:stream_challenge/providers/providers.dart';
 import 'package:stream_challenge/use_cases/challenges_actions.dart';
 
 import '../streamer_panel/widgets/report_dialog.dart';
+import '_staring_widget.dart';
 
 class ActionsBuilder extends ConsumerStatefulWidget {
   final Challenge challenge;
@@ -56,6 +57,9 @@ class _ChallengeActionBuilderState extends ConsumerState<ActionsBuilder> {
           }
         },
       );
+    }
+    if (challenge.status == 'SUCCESSFUL') {
+      return StarRating(onRatingChanged: print);
     }
     if (widget.challenge.status == 'PENDING') {
       return ElevatedButton(

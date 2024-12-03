@@ -43,7 +43,7 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Flexible(
                     flex: 5,
