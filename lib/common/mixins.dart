@@ -29,17 +29,29 @@ class Mixins {
     );
   }
 
-  static Column personInfo(ChallengePerson person, [double radius = 15]) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        CircleAvatar(
-          radius: radius,
-          backgroundImage: NetworkImage(person.urlImage),
+  static Widget personInfo(ChallengePerson person, BuildContext context,
+      [double radius = 15]) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Theme.of(context).colorScheme.primary),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: radius,
+              backgroundImage: NetworkImage(person.urlImage),
+            ),
+            const SizedBox(width: 5),
+            Text(
+              person.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
-        const SizedBox(width: 5),
-        Text(person.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-      ],
+      ),
     );
   }
 }

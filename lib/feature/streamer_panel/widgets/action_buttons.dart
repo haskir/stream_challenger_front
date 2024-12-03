@@ -63,7 +63,7 @@ List<Widget> getActionButtons({
             onPressed: () => actionCallback("REPORT"),
             child: const Icon(
               Icons.report_problem_outlined,
-              color: Colors.deepPurple,
+              color: Colors.orange,
             ),
           ),
         ),
@@ -78,36 +78,77 @@ class ChallengeInfoWidget extends StatelessWidget {
 
   const ChallengeInfoWidget({super.key, required this.challenge});
 
+  Widget _buildStatus(String status, BuildContext context) {
+    switch (status) {
+      case 'PENDING':
+        return Text(
+          '(${AppLocale.of(context).translate('Pending')})',
+          style: TextStyle(color: Colors.orange),
+        );
+      case 'ACCEPTED':
+        return Text(
+          '(${AppLocale.of(context).translate('Accepted')})',
+          style: TextStyle(color: Colors.blue),
+        );
+      default:
+        return Text("ERROR");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 15, 15),
-              child: Mixins.personInfo(challenge.author, 25),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // Аватарка
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 15, 15),
+                  child: Mixins.personInfo(challenge.author, context, 25),
+                ),
+                // Описание
+                Flexible(
+                  child: Text(
+                    challenge.description,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+              ],
             ),
-            Flexible(
-              child: Text(
-                challenge.description,
-                style: Theme.of(context).textTheme.titleLarge,
+            if (challenge.conditions.isNotEmpty)
+              // Условия
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${AppLocale.of(context).translate('Conditions')}:',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  ...challenge.conditions
+                      .map((condition) => Text('- $condition')),
+                ],
               ),
-            ),
           ],
         ),
-        if (challenge.conditions.isNotEmpty)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${AppLocale.of(context).translate('Conditions')}:',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              ...challenge.conditions.map((condition) => Text('- $condition')),
-            ],
-          ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '${challenge.bet} ${challenge.currency}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(width: 35),
+            _buildStatus(challenge.status, context),
+          ],
+        ),
       ],
     );
   }

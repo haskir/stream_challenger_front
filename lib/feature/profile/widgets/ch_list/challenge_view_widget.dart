@@ -104,7 +104,7 @@ class ChallengeViewPerformer extends StatelessWidget {
         child: Column(
           children: [
             _Info(challenge: challenge),
-            Mixins.personInfo(challenge.author),
+            Mixins.personInfo(challenge.author, context),
           ],
         ),
       ),
@@ -161,7 +161,7 @@ class _ChallengeViewAuthorState extends ConsumerState<ChallengeViewAuthor> {
                     Text('${AppLocale.of(context).translate('Created At')}: '),
                     Text(DateFormat('dd.MM.yyyy').format(challenge.createdAt)),
                     SizedBox(width: 20),
-                    Mixins.personInfo(challenge.performer),
+                    Mixins.personInfo(challenge.performer, context),
                     SizedBox(width: 20),
                     if (controller != null)
                       ElevatedButton(

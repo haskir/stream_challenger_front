@@ -11,47 +11,30 @@ import 'package:stream_challenge/providers/providers.dart';
 import 'action_buttons.dart';
 import 'report_dialog.dart';
 
-class ChallengeWidgetWithActions extends ConsumerStatefulWidget {
+class ChalellengeInfo extends StatelessWidget {
+  final Challenge challenge;
+  const ChalellengeInfo({super.key, required this.challenge});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class ChallengeCard extends ConsumerStatefulWidget {
   final Challenge challenge;
 
-  const ChallengeWidgetWithActions({
+  const ChallengeCard({
     super.key,
     required this.challenge,
   });
 
   @override
-  ConsumerState<ChallengeWidgetWithActions> createState() =>
-      _ChallengeWidgetWithActionsState();
+  ConsumerState<ChallengeCard> createState() => ChallengeCardState();
 }
 
-class _ChallengeWidgetWithActionsState
-    extends ConsumerState<ChallengeWidgetWithActions> {
-  late Challenge challenge;
-  //bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    challenge = widget.challenge;
-  }
-
-  Text getStatusText(Challenge challenge) {
-    String text = "${AppLocale.of(context).translate("Status")}: ";
-    text += AppLocale.of(context).translate(challenge.status);
-    const Map colors = {
-      "ENDED": Colors.blueAccent,
-      "SUCCESSFUL": Colors.green,
-      "FAILED": Colors.black,
-      "REJECTED": Colors.red,
-      "ACCEPTED": Colors.blue,
-      "PENDING": Colors.orange,
-    };
-    return Text(text,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: colors[challenge.status] ?? Colors.grey,
-        ));
-  }
+class ChallengeCardState extends ConsumerState<ChallengeCard> {
+  Challenge get challenge => widget.challenge;
 
   Future challengeAction(
       Challenge challenge, Requester requester, String action) async {
@@ -110,50 +93,47 @@ class _ChallengeWidgetWithActionsState
     return ConstrainedBox(
       constraints: const BoxConstraints(
         minHeight: 100,
-        maxHeight: 500,
-        maxWidth: 1300,
+        maxHeight: 300,
+        maxWidth: 700,
       ),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         margin: const EdgeInsets.all(10),
         child: Padding(
           padding: const EdgeInsets.all(25),
-          child: Column(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              ChallengeInfoWidget(challenge: challenge),
+              Flexible(
+                flex: 5,
+                child: ChallengeInfoWidget(challenge: challenge),
+              ),
+              Spacer(),
+              // Buttons
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Bet
-                  Text(
-                    '${challenge.bet} ${challenge.currency}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  // Buttons
-                  Row(
-                    children: getActionButtons(
-                      status: challenge.status,
-                      context: context,
-                      actionCallback: (action) async {
-                        if (action == "REPORT") {
-                          return await reportChallenge(
-                            challenge,
-                            await ref.read(httpClientProvider.future),
-                          );
-                        }
-                        if (await Mixins.showConfDialog(context) ?? false) {
-                          await challengeAction(
-                            challenge,
-                            await ref.read(httpClientProvider.future),
-                            action,
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ],
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: getActionButtons(
+                  status: challenge.status,
+                  context: context,
+                  actionCallback: (action) async {
+                    if (action == "REPORT") {
+                      return await reportChallenge(
+                        challenge,
+                        await ref.read(httpClientProvider.future),
+                      );
+                    }
+                    if (await Mixins.showConfDialog(context) ?? false) {
+                      await challengeAction(
+                        challenge,
+                        await ref.read(httpClientProvider.future),
+                        action,
+                      );
+                    }
+                  },
+                ),
               ),
             ],
           ),

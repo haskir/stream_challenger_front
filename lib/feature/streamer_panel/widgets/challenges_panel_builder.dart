@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/feature/streamer_panel/widgets/challenge_widget.dart';
+import 'package:stream_challenge/feature/streamer_panel/widgets/challenge_card.dart';
 
 class ChallengesPanelBuilder {
   static const Map<String, String> headers = {
@@ -61,7 +61,7 @@ class ChallengesPanelBuilder {
                 itemCount: challenges.length,
                 itemBuilder: (context, index) {
                   final challenge = challenges[index];
-                  return ChallengeWidgetWithActions(
+                  return ChallengeCard(
                     key: ObjectKey(challenge),
                     challenge: challenge,
                   );
@@ -73,24 +73,5 @@ class ChallengesPanelBuilder {
       );
     }).toList();
     return cachedPanels!;
-  }
-}
-
-void debugPanels(Map<String, List<Challenge>> challengesByState) {
-  if (!kDebugMode) {
-    return;
-  }
-  for (var entry in challengesByState.entries) {
-    if (entry.value.isEmpty) continue;
-    String ids = "${entry.key}:";
-    for (var challenge in entry.value) {
-      ids += " ${challenge.id}";
-    }
-    if (kDebugMode) {
-      print(ids);
-    }
-  }
-  if (kDebugMode) {
-    print("-------");
   }
 }
