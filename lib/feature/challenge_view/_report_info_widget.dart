@@ -7,10 +7,8 @@ class ReportInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(report.toString()),
-      ],
+    return Center(
+      child: Text(report.toString()),
     );
   }
 }

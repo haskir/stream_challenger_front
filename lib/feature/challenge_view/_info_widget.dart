@@ -3,10 +3,10 @@ import 'package:stream_challenge/common/mixins.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
-class ChallengeInfoWidget extends StatelessWidget {
+class InfoWidget extends StatelessWidget {
   final Challenge challenge;
 
-  const ChallengeInfoWidget({super.key, required this.challenge});
+  const InfoWidget({super.key, required this.challenge});
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +54,48 @@ class ChallengeInfoWidget extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              '${challenge.bet} ${challenge.currency}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            _buildBet(challenge, context),
             SizedBox(width: 35),
             _buildStatus(challenge.status, context),
           ],
         ),
+      ],
+    );
+  }
+
+  Widget _buildBet(Challenge challenge, BuildContext context) {
+    if (challenge.status == "FAILED") {
+      return Row(
+        children: [
+          Text(AppLocale.of(context).translate('Bet')),
+          Text(
+            ': ${challenge.bet} ${challenge.currency}',
+            style:
+                const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+          ),
+          if (challenge.payout != null) const SizedBox(width: 10),
+          if (challenge.payout != null)
+            Text(
+              '${AppLocale.of(context).translate('Payout')}: ',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          if (challenge.payout != null)
+            Text(
+              '${challenge.payout} ${challenge.currency}',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
+        ],
+      );
+    }
+    return Row(
+      children: [
+        Text(
+          '${challenge.bet} ${challenge.currency}',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        )
       ],
     );
   }

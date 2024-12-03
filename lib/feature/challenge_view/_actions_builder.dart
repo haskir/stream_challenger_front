@@ -13,12 +13,12 @@ import 'package:stream_challenge/use_cases/challenges_actions.dart';
 
 import '../streamer_panel/widgets/report_dialog.dart';
 
-class ChallengeActionsBuilder extends ConsumerStatefulWidget {
+class ActionsBuilder extends ConsumerStatefulWidget {
   final Challenge challenge;
-  final bool isAuthor;
+  final bool? isAuthor;
   final Function(bool isLoading) onLoading;
 
-  const ChallengeActionsBuilder({
+  const ActionsBuilder({
     super.key,
     required this.challenge,
     required this.isAuthor,
@@ -29,15 +29,14 @@ class ChallengeActionsBuilder extends ConsumerStatefulWidget {
   createState() => _ChallengeActionBuilderState();
 }
 
-class _ChallengeActionBuilderState
-    extends ConsumerState<ChallengeActionsBuilder> {
-  late final TextEditingController? controller;
-
+class _ChallengeActionBuilderState extends ConsumerState<ActionsBuilder> {
   Challenge get challenge => widget.challenge;
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.isAuthor) {
+    if (widget.isAuthor == null) return Container();
+
+    if (!widget.isAuthor!) {
       return _getActionButtons(
         status: widget.challenge.status,
         context: context,
@@ -75,16 +74,41 @@ class _ChallengeActionBuilderState
         ]),
       );
     }
-    if (widget.challenge.status == 'FAILED' && challenge.payout == null) {
-      controller = TextEditingController();
-      return SizedBox(
-        height: 150,
-        width: 500,
-        child: BetSlider(
-          controller: controller!,
-          minBet: 0.0,
-          balance: challenge.bet,
-          currency: challenge.currency,
+    if (challenge.status == 'FAILED' && challenge.payout == null) {
+      TextEditingController controller = TextEditingController();
+      return Center(
+        child: SizedBox(
+          height: 150,
+          width: 500,
+          child: Column(
+            children: [
+              BetSlider(
+                controller: controller,
+                minBet: 0.0,
+                balance: challenge.bet,
+                currency: challenge.currency,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  if (await Mixins.showConfDialog(context) ?? false) {
+                    await _payChallenge(
+                      ref,
+                      double.parse(controller!.text) / challenge.bet,
+                    );
+                    controller.dispose();
+                  }
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(AppLocale.of(context).translate('Pay')),
+                    Icon(Icons.attach_money),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -224,11 +248,8 @@ class _ChallengeActionBuilderState
     }, (right) async {
       final result =
           await ChallengeGetter.getChallenge(id: challenge.id, client: client);
-      result.fold((left) {
-        print("Error getting challenge ${left.message}");
-      }, (right) {
+      result.fold((left) {}, (right) {
         challenge.payout = right.payout;
-        print("Updated payout: ${challenge.payout}");
         setState(() {});
       });
     });
@@ -247,8 +268,6 @@ class _ChallengeActionBuilderState
       Fluttertoast.showToast(msg: result.toString());
     }, (right) async {
       challenge.status = 'CANCELED';
-      controller?.dispose();
-      controller = null;
       setState(() {});
     });
     widget.onLoading(false);

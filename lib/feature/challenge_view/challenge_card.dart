@@ -8,7 +8,7 @@ import '_report_info_widget.dart';
 
 class ChallengeCard extends ConsumerStatefulWidget {
   final Challenge challenge;
-  final bool isAuthor;
+  final bool? isAuthor;
 
   const ChallengeCard({
     super.key,
@@ -29,7 +29,7 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
     return ConstrainedBox(
       constraints: const BoxConstraints(
         minHeight: 100,
-        maxHeight: 300,
+        maxHeight: 350,
         maxWidth: 700,
       ),
       child: Stack(
@@ -48,7 +48,7 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
                 children: [
                   Flexible(
                     flex: 5,
-                    child: ChallengeInfoWidget(challenge: challenge),
+                    child: InfoWidget(challenge: challenge),
                   ),
                   Spacer(),
                   if (challenge.report != null)
@@ -56,7 +56,7 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
                         child: ReportInfoWidget(report: challenge.report!)),
                   Spacer(),
                   // Кнопки действий
-                  ChallengeActionsBuilder(
+                  ActionsBuilder(
                     challenge: challenge,
                     isAuthor: widget.isAuthor,
                     onLoading: _toggleLoading,
