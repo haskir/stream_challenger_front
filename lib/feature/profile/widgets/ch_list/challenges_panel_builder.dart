@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/feature/challenge_view/challenge_card.dart';
@@ -30,13 +31,13 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
   final PageController _pageController = PageController();
 
   static Map<String, String> headers = {
-    'PENDING': "New Challenges",
-    'ACCEPTED': "Accepted Challenges",
-    'REJECTED': "Rejected Challenges",
-    'SUCCESSFUL': "Successful Challenges",
-    'FAILED': "Failed Challenges",
-    'CANCELLED': "Cancelled Challenges",
-    'REPORTED': "Reported Challenges",
+    'PENDING': mNewChallenges,
+    'ACCEPTED': mAcceptedChallenges,
+    'REJECTED': mRejectedChallenges,
+    'SUCCESSFUL': mSuccessfulChallenges,
+    'FAILED': mFailedChallenges,
+    'CANCELLED': mCancelledChallenges,
+    'REPORTED': mReportedChallenges,
   };
 
   static const Map<String, Color> colors = {
@@ -176,7 +177,7 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
                 const Center(child: CircularProgressIndicator()),
             noItemsFoundIndicatorBuilder: (context) => Center(
               child: Text(
-                AppLocale.of(context).translate('No challenges available'),
+                AppLocale.of(context).translate(mNoChallengesAvailable),
                 style: const TextStyle(fontSize: 16),
               ),
             ),

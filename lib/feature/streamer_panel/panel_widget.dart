@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/use_cases/web_socket_client.dart';
@@ -80,7 +81,7 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(
               child: Text(
-            AppLocale.of(context).translate('No challenges available'),
+            AppLocale.of(context).translate(mNoChallengesAvailable),
           ));
         } else {
           final challenges = snapshot.data!;

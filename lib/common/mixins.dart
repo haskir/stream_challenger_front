@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
@@ -8,20 +9,20 @@ class Mixins {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocale.of(context).translate('Confirmation')),
-          content: Text(AppLocale.of(context).translate('Are you sure?')),
+          title: Text(AppLocale.of(context).translate(mConfirmation)),
+          content: Text(AppLocale.of(context).translate(mAreYouSure)),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false); // Отменить
               },
-              child: Text(AppLocale.of(context).translate('No')),
+              child: Text(AppLocale.of(context).translate(mNo)),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop(true); // Подтвердить
               },
-              child: Text(AppLocale.of(context).translate('Yes')),
+              child: Text(AppLocale.of(context).translate(mYes)),
             ),
           ],
         );

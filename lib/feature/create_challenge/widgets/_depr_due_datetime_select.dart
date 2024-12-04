@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 
 class DueDateTimeField extends StatefulWidget {
@@ -27,7 +28,7 @@ class _DueDateTimeFieldState extends State<DueDateTimeField> {
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
-        labelText: AppLocale.of(context).translate('Due Date & Time'),
+        labelText: AppLocale.of(context).translate(mDueDate),
       ),
       readOnly: true,
       onTap: () async {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stream_challenge/common/mixins.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
@@ -55,7 +56,7 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
       case 'ACCEPTED':
         return Row(mainAxisSize: MainAxisSize.min, children: [
           Tooltip(
-            message: AppLocale.of(context).translate('End'),
+            message: AppLocale.of(context).translate(mEnd),
             child: ElevatedButton(
                 onPressed: () => actionCallback("END"),
                 child: Icon(
@@ -68,7 +69,7 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
         return Row(mainAxisSize: MainAxisSize.min, children: [
           ElevatedButton(
             onPressed: () => actionCallback("START_POLL"),
-            child: Text(AppLocale.of(context).translate('Start poll'),
+            child: Text(AppLocale.of(context).translate(mStartPoll),
                 style: TextStyle(color: Colors.white)),
           )
         ]);
@@ -76,7 +77,7 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
         return Row(mainAxisSize: MainAxisSize.min, children: [
           // Accept Button
           Tooltip(
-            message: AppLocale.of(context).translate("Accept"),
+            message: AppLocale.of(context).translate(mAccept),
             child: ElevatedButton(
               onPressed: () => actionCallback("ACCEPT"),
               child: const Icon(
@@ -88,7 +89,7 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
           SizedBox(width: 5),
           // Reject Button
           Tooltip(
-            message: AppLocale.of(context).translate("Reject"),
+            message: AppLocale.of(context).translate(mReject),
             child: ElevatedButton(
               onPressed: () => actionCallback("REJECT"),
               style: ButtonStyle(),
@@ -101,7 +102,7 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
           SizedBox(width: 5),
           // Report Button
           Tooltip(
-            message: AppLocale.of(context).translate("Report"),
+            message: AppLocale.of(context).translate(mReport),
             child: ElevatedButton(
               onPressed: () => actionCallback("REPORT"),
               child: const Icon(
@@ -139,7 +140,7 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
       return result.fold(
           (left) => Fluttertoast.showToast(msg: result.toString()),
           (right) => Fluttertoast.showToast(
-              msg: AppLocale.of(context).translate("Reported")));
+              msg: AppLocale.of(context).translate(mReported)));
     }
   }
 

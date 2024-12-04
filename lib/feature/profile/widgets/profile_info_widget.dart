@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/auth_state.dart';
 
@@ -24,7 +25,7 @@ class ProfileInfoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  AppLocale.of(context).translate('Main info'),
+                  AppLocale.of(context).translate(mMainInfo),
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 IconButton(
@@ -40,12 +41,12 @@ class ProfileInfoCard extends StatelessWidget {
             ),
             SizedBox(height: 16),
             InfoRow(
-              label: AppLocale.of(context).translate('Login'),
+              label: AppLocale.of(context).translate(mLogin),
               value: user.login,
             ),
             InfoRow(label: 'Email', value: user.email),
             InfoRow(
-              label: AppLocale.of(context).translate('Broadcaster type'),
+              label: AppLocale.of(context).translate(mBroadcasterType),
               value: user.broadcasterType,
             ),
             if (kDebugMode) InfoRow(label: 'ID', value: user.id.toString()),

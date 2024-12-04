@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stream_challenge/data/models/user_preferences.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
+import 'common/text_consts.dart';
 import 'core/platform/app_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // ignore: depend_on_referenced_packages
@@ -26,7 +27,7 @@ class StreamChallengeApp extends ConsumerWidget {
       routeInformationProvider: router.routeInformationProvider,
       locale: Locale(preferences.language.toLowerCase()),
       theme: preferences.darkMode ? darkTheme : lightTheme,
-      onGenerateTitle: (context) => AppLocale.of(context).translate('title'),
+      onGenerateTitle: (context) => AppLocale.of(context).translate(mTitle),
       localizationsDelegates: const [
         AppLocalizationsDelegate(),
         ...GlobalMaterialLocalizations.delegates,

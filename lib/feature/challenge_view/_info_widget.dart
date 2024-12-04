@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/common/mixins.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
@@ -13,7 +14,6 @@ class InfoWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      // mainAxisSize: MainAxisSize.min,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +44,7 @@ class InfoWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '${AppLocale.of(context).translate('Conditions')}:',
+                    '${AppLocale.of(context).translate(mConditions)}:',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   ...challenge.conditions
@@ -70,7 +70,7 @@ class InfoWidget extends StatelessWidget {
     if (challenge.status == "FAILED") {
       return Row(
         children: [
-          Text(AppLocale.of(context).translate('Bet')),
+          Text(AppLocale.of(context).translate(mBet)),
           Text(
             ': ${challenge.bet} ${challenge.currency}',
             style:
@@ -79,7 +79,7 @@ class InfoWidget extends StatelessWidget {
           if (challenge.payout != null) ...[
             const SizedBox(width: 10),
             Text(
-              '${AppLocale.of(context).translate('Payout')}: ',
+              '${AppLocale.of(context).translate(mPayout)}: ',
             ),
             Text(
               challenge.payout!.toStringAsFixed(2),
@@ -105,37 +105,37 @@ class InfoWidget extends StatelessWidget {
     switch (status) {
       case 'PENDING':
         return Text(
-          AppLocale.of(context).translate('Pending'),
+          AppLocale.of(context).translate(mPending),
           style: TextStyle(color: Colors.orange),
         );
       case 'ACCEPTED':
         return Text(
-          AppLocale.of(context).translate('Accepted'),
+          AppLocale.of(context).translate(mAccept),
           style: TextStyle(color: Colors.blue),
         );
       case 'SUCCESSFUL':
         return Text(
-          AppLocale.of(context).translate('Successful'),
+          AppLocale.of(context).translate(mSuccessful),
           style: TextStyle(color: Colors.green),
         );
       case 'FAILED':
         return Text(
-          AppLocale.of(context).translate('Failed'),
+          AppLocale.of(context).translate(mFailed),
           style: TextStyle(color: Colors.red),
         );
       case 'CANCELLED':
         return Text(
-          AppLocale.of(context).translate('Cancelled'),
+          AppLocale.of(context).translate(mCancelled),
           style: TextStyle(color: Colors.grey),
         );
       case 'REJECTED':
         return Text(
-          AppLocale.of(context).translate('Rejected'),
+          AppLocale.of(context).translate(mRejected),
           style: TextStyle(color: Colors.red),
         );
       case 'REPORTED':
         return Text(
-          AppLocale.of(context).translate('Reported'),
+          AppLocale.of(context).translate(mReported),
           style: TextStyle(color: Colors.red),
         );
       default:

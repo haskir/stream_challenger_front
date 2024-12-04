@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'appbar_widgets/auth_widget.dart';
@@ -67,7 +68,7 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
           TextButton(
             onPressed: () => context.go('/challenge/lapkinastol'),
             child: Text(
-              AppLocale.of(context).translate('Create Challenge'),
+              AppLocale.of(context).translate(mCreateChallenge),
               style: TextStyle(
                   color: Theme.of(context).textTheme.bodyMedium?.color),
             ),
@@ -75,7 +76,7 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
           TextButton(
             onPressed: () => context.go('/panel'),
             child: Text(
-              AppLocale.of(context).translate('My Panel'),
+              AppLocale.of(context).translate(mMyPanel),
               style: TextStyle(
                   color: Theme.of(context).textTheme.bodyMedium?.color),
             ),

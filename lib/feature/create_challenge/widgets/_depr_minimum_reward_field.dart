@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 
 class MinimumRewardField extends StatelessWidget {
@@ -17,17 +18,17 @@ class MinimumRewardField extends StatelessWidget {
       maxLength: 3,
       decoration: InputDecoration(
         labelText:
-            '${AppLocale.of(context).translate('Minimum Reward')} (10% - 100%)',
+            '${AppLocale.of(context).translate(mMinimumReward)} (10% - 100%)',
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return AppLocale.of(context).translate('Please enter minimum reward');
+          return AppLocale.of(context).translate(mPleaseEnterMinimumReward);
         }
         if (double.tryParse(value) == null ||
             double.parse(value) < 0 ||
             double.parse(value) > 100) {
           return AppLocale.of(context)
-              .translate('Minimum reward must be between 10% and 100%');
+              .translate(mMinimumRewardMustBeBetween10And100);
         }
         return null;
       },

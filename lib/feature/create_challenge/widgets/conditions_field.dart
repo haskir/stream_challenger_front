@@ -1,5 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 
 class ConditionsSection extends StatefulWidget {
@@ -59,7 +59,7 @@ class _ConditionsSectionState extends State<ConditionsSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(children: [
-          Text('${AppLocale.of(context).translate('Conditions')}:'),
+          Text('${AppLocale.of(context).translate(mConditions)}:'),
           TextButton(
             onPressed: _addCondition,
             child: Icon(Icons.add),
@@ -89,12 +89,12 @@ class ConditionLineEdit extends TextFormField {
   }) : super(
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return AppLocale.of(context).translate('Please enter condition');
+              return AppLocale.of(context).translate(mPleaseEnterCondition);
             }
             return null;
           },
           decoration: InputDecoration(
-            hintText: AppLocale.of(context).translate('Condition'),
+            hintText: AppLocale.of(context).translate(mCondition),
           ),
           maxLength: 127,
         );

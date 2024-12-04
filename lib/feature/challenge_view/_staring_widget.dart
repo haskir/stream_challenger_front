@@ -20,7 +20,7 @@ class StarRatingWidget extends StatefulWidget {
 
 class StarRatingWidgetState extends State<StarRatingWidget> {
   late int _currentRating;
-  int _hoveredRating = 0; // Рейтинг при наведении мыши
+  int _hoveredRating = 0;
 
   @override
   void initState() {

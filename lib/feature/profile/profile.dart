@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/auth_state.dart';
 import 'package:stream_challenge/feature/profile/widgets/challenge_list_widget.dart';
@@ -47,7 +48,7 @@ class ProfilePage extends ConsumerWidget {
             padding: EdgeInsets.zero,
             children: [
               ListTile(
-                title: Text(AppLocale.of(context).translate('My profile')),
+                title: Text(AppLocale.of(context).translate(mMyProfile)),
                 selected: currentContent == '/',
                 selectedTileColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -56,7 +57,7 @@ class ProfilePage extends ConsumerWidget {
                     .setContent('/'),
               ),
               ListTile(
-                title: Text(AppLocale.of(context).translate('Transactions')),
+                title: Text(AppLocale.of(context).translate(mTransactions)),
                 selected: currentContent == '/transactions',
                 selectedTileColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -65,7 +66,7 @@ class ProfilePage extends ConsumerWidget {
                     .setContent('/transactions'),
               ),
               ListTile(
-                title: Text(AppLocale.of(context).translate('My challenges')),
+                title: Text(AppLocale.of(context).translate(mMyChallenges)),
                 selected: currentContent == '/my-challenges',
                 selectedTileColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -74,8 +75,7 @@ class ProfilePage extends ConsumerWidget {
                     .setContent('/my-challenges'),
               ),
               ListTile(
-                title:
-                    Text(AppLocale.of(context).translate('Challenges to me')),
+                title: Text(AppLocale.of(context).translate(mChallengesToMe)),
                 selected: currentContent == '/challenges-to-me',
                 selectedTileColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),

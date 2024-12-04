@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stream_challenge/common/mixins.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
@@ -71,7 +72,8 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
       Fluttertoast.showToast(msg: result.toString());
       return false;
     }, (right) async {
-      Fluttertoast.showToast(msg: "Challenge created");
+      Fluttertoast.showToast(
+          msg: AppLocale.of(context).translate(mChallengeCreated));
       return true;
     });
     return false;
@@ -90,16 +92,15 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
 
     return minimumInCurrency.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => const Center(child: Text("No such user")),
+        error: (error, stack) => const Center(child: Text(mNoSuchUser)),
         data: (minimum) {
           if (minimum == null) {
-            return const Center(
-                child: Text("Can't create challenge for this user"));
+            return const Center(child: Text(mCantCreateChallengeForThisUser));
           }
           if (account.balance < minimum) {
             return Center(
                 child: Text(AppLocale.of(context).translate(
-                    'Not enough balance, minimum is $minimum ${account.currency}')));
+                    '${AppLocale.of(context).translate(mNotEnoughBalance)} $minimum ${account.currency}')));
           }
           return Form(
             key: _formKey,
@@ -134,7 +135,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                         }
                       },
                       child: Text(
-                        AppLocale.of(context).translate('Create'),
+                        AppLocale.of(context).translate(mCreate),
                       ),
                     ),
                     const SizedBox(height: _margin),

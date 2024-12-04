@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
@@ -27,7 +28,7 @@ class ReportDialogState extends State<ReportDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocale.of(context).translate("Report Challenge")),
+      title: Text(AppLocale.of(context).translate(mReportChallenge)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -36,7 +37,7 @@ class ReportDialogState extends State<ReportDialog> {
             children: [
               Flexible(
                 child: RadioListTile<String>(
-                  title: Text(AppLocale.of(context).translate("Spam")),
+                  title: Text(AppLocale.of(context).translate(mSpam)),
                   value: "Spam",
                   groupValue: _selectedReason,
                   onChanged: (value) => setState(() => _selectedReason = value),
@@ -44,7 +45,7 @@ class ReportDialogState extends State<ReportDialog> {
               ),
               Flexible(
                 child: RadioListTile<String>(
-                  title: Text(AppLocale.of(context).translate("Harassment")),
+                  title: Text(AppLocale.of(context).translate(mHarassment)),
                   value: "Harassment",
                   groupValue: _selectedReason,
                   onChanged: (value) => setState(() => _selectedReason = value),
@@ -52,7 +53,7 @@ class ReportDialogState extends State<ReportDialog> {
               ),
               Flexible(
                 child: RadioListTile<String>(
-                  title: Text(AppLocale.of(context).translate("Other")),
+                  title: Text(AppLocale.of(context).translate(mOther)),
                   value: "Other",
                   groupValue: _selectedReason,
                   onChanged: (value) => setState(() => _selectedReason = value),
@@ -65,7 +66,7 @@ class ReportDialogState extends State<ReportDialog> {
             TextField(
               controller: _textController,
               decoration: InputDecoration(
-                labelText: AppLocale.of(context).translate("Please specify"),
+                labelText: AppLocale.of(context).translate(mPleaseSpecify),
                 border: OutlineInputBorder(),
               ),
             ),
@@ -75,7 +76,7 @@ class ReportDialogState extends State<ReportDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(null),
-          child: Text(AppLocale.of(context).translate("Cancel")),
+          child: Text(AppLocale.of(context).translate(mCancel)),
         ),
         ElevatedButton(
           onPressed: () {
@@ -89,7 +90,7 @@ class ReportDialogState extends State<ReportDialog> {
               Navigator.of(context).pop(dto);
             }
           },
-          child: Text(AppLocale.of(context).translate("Confirm")),
+          child: Text(AppLocale.of(context).translate(mReport)),
         ),
       ],
     );

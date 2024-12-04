@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 
 class DescriptionField extends StatelessWidget {
@@ -12,11 +13,11 @@ class DescriptionField extends StatelessWidget {
       controller: controller,
       maxLength: 255,
       decoration: InputDecoration(
-        labelText: AppLocale.of(context).translate("Description"),
+        labelText: AppLocale.of(context).translate(mDescription),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return AppLocale.of(context).translate("Please enter description");
+          return AppLocale.of(context).translate(mPleaseEnterDescription);
         }
         return null;
       },

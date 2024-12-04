@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 
 class BetSlider extends ConsumerStatefulWidget {
@@ -82,7 +83,7 @@ class BetSliderState extends ConsumerState<BetSlider> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText:
-                      '${AppLocale.of(context).translate('Percentage')} (%)',
+                      '${AppLocale.of(context).translate(mPercentage)} (%)',
                 ),
                 onChanged: _onPercentageChanged,
               ),
@@ -93,8 +94,7 @@ class BetSliderState extends ConsumerState<BetSlider> {
                 controller: widget.controller,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText:
-                      AppLocale.of(context).translate('Calculated value'),
+                  labelText: AppLocale.of(context).translate(mCalculatedValue),
                 ),
                 onChanged: _onResultChanged,
               ),

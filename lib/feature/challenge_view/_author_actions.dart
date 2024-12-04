@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stream_challenge/common/mixins.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 import 'package:stream_challenge/feature/create_challenge/widgets/bet_slider.dart';
@@ -41,7 +42,7 @@ class AuthorActionsState extends ConsumerState<ActionsBuilder> {
         },
         style: TextButton.styleFrom(foregroundColor: Colors.red),
         child: Row(children: [
-          Text(AppLocale.of(context).translate('Cancel')),
+          Text(AppLocale.of(context).translate(mCancel)),
           const SizedBox(width: 5),
           Icon(Icons.cancel),
         ]),
@@ -74,7 +75,7 @@ class AuthorActionsState extends ConsumerState<ActionsBuilder> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(AppLocale.of(context).translate('Pay')),
+                    Text(AppLocale.of(context).translate(mPay)),
                     Icon(Icons.attach_money),
                   ],
                 ),

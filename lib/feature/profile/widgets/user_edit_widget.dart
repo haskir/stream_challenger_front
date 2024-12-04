@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/common/consts.dart';
+import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/auth_state.dart';
 import 'package:stream_challenge/data/models/user_preferences.dart';
@@ -30,7 +31,7 @@ class UserEditDialogState extends ConsumerState<UserEditDialog> {
 
     return AlertDialog(
       title: Center(
-        child: Text(AppLocale.of(context).translate("Settings edit")),
+        child: Text(AppLocale.of(context).translate(mSettingsEdit)),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -42,7 +43,7 @@ class UserEditDialogState extends ConsumerState<UserEditDialog> {
               controller: _textController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: AppLocale.of(context).translate("Minimum in USD"),
+                labelText: AppLocale.of(context).translate(mMinimumInUSD),
                 hintText: preferences.minimumRewardInDollars.toString(),
               ),
             ),
@@ -51,7 +52,7 @@ class UserEditDialogState extends ConsumerState<UserEditDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocale.of(context).translate("Select Timezone")),
+              Text(AppLocale.of(context).translate(mSelectTimezone)),
               DropdownButton<String>(
                 value: preferences.timezone,
                 onChanged: (String? newValue) {
@@ -74,7 +75,7 @@ class UserEditDialogState extends ConsumerState<UserEditDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(AppLocale.of(context).translate("Cancel")),
+          child: Text(AppLocale.of(context).translate(mCancel)),
         ),
         ElevatedButton(
           onPressed: () {
@@ -88,7 +89,7 @@ class UserEditDialogState extends ConsumerState<UserEditDialog> {
 
             Navigator.of(context).pop();
           },
-          child: Text(AppLocale.of(context).translate("Confirm")),
+          child: Text(AppLocale.of(context).translate(mConfirm)),
         ),
       ],
     );
