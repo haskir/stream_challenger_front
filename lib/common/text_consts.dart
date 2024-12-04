@@ -13,6 +13,7 @@ const String mCantCreateChallengeForThisUser =
     "Can't create challenge for this user";
 const String mNoChallengesAvailable = "No challenges available";
 const String mStatus = "Status";
+const String mAccepted = "Accepted";
 const String mCompleted = "Completed";
 const String mRejected = "Rejected";
 const String mInProgress = "In Progress";

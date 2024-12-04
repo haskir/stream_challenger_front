@@ -58,11 +58,14 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
           Tooltip(
             message: AppLocale.of(context).translate(mEnd),
             child: ElevatedButton(
-                onPressed: () => actionCallback("END"),
-                child: Icon(
-                  Icons.check_box_outlined,
-                  color: Colors.green,
-                )),
+              onPressed: () => actionCallback("END"),
+              child: Row(
+                children: [
+                  Text(AppLocale.of(context).translate(mEnd)),
+                  const Icon(Icons.check_box_outlined, color: Colors.green)
+                ],
+              ),
+            ),
           )
         ]);
       case 'ENDED':

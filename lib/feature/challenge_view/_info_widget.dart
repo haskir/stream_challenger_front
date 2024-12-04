@@ -12,11 +12,14 @@ class InfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -57,8 +60,10 @@ class InfoWidget extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Ставка
             _buildBet(challenge, context),
             SizedBox(width: 35),
+            // Статус
             _buildStatus(challenge.status, context),
           ],
         ),
@@ -70,9 +75,9 @@ class InfoWidget extends StatelessWidget {
     if (challenge.status == "FAILED") {
       return Row(
         children: [
-          Text(AppLocale.of(context).translate(mBet)),
+          Text("${AppLocale.of(context).translate(mBet)}: "),
           Text(
-            ': ${challenge.bet} ${challenge.currency}',
+            '${challenge.bet} ${challenge.currency}',
             style:
                 const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
           ),
@@ -110,7 +115,7 @@ class InfoWidget extends StatelessWidget {
         );
       case 'ACCEPTED':
         return Text(
-          AppLocale.of(context).translate(mAccept),
+          AppLocale.of(context).translate(mAccepted),
           style: TextStyle(color: Colors.blue),
         );
       case 'SUCCESSFUL':

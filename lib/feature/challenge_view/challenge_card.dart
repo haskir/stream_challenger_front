@@ -21,11 +21,31 @@ class ChallengeCard extends ConsumerStatefulWidget {
 }
 
 class ChallengeCardState extends ConsumerState<ChallengeCard> {
+  late Widget actions;
   Challenge get challenge => widget.challenge;
   bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    switch (widget.isAuthor) {
+      case true:
+        actions = AuthorActionsBuilder(
+          challenge: challenge,
+          onLoading: _tLoading,
+        );
+        break;
+      case false:
+        actions = PerfomerActionsBuilder(
+          challenge: challenge,
+          onLoading: _tLoading,
+        );
+        break;
+      default:
+        actions = ActionsBuilder(
+          challenge: challenge,
+          onLoading: _tLoading,
+        );
+    }
     return ConstrainedBox(
       constraints: const BoxConstraints(
         maxHeight: 380,
@@ -47,30 +67,15 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
                 children: [
                   Flexible(
                     flex: 5,
+                    fit: FlexFit.tight,
                     child: InfoWidget(challenge: challenge),
                   ),
                   Spacer(),
                   if (challenge.report != null)
-                    Flexible(
-                      child: ReportInfoWidget(report: challenge.report!),
-                    ),
+                    ReportInfoWidget(report: challenge.report!),
                   Spacer(),
                   // Кнопки действий
-                  if (widget.isAuthor == null)
-                    ActionsBuilder(
-                      challenge: challenge,
-                      onLoading: _toggleLoading,
-                    ),
-                  if (widget.isAuthor == true)
-                    AuthorActionsBuilder(
-                      challenge: challenge,
-                      onLoading: _toggleLoading,
-                    ),
-                  if (widget.isAuthor == false)
-                    PerfomerActionsBuilder(
-                      challenge: challenge,
-                      onLoading: _toggleLoading,
-                    ),
+                  actions,
                 ],
               ),
             ),
@@ -95,7 +100,7 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
     );
   }
 
-  void _toggleLoading(bool isLoading) {
+  void _tLoading(bool isLoading) {
     setState(() {
       _isLoading = isLoading;
     });

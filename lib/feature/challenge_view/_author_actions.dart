@@ -50,42 +50,41 @@ class AuthorActionsState extends ConsumerState<ActionsBuilder> {
     }
     if (challenge.status == 'FAILED' && challenge.payout == null) {
       TextEditingController controller = TextEditingController();
-      return Center(
-        child: SizedBox(
-          height: 150,
-          width: 500,
-          child: Column(
-            children: [
-              BetSlider(
-                controller: controller,
-                minBet: 0.0,
-                balance: challenge.bet,
-                currency: challenge.currency,
+      return SizedBox(
+        height: 150,
+        width: 500,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            BetSlider(
+              controller: controller,
+              minBet: 0.0,
+              balance: challenge.bet,
+              currency: challenge.currency,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (await Mixins.showConfDialog(context) ?? false) {
+                  double amount = double.parse(controller.text) / challenge.bet;
+                  controller.dispose();
+                  await _payChallenge(ref, amount);
+                }
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(AppLocale.of(context).translate(mPay)),
+                  Icon(Icons.attach_money),
+                ],
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (await Mixins.showConfDialog(context) ?? false) {
-                    double amount =
-                        double.parse(controller.text) / challenge.bet;
-                    controller.dispose();
-                    await _payChallenge(ref, amount);
-                  }
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(AppLocale.of(context).translate(mPay)),
-                    Icon(Icons.attach_money),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     }
-    return Container();
+    return Text("");
   }
 
   Future<void> _payChallenge(ref, double decimalPercentage) async {
