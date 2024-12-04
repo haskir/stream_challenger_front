@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class StarRating extends StatefulWidget {
+class StarRatingWidget extends StatefulWidget {
   final bool isAuthor;
   final int maxRating;
   final int? initialRating;
   final Function(int rating)? onRatingChanged;
 
-  const StarRating({
+  const StarRatingWidget({
     super.key,
     required this.isAuthor,
     this.onRatingChanged,
@@ -15,10 +15,10 @@ class StarRating extends StatefulWidget {
   });
 
   @override
-  StarRatingState createState() => StarRatingState();
+  StarRatingWidgetState createState() => StarRatingWidgetState();
 }
 
-class StarRatingState extends State<StarRating> {
+class StarRatingWidgetState extends State<StarRatingWidget> {
   late int _currentRating;
   int _hoveredRating = 0; // Рейтинг при наведении мыши
 

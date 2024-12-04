@@ -76,20 +76,18 @@ class InfoWidget extends StatelessWidget {
             style:
                 const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
           ),
-          if (challenge.payout != null) const SizedBox(width: 10),
-          if (challenge.payout != null)
+          if (challenge.payout != null) ...[
+            const SizedBox(width: 10),
             Text(
               '${AppLocale.of(context).translate('Payout')}: ',
-              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-          if (challenge.payout != null)
             Text(
-              '${challenge.payout} ${challenge.currency}',
+              challenge.payout!.toStringAsFixed(2),
               style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
-              ),
+                  fontWeight: FontWeight.bold, color: Colors.green),
             ),
+            Text(' ${challenge.currency}')
+          ]
         ],
       );
     }

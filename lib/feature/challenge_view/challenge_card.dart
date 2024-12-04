@@ -56,11 +56,21 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
                     ),
                   Spacer(),
                   // Кнопки действий
-                  ActionsBuilder(
-                    challenge: challenge,
-                    isAuthor: widget.isAuthor,
-                    onLoading: _toggleLoading,
-                  ),
+                  if (widget.isAuthor == null)
+                    ActionsBuilder(
+                      challenge: challenge,
+                      onLoading: _toggleLoading,
+                    ),
+                  if (widget.isAuthor == true)
+                    AuthorActionsBuilder(
+                      challenge: challenge,
+                      onLoading: _toggleLoading,
+                    ),
+                  if (widget.isAuthor == false)
+                    PerfomerActionsBuilder(
+                      challenge: challenge,
+                      onLoading: _toggleLoading,
+                    ),
                 ],
               ),
             ),
