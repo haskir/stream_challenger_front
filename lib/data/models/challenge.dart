@@ -83,6 +83,7 @@ class Challenge {
   final List<String> conditions;
   final String currency;
   final double bet;
+  int? rating;
   String status;
   double? payout;
   final String? reportStatus;
@@ -99,9 +100,10 @@ class Challenge {
     required this.conditions,
     required this.currency,
     required this.bet,
+    required this.rating,
     required this.status,
-    required this.reportStatus,
     required this.payout,
+    required this.reportStatus,
     required this.author,
     required this.performer,
     required this.performerLogin,
@@ -117,9 +119,10 @@ class Challenge {
       'conditions': conditions,
       'currency': currency,
       'bet': bet,
+      'rating': rating,
       'status': status,
-      'report_status': reportStatus,
       'payout': payout,
+      'report_status': reportStatus,
       'author': author.toMap(),
       'performer': performer.toMap(),
       'performer_login': performerLogin,
@@ -136,9 +139,10 @@ class Challenge {
       conditions: List<String>.from((map['conditions'])),
       currency: map['currency'],
       bet: map['bet'],
+      rating: map['rating'],
       status: map['status'],
-      reportStatus: map['report_status'],
       payout: map['payout'],
+      reportStatus: map['report_status'],
       author: ChallengePerson.fromMap(map['author']),
       performer: ChallengePerson.fromMap(map['performer']),
       performerLogin: map['performer_login'],

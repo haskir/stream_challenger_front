@@ -37,19 +37,26 @@ class _ChallengeActionBuilderState extends ConsumerState<ActionsBuilder> {
   Widget build(BuildContext context) {
     if (widget.isAuthor == null) return Container();
 
+    // Performer
     if (!widget.isAuthor!) {
+      if (widget.challenge.status == 'SUCCESSFUL') {
+        return StarRating(
+          isAuthor: widget.isAuthor ?? false,
+          initialRating: challenge.rating,
+        );
+      }
       return _getActionButtons(
         status: widget.challenge.status,
         context: context,
         actionCallback: (action) async {
           if (action == "REPORT") {
-            return await reportChallenge(
+            return await _reportChallenge(
               challenge,
               await ref.read(httpClientProvider.future),
             );
           }
           if (await Mixins.showConfDialog(context) ?? false) {
-            await challengeAction(
+            await _challengeAction(
               challenge,
               await ref.read(httpClientProvider.future),
               action,
@@ -58,8 +65,20 @@ class _ChallengeActionBuilderState extends ConsumerState<ActionsBuilder> {
         },
       );
     }
+
+    // Author
     if (challenge.status == 'SUCCESSFUL') {
-      return StarRating(onRatingChanged: print);
+      return StarRating(
+        isAuthor: widget.isAuthor ?? false,
+        onRatingChanged: (int rating) async {
+          final bool? result = await Mixins.showConfDialog(
+            context,
+          );
+          if (result == null || !result) return;
+          await _rateChallenge(ref, rating);
+        },
+        initialRating: challenge.rating,
+      );
     }
     if (widget.challenge.status == 'PENDING') {
       return ElevatedButton(
@@ -188,7 +207,7 @@ class _ChallengeActionBuilderState extends ConsumerState<ActionsBuilder> {
     }
   }
 
-  Future? reportChallenge(
+  Future? _reportChallenge(
     Challenge challenge,
     Requester client,
   ) async {
@@ -215,7 +234,7 @@ class _ChallengeActionBuilderState extends ConsumerState<ActionsBuilder> {
     }
   }
 
-  Future challengeAction(
+  Future _challengeAction(
       Challenge challenge, Requester requester, String action) async {
     widget.onLoading(true);
 
@@ -272,6 +291,27 @@ class _ChallengeActionBuilderState extends ConsumerState<ActionsBuilder> {
     }, (right) async {
       challenge.status = 'CANCELED';
       setState(() {});
+    });
+    widget.onLoading(false);
+  }
+
+  Future<void> _rateChallenge(ref, int rating) async {
+    final client = await ref.watch(httpClientProvider.future);
+    widget.onLoading(true);
+    final result = await ChallengesActions.rateChallenge(
+      challenge: challenge,
+      client: client,
+      rating: rating,
+    );
+    await result.fold((left) {
+      Fluttertoast.showToast(msg: result.toString());
+    }, (right) async {
+      final result =
+          await ChallengeGetter.getChallenge(id: challenge.id, client: client);
+      result.fold((left) {}, (right) {
+        challenge.rating = right.rating;
+        setState(() {});
+      });
     });
     widget.onLoading(false);
   }

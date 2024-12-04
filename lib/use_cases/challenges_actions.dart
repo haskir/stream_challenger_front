@@ -57,4 +57,19 @@ class ChallengesActions {
       (right) => Right(Report.fromMap(right)),
     );
   }
+
+  static Future<Either<ErrorDTO, Challenge?>> rateChallenge({
+    required Challenge challenge,
+    required Requester client,
+    required int rating,
+  }) async {
+    final result = (await client.post(
+      '/challenges/${challenge.id}/rate',
+      query: ({'value': rating}),
+    ));
+    return result.fold(
+      (left) => Left(left),
+      (right) => Right(Challenge.fromMap(right)),
+    );
+  }
 }

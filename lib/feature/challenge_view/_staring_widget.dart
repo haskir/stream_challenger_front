@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class StarRating extends StatefulWidget {
+  final bool isAuthor;
   final int maxRating;
-  final int initialRating;
-  final Function(int rating) onRatingChanged;
+  final int? initialRating;
+  final Function(int rating)? onRatingChanged;
 
   const StarRating({
     super.key,
-    required this.onRatingChanged,
+    required this.isAuthor,
+    this.onRatingChanged,
+    this.initialRating,
     this.maxRating = 5,
-    this.initialRating = 0,
   });
 
   @override
@@ -23,17 +25,19 @@ class StarRatingState extends State<StarRating> {
   @override
   void initState() {
     super.initState();
-    _currentRating = widget.initialRating;
+    _currentRating = widget.initialRating ?? 0;
   }
 
   void _updateRating(int newRating) {
+    if (!widget.isAuthor) return;
     setState(() {
       _currentRating = newRating;
     });
-    widget.onRatingChanged(_currentRating);
+    widget.onRatingChanged!(_currentRating);
   }
 
   void _updateHoveredRating(int newHoveredRating) {
+    if (!widget.isAuthor) return;
     setState(() {
       _hoveredRating = newHoveredRating;
     });
