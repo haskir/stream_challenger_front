@@ -17,13 +17,9 @@ class AuthWidget extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              onPressed: () => context.go('/profile'),
-              icon: CircleAvatar(
-                radius: 20,
-                backgroundImage:
-                    NetworkImage(authState.user!.profile_image_url),
-              ),
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(authState.user!.profile_image_url),
             ),
             const SizedBox(width: 5),
             IconButton(

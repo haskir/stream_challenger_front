@@ -80,7 +80,15 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
               style: TextStyle(
                   color: Theme.of(context).textTheme.bodyMedium?.color),
             ),
-          )
+          ),
+          TextButton(
+            onPressed: () => context.go('/profile'),
+            child: Text(
+              AppLocale.of(context).translate(mProfile),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color),
+            ),
+          ),
         ],
       );
     }
