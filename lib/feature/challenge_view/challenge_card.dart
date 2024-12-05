@@ -85,20 +85,19 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
             ),
           ),
 
-          // Блокировка интерфейса
-          if (_isLoading)
+          if (_isLoading) ...[
+            // Блокировка интерфейса
             Positioned.fill(
-              child: ModalBarrier(dismissible: false),
+              child: const ModalBarrier(dismissible: false),
             ),
-
-          // Индикатор загрузки в центре и непрозрачность
-          if (_isLoading)
+            // Индикатор загрузки в центре и непрозрачность
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
               child: const Center(
                 child: CircularProgressIndicator(),
               ),
             ),
+          ]
         ],
       ),
     );

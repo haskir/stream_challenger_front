@@ -91,7 +91,7 @@ class Mixins {
         Text(streamerInfo.displayName,
             style: const TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(width: 5),
-        isOnline(streamerInfo.isOnline),
+        isOnline(streamerInfo.isOnline ?? false),
       ],
     );
   }

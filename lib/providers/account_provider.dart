@@ -40,7 +40,7 @@ class AccountNotifier extends StateNotifier<Account?> {
   Future<void> initialize() async {
     final authState = ref.watch(authStateProvider);
     if (authState.isAuthenticated) {
-      await _fetchAccount();
+      await refresh();
       _startUpdateLoop(60);
     }
   }
@@ -49,17 +49,15 @@ class AccountNotifier extends StateNotifier<Account?> {
   void _startUpdateLoop(int seconds) {
     Timer.periodic(Duration(seconds: seconds), (_) async {
       try {
-        await _fetchAccount();
+        await refresh();
       } catch (e) {
         // Обработка ошибок при запросах (опционально)
       }
     });
   }
 
-  get refresh => _fetchAccount();
-
   /// Обновление данных Account
-  Future<void> _fetchAccount() async {
+  Future<void> refresh() async {
     final client = await ref.read(accountClientProvider);
     final account = await client.fetchAccount(ref);
     if (account == state) return;

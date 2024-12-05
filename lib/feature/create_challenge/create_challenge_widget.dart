@@ -32,9 +32,9 @@ class CreateChallengeWidget extends ConsumerStatefulWidget {
 class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   Account? account;
   final _formKey = GlobalKey<FormState>();
-  final _descriptionController = TextEditingController();
-  final _minimumRewardController = TextEditingController();
-  final _betController = TextEditingController();
+  late TextEditingController _descriptionController;
+  late TextEditingController _minimumRewardController;
+  late TextEditingController _betController;
   final List<TextEditingController> _controllers = [];
   static const double _margin = 10.0;
 
@@ -60,7 +60,9 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
           }
           double minimum = streamerInfo.minimumRewardInDollars *
               streamerInfo.currencyRates[account!.currency]!;
-          print("Пересчитываю minimuim $minimum");
+          _descriptionController = TextEditingController();
+          _minimumRewardController = TextEditingController();
+          _betController = TextEditingController();
           if (account!.balance < minimum) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -103,7 +105,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                         ConditionsSection(controllers: _controllers, max: 5),
                         // Кнопка "Создать"
                         ElevatedButton(
-                          onPressed: () async => await _createChallenge(),
+                          onPressed: () async => await _submit(),
                           child: Text(
                             AppLocale.of(context).translate(mCreate),
                           ),
@@ -151,7 +153,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
     super.dispose();
   }
 
-  Future<void> _createChallenge() async {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
     if (await Mixins.showConfDialog(context) != true) return;
@@ -163,19 +165,15 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
       conditions: _controllers.map((e) => e.text).toList(),
       performerLogin: widget.performerLogin,
     );
-    await _submit(
+    bool res = await _createChallenge(
       challenge,
       await ref.watch(httpClientProvider.future),
     );
-    /* if (result && mounted) {
-      await Mixins.showOpenURLDialog(
-        context,
-        Mixins.buildURLFromLogin(widget.performerLogin),
-      );
-    } */
+    if (res) await ref.read(accountProvider.notifier).refresh();
   }
 
-  Future<bool> _submit(CreateChallengeDTO challenge, Requester client) async {
+  Future<bool> _createChallenge(
+      CreateChallengeDTO challenge, Requester client) async {
     Either result = await ChallengesActions.challengeCreate(
       challenge: challenge,
       client: client,

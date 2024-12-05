@@ -16,25 +16,25 @@ class BetSlider extends ConsumerStatefulWidget {
     required this.currency,
   });
 
-  double get minInPercentage => minBet / maximum * 100;
-
   @override
-  BetSliderState createState() => BetSliderState();
+  ConsumerState<BetSlider> createState() => _BetSliderState();
 }
 
-class BetSliderState extends ConsumerState<BetSlider> {
+class _BetSliderState extends ConsumerState<BetSlider> {
   late double _sliderValue;
   final TextEditingController _percentageController = TextEditingController();
 
+  double get minInPercentage => widget.minBet / widget.maximum * 100;
+
   void setDefault() {
-    _sliderValue = widget.minInPercentage;
-    _percentageController.text = widget.minInPercentage.toStringAsFixed(2);
+    _sliderValue = minInPercentage;
+    _percentageController.text = minInPercentage.toStringAsFixed(2);
     widget.controller.text = widget.minBet.toStringAsFixed(2);
   }
 
   @override
   void initState() {
-    _sliderValue = widget.minInPercentage;
+    // _sliderValue = minInPercentage;
     setDefault();
     super.initState();
   }
@@ -43,7 +43,7 @@ class BetSliderState extends ConsumerState<BetSlider> {
     double? percentage = double.tryParse(value);
     if (percentage == null) return;
     if (percentage > 100) percentage = 100;
-    if (percentage > widget.minInPercentage && percentage <= 100) {
+    if (percentage > minInPercentage && percentage <= 100) {
       widget.controller.text =
           (widget.maximum * percentage / 100).toStringAsFixed(2);
       _percentageController.text = percentage.toStringAsFixed(2);
@@ -104,15 +104,16 @@ class BetSliderState extends ConsumerState<BetSlider> {
         ),
         const SizedBox(height: 20),
         Slider(
-            divisions: 40,
-            min: widget.minInPercentage,
-            max: 100,
-            value: _sliderValue,
-            label: widget.controller.text,
-            onChanged: (double value) {
-              _onPercentageChanged(value.toString());
-              setState(() {});
-            }),
+          divisions: 40,
+          min: minInPercentage,
+          max: 100,
+          value: _sliderValue,
+          label: widget.controller.text,
+          onChanged: (double value) {
+            _onPercentageChanged(value.toString());
+            setState(() {});
+          },
+        ),
       ],
     );
   }

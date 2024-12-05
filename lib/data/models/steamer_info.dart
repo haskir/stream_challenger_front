@@ -8,7 +8,7 @@ class StreamerInfo {
   final String urlImage;
   final double minimumRewardInDollars;
   final String currency;
-  final bool isOnline;
+  final bool? isOnline;
   final bool isOnChallenge;
   final Map<String, double> currencyRates;
 
