@@ -34,7 +34,6 @@ class _BetSliderState extends ConsumerState<BetSlider> {
 
   @override
   void initState() {
-    // _sliderValue = minInPercentage;
     setDefault();
     super.initState();
   }
@@ -105,7 +104,6 @@ class _BetSliderState extends ConsumerState<BetSlider> {
         const SizedBox(height: 20),
         Slider(
           divisions: 40,
-          min: minInPercentage,
           max: 100,
           value: _sliderValue,
           label: widget.controller.text,
