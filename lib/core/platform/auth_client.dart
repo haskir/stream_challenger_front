@@ -1,5 +1,4 @@
 import 'dart:async';
-// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
 import 'package:dio/dio.dart';

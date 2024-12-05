@@ -3,36 +3,33 @@ import 'dart:convert';
 import 'package:stream_challenge/core/platform/datetime_format.dart';
 
 class StreamerInfo {
-  final String name;
+  final String login;
+  final String displayName;
   final String urlImage;
-  final double minimumReward;
+  final double minimumRewardInDollars;
   final String currency;
-  final String? game;
-  final int? viewers;
-  final String? language;
-  final bool? isOnline;
-  final bool? isOnChallenge;
-  StreamerInfo({
-    required this.name,
+  final bool isOnline;
+  final bool isOnChallenge;
+  final Map<String, double> currencyRates;
+
+  const StreamerInfo({
+    required this.login,
+    required this.displayName,
     required this.urlImage,
-    required this.minimumReward,
+    required this.minimumRewardInDollars,
     required this.currency,
-    this.game,
-    this.viewers,
-    this.language,
-    this.isOnline,
-    this.isOnChallenge,
+    required this.isOnline,
+    required this.isOnChallenge,
+    required this.currencyRates,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'name': name,
+      'login': login,
+      'display_name': displayName,
       'url_image': urlImage,
-      'minimum_reward': minimumReward,
+      'minimum_reward_in_dollars': minimumRewardInDollars,
       'currency': currency,
-      'game': game,
-      'viewers': viewers,
-      'language': language,
       'is_online': isOnline,
       'is_on_challenge': isOnChallenge,
     };
@@ -40,23 +37,21 @@ class StreamerInfo {
 
   factory StreamerInfo.fromMap(Map<String, dynamic> map) {
     return StreamerInfo(
-      name: map['name'] as String,
-      urlImage: map['url_image'] as String,
-      minimumReward: map['minimum_reward'] as double,
-      currency: map['currency'] as String,
-      game: map['game'] != null ? map['game'] as String : null,
-      viewers: map['viewers'] != null ? map['viewers'] as int : null,
-      language: map['language'] != null ? map['language'] as String : null,
-      isOnline: map['is_online'] != null ? map['is_online'] as bool : null,
-      isOnChallenge:
-          map['isOnChallenge'] != null ? map['is_on_challenge'] as bool : null,
+      login: map['login'],
+      displayName: map['display_name'],
+      urlImage: map['url_image'],
+      minimumRewardInDollars: map['minimum_reward_in_dollars'],
+      currency: map['currency'],
+      isOnline: map['is_online'],
+      isOnChallenge: map['is_on_challenge'],
+      currencyRates: Map.from(map['currency_rates']),
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory StreamerInfo.fromJson(String source) =>
       StreamerInfo.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  String toJson() => json.encode(toMap());
 
   @override
   String toString() => prettyJson(toMap());

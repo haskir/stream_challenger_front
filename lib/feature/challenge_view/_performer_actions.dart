@@ -54,20 +54,23 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
   }) {
     switch (status) {
       case 'ACCEPTED':
-        return Row(mainAxisSize: MainAxisSize.min, children: [
-          Tooltip(
-            message: AppLocale.of(context).translate(mEnd),
-            child: ElevatedButton(
-              onPressed: () => actionCallback("END"),
-              child: Row(
-                children: [
-                  Text(AppLocale.of(context).translate(mEnd)),
-                  const Icon(Icons.check_box_outlined, color: Colors.green)
-                ],
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Tooltip(
+              message: AppLocale.of(context).translate(mEnd),
+              child: ElevatedButton(
+                onPressed: () => actionCallback("END"),
+                child: Row(
+                  children: [
+                    Text(AppLocale.of(context).translate(mEnd)),
+                    const Icon(Icons.check_box_outlined, color: Colors.green)
+                  ],
+                ),
               ),
-            ),
-          )
-        ]);
+            )
+          ],
+        );
       case 'ENDED':
         return Row(mainAxisSize: MainAxisSize.min, children: [
           ElevatedButton(
@@ -77,44 +80,47 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
           )
         ]);
       case 'PENDING':
-        return Row(mainAxisSize: MainAxisSize.min, children: [
-          // Accept Button
-          Tooltip(
-            message: AppLocale.of(context).translate(mAccept),
-            child: ElevatedButton(
-              onPressed: () => actionCallback("ACCEPT"),
-              child: const Icon(
-                Icons.check,
-                color: Colors.green,
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Accept Button
+            Tooltip(
+              message: AppLocale.of(context).translate(mAccept),
+              child: ElevatedButton(
+                onPressed: () => actionCallback("ACCEPT"),
+                child: const Icon(
+                  Icons.check,
+                  color: Colors.green,
+                ),
               ),
             ),
-          ),
-          SizedBox(width: 5),
-          // Reject Button
-          Tooltip(
-            message: AppLocale.of(context).translate(mReject),
-            child: ElevatedButton(
-              onPressed: () => actionCallback("REJECT"),
-              style: ButtonStyle(),
-              child: const Icon(
-                Icons.close,
-                color: Colors.red,
+            SizedBox(width: 5),
+            // Reject Button
+            Tooltip(
+              message: AppLocale.of(context).translate(mReject),
+              child: ElevatedButton(
+                onPressed: () => actionCallback("REJECT"),
+                style: ButtonStyle(),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.red,
+                ),
               ),
             ),
-          ),
-          SizedBox(width: 5),
-          // Report Button
-          Tooltip(
-            message: AppLocale.of(context).translate(mReport),
-            child: ElevatedButton(
-              onPressed: () => actionCallback("REPORT"),
-              child: const Icon(
-                Icons.report_problem_outlined,
-                color: Colors.orange,
+            SizedBox(width: 5),
+            // Report Button
+            Tooltip(
+              message: AppLocale.of(context).translate(mReport),
+              child: ElevatedButton(
+                onPressed: () => actionCallback("REPORT"),
+                child: const Icon(
+                  Icons.report_problem_outlined,
+                  color: Colors.orange,
+                ),
               ),
             ),
-          ),
-        ]);
+          ],
+        );
       default:
         return Row(children: []);
     }

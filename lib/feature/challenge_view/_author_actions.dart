@@ -60,7 +60,7 @@ class AuthorActionsState extends ConsumerState<ActionsBuilder> {
             BetSlider(
               controller: controller,
               minBet: 0.0,
-              balance: challenge.bet,
+              maximum: challenge.bet,
               currency: challenge.currency,
             ),
             ElevatedButton(

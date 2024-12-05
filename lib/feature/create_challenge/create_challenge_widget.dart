@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -29,13 +30,115 @@ class CreateChallengeWidget extends ConsumerStatefulWidget {
 }
 
 class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
-  late Account account;
+  Account? account;
   final _formKey = GlobalKey<FormState>();
   final _descriptionController = TextEditingController();
   final _minimumRewardController = TextEditingController();
   final _betController = TextEditingController();
   final List<TextEditingController> _controllers = [];
   static const double _margin = 10.0;
+
+  @override
+  Widget build(BuildContext context) {
+    account = ref.watch(accountProvider);
+    if (account == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final streamerInfoFuture = ref.watch(streamerInfoProvider(
+      widget.performerLogin,
+    ));
+
+    return streamerInfoFuture.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) {
+          if (kDebugMode) return Center(child: Text(error.toString()));
+          return const Center(child: Text(mNoSuchUser));
+        },
+        data: (streamerInfo) {
+          if (streamerInfo == null) {
+            return const Center(child: Text(mCantCreateChallengeForThisUser));
+          }
+          double minimum = streamerInfo.minimumRewardInDollars *
+              streamerInfo.currencyRates[account!.currency]!;
+          print("Пересчитываю minimuim $minimum");
+          if (account!.balance < minimum) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(AppLocale.of(context).translate(mNotEnoughBalance)),
+                Text(': $minimum ${account!.currency} '),
+                Text(AppLocale.of(context).translate(mIsMunimum)),
+              ],
+            );
+          }
+          return Container(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 1000),
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      // Информация о стримере
+                      Center(child: Mixins.streamerInfo(streamerInfo, context)),
+                      // Поле для описания
+                      DescriptionField(controller: _descriptionController),
+                      const SizedBox(height: _margin),
+
+                      // Поле для ставки и валюты
+                      BetSlider(
+                        controller: _betController,
+                        minBet: minimum,
+                        maximum: account!.balance,
+                        currency: account!.currency,
+                      ),
+                      const SizedBox(height: _margin),
+
+                      Column(children: [
+                        // Поле для условий испытания
+                        ConditionsSection(controllers: _controllers, max: 5),
+                        // Кнопка "Создать"
+                        ElevatedButton(
+                          onPressed: () async => await _createChallenge(),
+                          child: Text(
+                            AppLocale.of(context).translate(mCreate),
+                          ),
+                        ),
+                        const SizedBox(height: _margin),
+                        infoAcception(context),
+                      ])
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  static Widget infoAcception(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          AppLocale.of(context).translate(mInfoAcception),
+          style: TextStyle(fontSize: 10.0, color: Colors.grey),
+        ),
+        TextButton(
+          child: Text(
+            AppLocale.of(context).translate(mTerms),
+            style: TextStyle(fontSize: 10.0),
+          ),
+          onPressed: () {},
+        ),
+      ],
+    );
+  }
 
   @override
   void dispose() {
@@ -49,18 +152,27 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   }
 
   Future<void> _createChallenge() async {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState!.save();
+    if (await Mixins.showConfDialog(context) != true) return;
+
     CreateChallengeDTO challenge = CreateChallengeDTO(
       description: _descriptionController.text,
       bet: double.parse(_betController.text),
-      currency: account.currency.toUpperCase(),
+      currency: account!.currency.toUpperCase(),
       conditions: _controllers.map((e) => e.text).toList(),
       performerLogin: widget.performerLogin,
     );
-    bool result = await _submit(
+    await _submit(
       challenge,
       await ref.watch(httpClientProvider.future),
     );
-    if (result) dispose();
+    /* if (result && mounted) {
+      await Mixins.showOpenURLDialog(
+        context,
+        Mixins.buildURLFromLogin(widget.performerLogin),
+      );
+    } */
   }
 
   Future<bool> _submit(CreateChallengeDTO challenge, Requester client) async {
@@ -68,7 +180,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
       challenge: challenge,
       client: client,
     );
-    result.fold((left) {
+    return result.fold((left) {
       Fluttertoast.showToast(msg: result.toString());
       return false;
     }, (right) async {
@@ -76,74 +188,5 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
           msg: AppLocale.of(context).translate(mChallengeCreated));
       return true;
     });
-    return false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final providedAccount = ref.watch(accountProvider);
-    if (providedAccount == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    account = providedAccount;
-
-    final minimumInCurrency =
-        ref.watch(minimumInCurrencyProvider(widget.performerLogin));
-
-    return minimumInCurrency.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => const Center(child: Text(mNoSuchUser)),
-        data: (minimum) {
-          if (minimum == null) {
-            return const Center(child: Text(mCantCreateChallengeForThisUser));
-          }
-          if (account.balance < minimum) {
-            return Center(
-                child: Text(AppLocale.of(context).translate(
-                    '${AppLocale.of(context).translate(mNotEnoughBalance)} $minimum ${account.currency}')));
-          }
-          return Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListView(
-                children: [
-                  // Поле для описания
-                  DescriptionField(controller: _descriptionController),
-                  const SizedBox(height: _margin),
-
-                  // Поле для ставки и валюты
-                  BetSlider(
-                    controller: _betController,
-                    minBet: minimum,
-                    balance: account.balance,
-                    currency: account.currency,
-                  ),
-                  const SizedBox(height: _margin),
-
-                  Column(children: [
-                    // Поле для условий испытания
-                    ConditionsSection(controllers: _controllers, max: 5),
-                    // Кнопка "Создать"
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (!_formKey.currentState!.validate()) return;
-                        _formKey.currentState!.save();
-                        final bool? res = await Mixins.showConfDialog(context);
-                        if (res == true) {
-                          await _createChallenge();
-                        }
-                      },
-                      child: Text(
-                        AppLocale.of(context).translate(mCreate),
-                      ),
-                    ),
-                    const SizedBox(height: _margin),
-                  ])
-                ],
-              ),
-            ),
-          );
-        });
   }
 }

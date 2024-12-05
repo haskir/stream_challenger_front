@@ -11,7 +11,7 @@ class DescriptionField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      maxLength: 255,
+      maxLength: 127,
       decoration: InputDecoration(
         labelText: AppLocale.of(context).translate(mDescription),
       ),

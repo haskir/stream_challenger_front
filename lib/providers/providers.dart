@@ -8,7 +8,7 @@ import '../main_widgets/router.dart';
 
 final authStateProvider =
     StateNotifierProvider<AuthNotifier, AuthState>((ref) => AuthNotifier());
-final httpClientProvider = FutureProvider<Requester>((ref) async {
+final httpClientProvider = FutureProvider.autoDispose<Requester>((ref) async {
   final token = await ref.watch(authStateProvider.notifier).getTokenAsync();
   return Requester(token);
 });

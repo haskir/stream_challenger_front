@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/user_preferences.dart';
-import 'package:stream_challenge/providers/account_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
+
+import '../data/models/steamer_info.dart';
 
 /// Requester - клиент для выполнения HTTP-запросов
 class _PreferencesRequester {
@@ -29,14 +30,13 @@ class _PreferencesRequester {
     );
   }
 
-  Future<double?> getMinimumInCurrency(String login, String currency) async {
+  Future<StreamerInfo?> getStreamerInfo(String login) async {
     final response = await httpClient.get(
-      '$url/minimum_in_currency',
-      {'login': login, 'currency': currency},
+      '$url/$login',
     );
     return response.fold((left) => null, (right) {
       final Map data = Map<String, dynamic>.from(right);
-      return double.tryParse(data['minimum'].toString());
+      return StreamerInfo.fromMap(data as Map<String, dynamic>);
     });
   }
 }
@@ -96,12 +96,9 @@ final preferencesProvider =
   return PreferencesNotifier(ref);
 });
 
-final minimumInCurrencyProvider = FutureProvider.family<double?, String>(
+final streamerInfoProvider = FutureProvider.family<StreamerInfo?, String>(
   (ref, login) async {
-    final account = ref.watch(accountProvider);
-    if (account == null) return null;
-
     final client = await ref.read(prefRequesterProvider.future);
-    return client.getMinimumInCurrency(login, account.currency);
+    return client.getStreamerInfo(login);
   },
 );

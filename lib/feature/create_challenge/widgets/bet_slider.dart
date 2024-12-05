@@ -6,17 +6,17 @@ import 'package:stream_challenge/core/platform/app_localization.dart';
 class BetSlider extends ConsumerStatefulWidget {
   final TextEditingController controller;
   final double minBet;
-  final double balance;
+  final double maximum;
   final String currency;
   const BetSlider({
     super.key,
     required this.controller,
     required this.minBet,
-    required this.balance,
+    required this.maximum,
     required this.currency,
   });
 
-  double get minInPercentage => minBet / balance * 100;
+  double get minInPercentage => minBet / maximum * 100;
 
   @override
   BetSliderState createState() => BetSliderState();
@@ -45,7 +45,7 @@ class BetSliderState extends ConsumerState<BetSlider> {
     if (percentage > 100) percentage = 100;
     if (percentage > widget.minInPercentage && percentage <= 100) {
       widget.controller.text =
-          (widget.balance * percentage / 100).toStringAsFixed(2);
+          (widget.maximum * percentage / 100).toStringAsFixed(2);
       _percentageController.text = percentage.toStringAsFixed(2);
     } else {
       setDefault();
@@ -59,10 +59,10 @@ class BetSliderState extends ConsumerState<BetSlider> {
   void _onResultChanged(String value) {
     double? result = double.tryParse(value);
     if (result == null) return;
-    if (result <= widget.balance && result >= widget.minBet) {
+    if (result <= widget.maximum && result >= widget.minBet) {
       _percentageController.text =
-          (result / widget.balance * 100).toStringAsFixed(2);
-      _sliderValue = result / widget.balance * 100;
+          (result / widget.maximum * 100).toStringAsFixed(2);
+      _sliderValue = result / widget.maximum * 100;
     } else {
       setDefault();
     }

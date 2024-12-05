@@ -5,9 +5,14 @@ import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
 
 class InfoWidget extends StatelessWidget {
+  final bool? isAuthor;
   final Challenge challenge;
 
-  const InfoWidget({super.key, required this.challenge});
+  const InfoWidget({
+    super.key,
+    required this.isAuthor,
+    required this.challenge,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +34,12 @@ class InfoWidget extends StatelessWidget {
                 // Аватарка
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 15, 15),
-                  child: Mixins.personInfo(challenge.author, context, 25),
+                  child: Mixins.personInfo(
+                      (isAuthor == true)
+                          ? challenge.performer
+                          : challenge.author,
+                      context,
+                      25),
                 ),
                 // Описание
                 Flexible(

@@ -9,8 +9,6 @@ const String mMyPanel = "My Panel";
 const String mPleaseLogIn = "Please log in";
 const String mNoChallenges = "No challenges.";
 const String mDueDate = "Due Date";
-const String mCantCreateChallengeForThisUser =
-    "Can't create challenge for this user";
 const String mNoChallengesAvailable = "No challenges available";
 const String mStatus = "Status";
 const String mAccepted = "Accepted";
@@ -93,3 +91,13 @@ const String mChallengeCreated = "Challenge created";
 const String mSettingsEdit = "Settings edit";
 const String mSelectTimezone = "Select timezone";
 const String mMinimumInUSD = "Minimum in USD";
+const String mIsMunimum = "is minimum";
+const String mCantCreateChallengeForThisUser =
+    "Can't create challenge for this user";
+const String mInfoAcception =
+    "By clicking on the 'Create' button, you accept our";
+const String mTerms = "Terms of service";
+const String mOnline = "is online";
+const String mOpenURL = "Open URL";
+const String mOpen = "Open";
+const String mOffline = "is offline";

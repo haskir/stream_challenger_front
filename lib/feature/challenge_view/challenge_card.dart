@@ -48,7 +48,7 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
     }
     return ConstrainedBox(
       constraints: const BoxConstraints(
-        maxHeight: 380,
+        maxHeight: 550,
         maxWidth: 700,
       ),
       child: Stack(
@@ -68,12 +68,16 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
                   Flexible(
                     flex: 5,
                     fit: FlexFit.tight,
-                    child: InfoWidget(challenge: challenge),
+                    child: InfoWidget(
+                      challenge: challenge,
+                      isAuthor: widget.isAuthor,
+                    ),
                   ),
-                  Spacer(),
-                  if (challenge.report != null)
+                  if (challenge.report != null) ...[
+                    Spacer(),
                     ReportInfoWidget(report: challenge.report!),
-                  Spacer(),
+                    Spacer(),
+                  ],
                   // Кнопки действий
                   actions,
                 ],
