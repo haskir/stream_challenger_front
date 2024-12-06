@@ -4,16 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ApiPath {
   static const url = 'localhost';
+  static const prefix = 'api';
   static const security = false;
 
   static String get http {
-    if (security) return 'https://$url:443';
-    return 'http://$url:80';
+    if (security) return 'https://$url:443/$prefix/';
+    return 'http://$url:80/$prefix/';
   }
 
   static String get ws {
-    if (security) return 'wss://$url:443';
-    return 'ws://$url:80';
+    if (security) return 'wss://$url:443/$prefix/';
+    return 'ws://$url:80/$prefix/';
   }
 }
 

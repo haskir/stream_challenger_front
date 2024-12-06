@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/common/mixins.dart';
 import 'package:stream_challenge/common/text_consts.dart';
@@ -42,6 +43,7 @@ class InfoWidget extends StatelessWidget {
                       25),
                 ),
                 // Описание
+                if (kDebugMode) Text('${challenge.id} '),
                 Flexible(
                   child: Text(
                     challenge.description,

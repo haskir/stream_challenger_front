@@ -15,7 +15,7 @@ abstract class AbstractChallengePanelRequester {
 
 class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
   final String token;
-  final Uri wsUrl = Uri.parse('${ApiPath.ws}/panel/ws');
+  final Uri wsUrl = Uri.parse('${ApiPath.ws}panel/');
   late WebSocketChannel _channel;
   bool _isConnected = false;
   final StreamController<List<Challenge>> _challengeController =

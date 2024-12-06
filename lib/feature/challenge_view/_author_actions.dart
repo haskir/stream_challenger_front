@@ -55,7 +55,7 @@ class AuthorActionsState extends ConsumerState<ActionsBuilder> {
         width: 500,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             BetSlider(
               controller: controller,

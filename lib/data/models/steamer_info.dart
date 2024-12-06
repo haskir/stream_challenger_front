@@ -8,8 +8,8 @@ class StreamerInfo {
   final String urlImage;
   final double minimumRewardInDollars;
   final String currency;
-  final bool? isOnline;
-  final bool isOnChallenge;
+  //final bool? isOnline;
+  //final bool isOnChallenge;
   final Map<String, double> currencyRates;
 
   const StreamerInfo({
@@ -18,8 +18,8 @@ class StreamerInfo {
     required this.urlImage,
     required this.minimumRewardInDollars,
     required this.currency,
-    required this.isOnline,
-    required this.isOnChallenge,
+    //required this.isOnline,
+    //required this.isOnChallenge,
     required this.currencyRates,
   });
 
@@ -30,8 +30,8 @@ class StreamerInfo {
       'url_image': urlImage,
       'minimum_reward_in_dollars': minimumRewardInDollars,
       'currency': currency,
-      'is_online': isOnline,
-      'is_on_challenge': isOnChallenge,
+      //'is_online': isOnline,
+      //'is_on_challenge': isOnChallenge,
     };
   }
 
@@ -42,8 +42,8 @@ class StreamerInfo {
       urlImage: map['url_image'],
       minimumRewardInDollars: map['minimum_reward_in_dollars'],
       currency: map['currency'],
-      isOnline: map['is_online'],
-      isOnChallenge: map['is_on_challenge'],
+      //isOnline: map['is_online'],
+      //isOnChallenge: map['is_on_challenge'],
       currencyRates: Map.from(map['currency_rates']),
     );
   }

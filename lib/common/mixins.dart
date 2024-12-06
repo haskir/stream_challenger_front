@@ -59,7 +59,7 @@ class Mixins {
   }
 
   static Widget streamerInfo(StreamerInfo streamerInfo, BuildContext context) {
-    Widget isOnline(bool isOnline) {
+/*     Widget isOnline(bool isOnline) {
       if (isOnline) {
         return Row(
           children: [
@@ -77,7 +77,7 @@ class Mixins {
           ],
         );
       }
-    }
+    } */
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -91,7 +91,7 @@ class Mixins {
         Text(streamerInfo.displayName,
             style: const TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(width: 5),
-        isOnline(streamerInfo.isOnline ?? false),
+        //isOnline(streamerInfo),
       ],
     );
   }
