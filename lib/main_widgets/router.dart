@@ -5,7 +5,7 @@ import 'package:stream_challenge/feature/single_challenge_view/widgets/single_ch
 import 'package:stream_challenge/feature/streamer_panel/panel_widget.dart';
 import 'package:stream_challenge/feature/profile/profile.dart';
 
-import 'body_widgets/home_page.dart';
+import '../../main_widgets/body_widgets/home_page.dart';
 
 final GoRouter goRouter = GoRouter(
   initialLocation: '/',

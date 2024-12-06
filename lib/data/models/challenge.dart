@@ -93,6 +93,8 @@ class Challenge {
   final DateTime createdAt;
   final DateTime updatedAt;
   final Report? report;
+  String? predictID;
+  String? pollID;
 
   Challenge({
     required this.id,
@@ -109,7 +111,9 @@ class Challenge {
     required this.performerLogin,
     required this.createdAt,
     required this.updatedAt,
-    this.report,
+    required this.report,
+    required this.predictID,
+    required this.pollID,
   });
 
   Map<String, dynamic> toMap() {
@@ -129,6 +133,8 @@ class Challenge {
       'created_at': createdAt.millisecondsSinceEpoch,
       'updated_at': updatedAt.millisecondsSinceEpoch,
       'report': report?.toMap(),
+      'predict_id': predictID,
+      'poll_id': pollID,
     };
   }
 
@@ -149,6 +155,8 @@ class Challenge {
       createdAt: dateTimeFormat.parse(map['created_at']),
       updatedAt: dateTimeFormat.parse(map['updated_at']),
       report: map['report'] != null ? Report.fromMap(map['report']) : null,
+      predictID: map['predict_id'],
+      pollID: map['poll_id'],
     );
   }
 

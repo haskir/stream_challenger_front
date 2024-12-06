@@ -57,28 +57,34 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Tooltip(
+            /* Tooltip(
               message: AppLocale.of(context).translate(mEnd),
               child: ElevatedButton(
-                onPressed: () => actionCallback("END"),
+                onPressed: () => actionCallback("START_POLL"),
                 child: Row(
                   children: [
                     Text(AppLocale.of(context).translate(mEnd)),
-                    const Icon(Icons.check_box_outlined, color: Colors.green)
+                    const Icon(Icons.check_box_outlined, color: Colors.green),
+                    SizedBox(width: 5),
                   ],
                 ),
               ),
-            )
+            ), */
+            if (challenge.predictID == null) ...[
+              ElevatedButton(
+                onPressed: () => actionCallback("START_PREDICT"),
+                child: Text(AppLocale.of(context).translate(mStartPredict)),
+              ),
+              SizedBox(width: 5),
+            ],
+            if (challenge.pollID == null) ...[
+              ElevatedButton(
+                onPressed: () => actionCallback("START_POLL"),
+                child: Text(AppLocale.of(context).translate(mStartPoll)),
+              ),
+            ]
           ],
         );
-      case 'ENDED':
-        return Row(mainAxisSize: MainAxisSize.min, children: [
-          ElevatedButton(
-            onPressed: () => actionCallback("START_POLL"),
-            child: Text(AppLocale.of(context).translate(mStartPoll),
-                style: TextStyle(color: Colors.white)),
-          )
-        ]);
       case 'PENDING':
         return Row(
           mainAxisSize: MainAxisSize.min,

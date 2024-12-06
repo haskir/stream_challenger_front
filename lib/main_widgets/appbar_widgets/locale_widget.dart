@@ -29,17 +29,18 @@ class _LocaleState extends ConsumerState<LocaleWidget> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconButton(
+        TextButton(
           onPressed: () async {
             preferences.language = switchLanguage(preferences.language);
             await ref
                 .read(preferencesProvider.notifier)
                 .updatePreferences(preferences);
           },
-          icon: Container(
+          child: Container(
+            alignment: Alignment.center,
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(15),
             ),
             child: Text(switchLanguage(preferences.language)),
           ),

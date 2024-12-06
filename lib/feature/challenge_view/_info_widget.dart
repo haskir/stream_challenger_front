@@ -66,6 +66,9 @@ class InfoWidget extends StatelessWidget {
                       .map((condition) => Text('- $condition')),
                 ],
               ),
+            // Прогноз и голосование
+            if (isAuthor == false && challenge.status == "ACCEPTED")
+              _buildPredictAndPoll(challenge, context),
           ],
         ),
         SizedBox(height: 35),
@@ -158,5 +161,34 @@ class InfoWidget extends StatelessWidget {
       default:
         return Center(child: Text(status));
     }
+  }
+
+  Widget _buildPredictAndPoll(Challenge challenge, BuildContext context) {
+    return Column(
+      children: [
+        // Predict
+        Row(
+          children: [
+            Text(AppLocale.of(context).translate(mPredictStarted),
+                style: TextStyle(
+                    color: (challenge.predictID != null)
+                        ? Colors.green
+                        : Colors.red)),
+            Icon((challenge.predictID != null) ? Icons.check : Icons.close),
+          ],
+        ),
+        // Poll
+        Row(
+          children: [
+            Text(AppLocale.of(context).translate(mPollStarted),
+                style: TextStyle(
+                    color: (challenge.pollID != null)
+                        ? Colors.green
+                        : Colors.red)),
+            Icon((challenge.pollID != null) ? Icons.check : Icons.close),
+          ],
+        )
+      ],
+    );
   }
 }

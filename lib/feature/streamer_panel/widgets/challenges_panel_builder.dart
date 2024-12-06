@@ -21,7 +21,7 @@ class ChallengesPanelBuilder {
 
     cachedPanels = challengesByStatus.entries.map((entry) {
       final status = entry.key;
-      final challenges = entry.value;
+      final List<Challenge> challenges = entry.value;
 
       return ExpansionPanel(
         headerBuilder: (BuildContext context, bool isExpanded) {
