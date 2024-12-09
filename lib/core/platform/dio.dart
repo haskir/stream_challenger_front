@@ -101,6 +101,8 @@ class Requester implements _Client {
           return List<dynamic>.from(data); // Если ответ — List
         } else if (data is Map) {
           return Map<String, dynamic>.from(data); // Если ответ — Map
+        } else if (data is bool || data is String) {
+          return data;
         } else {
           throw TypeError(); // Если ответ неожиданный
         }

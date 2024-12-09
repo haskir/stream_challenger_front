@@ -71,6 +71,7 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
                     child: InfoWidget(
                       challenge: challenge,
                       isAuthor: widget.isAuthor,
+                      actions: actions,
                     ),
                   ),
                   if (challenge.report != null) ...[
@@ -78,8 +79,6 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
                     ReportInfoWidget(report: challenge.report!),
                     Spacer(),
                   ],
-                  // Кнопки действий
-                  actions,
                 ],
               ),
             ),

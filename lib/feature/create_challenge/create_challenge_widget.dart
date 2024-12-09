@@ -10,10 +10,12 @@ import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/account.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/data/models/steamer_info.dart';
 import 'package:stream_challenge/use_cases/challenges_actions.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
+import 'widgets/is_online_status_widget.dart';
 import 'widgets/view.dart';
 
 class CreateChallengeWidget extends ConsumerStatefulWidget {
@@ -86,7 +88,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                     shrinkWrap: true,
                     children: [
                       // Информация о стримере
-                      Center(child: Mixins.streamerInfo(streamerInfo, context)),
+                      Center(child: streamerInfoWidget(streamerInfo)),
                       // Поле для описания
                       DescriptionField(controller: _descriptionController),
                       const SizedBox(height: _margin),
@@ -121,6 +123,22 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
           );
         });
   }
+
+  static Widget streamerInfoWidget(StreamerInfo streamerInfo) => Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 40,
+            backgroundImage: NetworkImage(streamerInfo.urlImage),
+          ),
+          const SizedBox(width: 5),
+          Text(streamerInfo.displayName,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(width: 5),
+          IsOnlineStatusWidget(login: streamerInfo.login),
+        ],
+      );
 
   static Widget infoAcception(BuildContext context) {
     return Row(

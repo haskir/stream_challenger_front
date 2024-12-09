@@ -39,6 +39,21 @@ class _PreferencesRequester {
       return StreamerInfo.fromMap(data as Map<String, dynamic>);
     });
   }
+
+  Future<bool> isStreamerOnline(String login) async {
+    try {
+      print(0);
+      final response = await httpClient.get(
+        '/panel/is_online',
+        {'login': login},
+      );
+      print(1);
+      return response.fold((left) => false, (right) => right);
+    } catch (e) {
+      print("error in isStreamerOnline $e");
+      return false;
+    }
+  }
 }
 
 /// Провайдер для PreferencesClient
@@ -96,9 +111,14 @@ final preferencesProvider =
   return PreferencesNotifier(ref);
 });
 
-final streamerInfoProvider = FutureProvider.family<StreamerInfo?, String>(
-  (ref, login) async {
-    final client = await ref.read(prefRequesterProvider.future);
-    return client.getStreamerInfo(login);
-  },
-);
+final streamerInfoProvider =
+    FutureProvider.family<StreamerInfo?, String>((ref, login) async {
+  final client = await ref.read(prefRequesterProvider.future);
+  return client.getStreamerInfo(login);
+});
+
+final isOnlineProvider =
+    FutureProvider.family<bool, String>((ref, login) async {
+  final client = await ref.read(prefRequesterProvider.future);
+  return client.isStreamerOnline(login);
+});

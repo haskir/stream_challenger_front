@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/data/models/steamer_info.dart';
 import 'dart:html' as html;
 
 class Mixins {
@@ -55,44 +54,6 @@ class Mixins {
           ],
         ),
       ),
-    );
-  }
-
-  static Widget streamerInfo(StreamerInfo streamerInfo, BuildContext context) {
-/*     Widget isOnline(bool isOnline) {
-      if (isOnline) {
-        return Row(
-          children: [
-            Icon(Icons.circle, color: Colors.green, size: 14),
-            const SizedBox(width: 5),
-            Text(AppLocale.of(context).translate(mOnline)),
-          ],
-        );
-      } else {
-        return Row(
-          children: [
-            Icon(Icons.circle, color: Colors.red, size: 14),
-            const SizedBox(width: 5),
-            Text(AppLocale.of(context).translate(mOffline)),
-          ],
-        );
-      }
-    } */
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          radius: 40,
-          backgroundImage: NetworkImage(streamerInfo.urlImage),
-        ),
-        const SizedBox(width: 5),
-        Text(streamerInfo.displayName,
-            style: const TextStyle(fontWeight: FontWeight.bold)),
-        const SizedBox(width: 5),
-        //isOnline(streamerInfo),
-      ],
     );
   }
 

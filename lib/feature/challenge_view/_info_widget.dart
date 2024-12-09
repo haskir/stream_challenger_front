@@ -8,55 +8,63 @@ import 'package:stream_challenge/data/models/challenge.dart';
 class InfoWidget extends StatelessWidget {
   final bool? isAuthor;
   final Challenge challenge;
+  final Widget actions;
 
   const InfoWidget({
     super.key,
     required this.isAuthor,
     required this.challenge,
+    required this.actions,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // Аватарка
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 15, 15),
-                  child: Mixins.personInfo(
-                      (isAuthor == true)
-                          ? challenge.performer
-                          : challenge.author,
-                      context,
-                      25),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 200),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      // Аватарка
+                      child: Mixins.personInfo(
+                        (isAuthor == true)
+                            ? challenge.performer
+                            : challenge.author,
+                        context,
+                        25,
+                      ),
+                    ),
+                    if (kDebugMode) Text('${challenge.id}  '),
+                    // Описание
+                    Flexible(
+                      child: Text(
+                        challenge.description,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                  ],
                 ),
-                // Описание
-                if (kDebugMode) Text('${challenge.id} '),
-                Flexible(
-                  child: Text(
-                    challenge.description,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-              ],
-            ),
-            if (challenge.conditions.isNotEmpty)
-              // Условия
-              Column(
+              ),
+              // Действия
+              Container(alignment: Alignment.bottomRight, child: actions),
+            ],
+          ),
+          if (challenge.conditions.isNotEmpty)
+            // Условия
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     '${AppLocale.of(context).translate(mConditions)}:',
@@ -66,23 +74,23 @@ class InfoWidget extends StatelessWidget {
                       .map((condition) => Text('- $condition')),
                 ],
               ),
-            // Прогноз и голосование
-            if (isAuthor == false && challenge.status == "ACCEPTED")
-              _buildPredictAndPoll(challenge, context),
-          ],
-        ),
-        SizedBox(height: 35),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Ставка
-            _buildBet(challenge, context),
-            SizedBox(width: 35),
-            // Статус
-            _buildStatus(challenge.status, context),
-          ],
-        ),
-      ],
+            ),
+          // Прогноз и голосование
+          if (isAuthor == false && challenge.status == "ACCEPTED")
+            _buildPredictAndPoll(challenge, context),
+          // Ставка и статус (снизу)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              _buildBet(challenge, context),
+              SizedBox(width: 35),
+              _buildStatus(challenge.status, context),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
