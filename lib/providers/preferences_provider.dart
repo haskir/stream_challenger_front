@@ -42,12 +42,10 @@ class _PreferencesRequester {
 
   Future<bool> isStreamerOnline(String login) async {
     try {
-      print(0);
       final response = await httpClient.get(
         '/panel/is_online',
         {'login': login},
       );
-      print(1);
       return response.fold((left) => false, (right) => right);
     } catch (e) {
       print("error in isStreamerOnline $e");

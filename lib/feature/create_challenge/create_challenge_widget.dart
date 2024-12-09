@@ -35,7 +35,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   Account? account;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _descriptionController;
-  late TextEditingController _minimumRewardController;
   late TextEditingController _betController;
   final List<TextEditingController> _controllers = [];
   static const double _margin = 10.0;
@@ -63,7 +62,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
           double minimum = streamerInfo.minimumRewardInDollars *
               streamerInfo.currencyRates[account!.currency]!;
           _descriptionController = TextEditingController();
-          _minimumRewardController = TextEditingController();
           _betController = TextEditingController();
           if (account!.balance < minimum) {
             return Row(
@@ -163,7 +161,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   @override
   void dispose() {
     _descriptionController.dispose();
-    _minimumRewardController.dispose();
     _betController.dispose();
     for (var controller in _controllers) {
       controller.dispose();

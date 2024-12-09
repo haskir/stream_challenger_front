@@ -38,6 +38,7 @@ const String mBetMustBeAtMost = "Bet must be at most";
 const String mMinimumReward = "Minimum Reward";
 const String mMinimumRewardMustBeBetween10And100 =
     "Minimum reward must be between 10% and 100%";
+const String mPleaseEnterValidValue = "Please enter valid value";
 const String mcCurrency = "Currency";
 const String mCreate = "Create";
 const String mNotEnoughBalance = "Not enough balance";

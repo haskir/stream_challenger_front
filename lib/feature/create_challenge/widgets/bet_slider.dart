@@ -89,14 +89,26 @@ class _BetSliderState extends ConsumerState<BetSlider> {
             ),
             const SizedBox(width: 20),
             Flexible(
-              child: TextField(
-                controller: widget.controller,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: AppLocale.of(context).translate(mCalculatedValue),
-                ),
-                onChanged: _onResultChanged,
-              ),
+              child: TextFormField(
+                  controller: widget.controller,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText:
+                        AppLocale.of(context).translate(mCalculatedValue),
+                  ),
+                  onChanged: _onResultChanged,
+                  validator: (value) {
+                    if (value == null) {
+                      return "Enter a value";
+                    }
+                    if (double.tryParse(value) == null ||
+                        double.parse(value) < widget.minBet ||
+                        double.parse(value) > widget.maximum) {
+                      return AppLocale.of(context)
+                          .translate(mPleaseEnterValidValue);
+                    }
+                    return null;
+                  }),
             ),
             Text(widget.currency),
           ],

@@ -18,6 +18,7 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
   final Uri wsUrl = Uri.parse('${ApiPath.ws}panel/');
   late WebSocketChannel _channel;
   bool _isConnected = false;
+  final List<Challenge> _challenges = [];
   final StreamController<List<Challenge>> _challengeController =
       StreamController.broadcast();
   Timer? _pingTimer;
@@ -27,9 +28,8 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
 
   @override
   Future<bool> connect() async {
-    if (kDebugMode) {
-      print('Connecting to WebSocket...');
-    }
+    if (kDebugMode) print('Connecting to WebSocket...');
+
     _channel = WebSocketChannel.connect(wsUrl);
 
     try {
@@ -41,54 +41,74 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
         onDone: _handleDisconnect,
       );
       _startPing();
-      if (kDebugMode) {
-        print("WebSocket connected.");
-      }
+      if (kDebugMode) print("WebSocket connected.");
       return true;
     } on WebSocketChannelException {
-      if (kDebugMode) {
-        print('WebSocket connection failed.');
-      }
+      if (kDebugMode) print('WebSocket connection failed.');
       _isConnected = false;
       _reconnect();
       return false;
     } catch (e) {
       _isConnected = false;
-      if (kDebugMode) {
-        print('Unexpected error during WebSocket connection: $e');
-      }
+      if (kDebugMode) print('Unexpected error during WebSocket connection: $e');
       return false;
     }
   }
 
-  // Обработка входящих данных
   void _handleData(dynamic data) {
     try {
       if (data == null) return;
-      final challengesJson = jsonDecode(data) as List;
-      final challenges =
-          challengesJson.map((json) => Challenge.fromMap(json)).toList();
-      _challengeController.add(challenges);
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error parsing challenges: $e');
+      final parsedData = jsonDecode(data);
+
+      if (parsedData is List) {
+        // Инициализация списка
+        _challenges.clear();
+        _challenges.addAll(parsedData.map((json) => Challenge.fromMap(json)));
+      } else if (parsedData is Map) {
+        bool flag = false;
+        for (Challenge challenge in _challenges) {
+          if (challenge.id == parsedData['id']) {
+            print("OLD: challenge: ${challenge.toString()}");
+            challenge.update(parsedData as Map<String, dynamic>);
+            print("NEW: challenge: ${challenge.toString()}");
+            flag = true;
+            break;
+          }
+        }
+        if (!flag) {
+          _addChallenge(Challenge.fromMap(parsedData as Map<String, dynamic>));
+        }
       }
+      // Передаем обновленный список
+      _challengeController.add(List.unmodifiable(_challenges));
+    } catch (e) {
+      if (kDebugMode) print('Error processing WebSocket data: $e');
       disconnect();
-      return _reconnect();
+      _reconnect();
     }
   }
 
-  // Обработка ошибок соединения
+  void _addChallenge(Challenge challenge) {
+    if (!_challenges.any((c) => c.id == challenge.id)) {
+      _challenges.add(challenge);
+    }
+  }
+
+  void _updateChallenge(Challenge challenge) {
+    final index = _challenges.indexWhere((c) => c.id == challenge.id);
+    if (index != -1) {
+      _challenges[index] = challenge;
+    }
+  }
+
   void _handleError(error) => _reconnect();
 
-  // Обработка завершения соединения
   void _handleDisconnect() {
     _challengeController.sink.addError('Connection lost.');
     _isConnected = false;
     _reconnect();
   }
 
-  // Пинг для поддержания соединения
   void _startPing() {
     _pingTimer?.cancel();
     _pingTimer = Timer.periodic(const Duration(seconds: 30), (_) {
@@ -100,7 +120,6 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
     });
   }
 
-  // Автопереподключение
   void _reconnect() {
     if (_reconnectTimer != null && _reconnectTimer!.isActive) return;
 

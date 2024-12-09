@@ -7,17 +7,13 @@ import 'package:stream_challenge/feature/challenge_view/challenge_card.dart';
 class ChallengesPanelBuilder {
   final Map<String, bool> expandedStates;
 
-  ChallengesPanelBuilder({
-    required this.expandedStates,
-  });
+  ChallengesPanelBuilder({required this.expandedStates});
 
   List<ExpansionPanel>? cachedPanels;
 
   List<ExpansionPanel> buildExpansionPanels(
       BuildContext context, Map<String, List<Challenge>> challengesByStatus) {
-    if (cachedPanels != null) {
-      return cachedPanels!;
-    }
+    if (cachedPanels != null) return cachedPanels!;
 
     cachedPanels = challengesByStatus.entries.map((entry) {
       final status = entry.key;

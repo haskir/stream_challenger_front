@@ -31,6 +31,7 @@
   "Bet must be a number": "Cтавка должна быть числом",
   "Bet must be at least": "Cтавка должна быть не менее",
   "Bet must be at most": "Cтавка должна быть не более",
+  "Please enter valid value": "Пожалуйста, введите корректное значение",
   "Minimum Reward": "Минимальное вознаграждение",
   "Please enter minimum reward": "Пожалуйста, введите минимальное вознаграждение",
   "Minimum reward must be between 10% and 100%": "Минимальное вознаграждение должно быть между 10% и 100%",

@@ -37,12 +37,15 @@ class _LocaleState extends ConsumerState<LocaleWidget> {
                 .updatePreferences(preferences);
           },
           child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
+            decoration: BoxDecoration(shape: BoxShape.circle),
+            child: Center(
+              child: Text(
+                switchLanguage(preferences.language),
+                style: preferences.darkMode
+                    ? const TextStyle(color: Colors.white)
+                    : const TextStyle(color: Colors.black),
+              ),
             ),
-            child: Text(switchLanguage(preferences.language)),
           ),
         ),
       ],

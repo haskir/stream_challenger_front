@@ -86,13 +86,13 @@ class Challenge {
   int? rating;
   String status;
   double? payout;
-  final String? reportStatus;
+  String? reportStatus;
   final ChallengePerson author;
   final ChallengePerson performer;
   final String performerLogin;
   final DateTime createdAt;
-  final DateTime updatedAt;
-  final Report? report;
+  DateTime updatedAt;
+  Report? report;
   String? predictID;
   String? pollID;
 
@@ -115,6 +115,12 @@ class Challenge {
     required this.predictID,
     required this.pollID,
   });
+
+  void update(Map<String, dynamic> map) {
+    status = map["status"];
+    predictID = map["predict_id"];
+    pollID = map["poll_id"];
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
