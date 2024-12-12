@@ -5,13 +5,13 @@ import 'package:stream_challenge/core/platform/app_localization.dart';
 
 class SliderWidget extends ConsumerStatefulWidget {
   final TextEditingController controller;
-  final double minBet;
+  final double minimum;
   final double maximum;
   final String currency;
   const SliderWidget({
     super.key,
     required this.controller,
-    required this.minBet,
+    required this.minimum,
     required this.maximum,
     required this.currency,
   });
@@ -24,12 +24,12 @@ class _BetSliderState extends ConsumerState<SliderWidget> {
   late double _sliderValue;
   final TextEditingController _percentageController = TextEditingController();
 
-  double get minInPercentage => widget.minBet / widget.maximum * 100;
+  double get minInPercentage => widget.minimum / widget.maximum * 100;
 
   void setDefault() {
     _sliderValue = minInPercentage;
     _percentageController.text = minInPercentage.toStringAsFixed(2);
-    widget.controller.text = widget.minBet.toStringAsFixed(2);
+    widget.controller.text = widget.minimum.toStringAsFixed(2);
   }
 
   @override
@@ -58,7 +58,7 @@ class _BetSliderState extends ConsumerState<SliderWidget> {
   void _onResultChanged(String value) {
     double? result = double.tryParse(value);
     if (result == null) return;
-    if (result <= widget.maximum && result >= widget.minBet) {
+    if (result <= widget.maximum && result >= widget.minimum) {
       _percentageController.text =
           (result / widget.maximum * 100).toStringAsFixed(2);
       _sliderValue = result / widget.maximum * 100;
@@ -101,8 +101,6 @@ class _BetSliderState extends ConsumerState<SliderWidget> {
                       alignment: Alignment.topRight,
                       child: Text(widget.currency),
                     ),
-                    //hintStyle: TextStyle(color: Colors.grey),
-                    //helperText: widget.currency,
                   ),
                   onChanged: _onResultChanged,
                   validator: (value) {
@@ -110,7 +108,7 @@ class _BetSliderState extends ConsumerState<SliderWidget> {
                       return "Enter a value";
                     }
                     if (double.tryParse(value) == null ||
-                        double.parse(value) < widget.minBet ||
+                        double.parse(value) < widget.minimum ||
                         double.parse(value) > widget.maximum) {
                       return AppLocale.of(context)
                           .translate(mPleaseEnterValidValue);
@@ -118,7 +116,6 @@ class _BetSliderState extends ConsumerState<SliderWidget> {
                     return null;
                   }),
             ),
-            //Text(widget.currency),
           ],
         ),
         const SizedBox(height: 20),

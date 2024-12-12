@@ -2,7 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:stream_challenge/data/models/account.dart';
-import 'package:stream_challenge/feature/transaction/transaction_dialogs.dart';
+import 'package:stream_challenge/data/models/transaction.dart';
+import 'package:stream_challenge/feature/transaction/deposit_dialog.dart';
+import 'package:stream_challenge/feature/transaction/withdraw_dialog.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
 
 final Map _currency = {
@@ -32,10 +34,11 @@ class BalanceWidget extends ConsumerWidget {
         // +
         TextButton(
           onPressed: () async {
-            await showDialog<void>(
+            CreateTransactionDTO? dto = await showDialog<CreateTransactionDTO>(
               context: context,
               builder: (context) => DepositDialog(account: account),
             );
+            print(dto);
           },
           onLongPress: () async {
             await player.play(
@@ -44,25 +47,20 @@ class BalanceWidget extends ConsumerWidget {
             );
           },
           style: TextButton.styleFrom(maximumSize: Size(size, size)),
-          child: Icon(
-            Icons.add,
-            size: 20,
-          ),
+          child: Icon(Icons.add, size: 20),
         ),
         // -
         TextButton(
           onPressed: () async {
-            await showDialog<void>(
+            CreateTransactionDTO? dto = await showDialog<CreateTransactionDTO>(
               context: context,
               builder: (context) => WithdrawDialog(account: account),
             );
+            print(dto);
           },
           onLongPress: () async {},
           style: TextButton.styleFrom(maximumSize: Size(size, size)),
-          child: Icon(
-            Icons.remove,
-            size: 20,
-          ),
+          child: Icon(Icons.remove, size: 20),
         ),
       ],
     );

@@ -94,7 +94,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                       // Поле для ставки и валюты
                       SliderWidget(
                         controller: _betController,
-                        minBet: minimum,
+                        minimum: minimum,
                         maximum: account!.balance,
                         currency: account!.currency,
                       ),

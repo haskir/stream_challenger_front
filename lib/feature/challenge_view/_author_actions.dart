@@ -59,7 +59,7 @@ class AuthorActionsState extends ConsumerState<ActionsBuilder> {
           children: [
             SliderWidget(
               controller: controller,
-              minBet: 0.0,
+              minimum: 0.0,
               maximum: challenge.bet,
               currency: challenge.currency,
             ),
