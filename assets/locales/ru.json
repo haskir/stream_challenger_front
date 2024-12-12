@@ -81,6 +81,7 @@
   "Harassment": "Осуждаю",
   "Other": "Другое",
   "Please specify": "Пожалуйста, укажите причину",
+  "Submit": "Подтвердить",
   "Confirm": "Подтвердить",
   "Reported sent": "Жалоба отправлена",
   "Reported Challenges": "Жалобы",
@@ -93,6 +94,9 @@
   "is offline": "оффлайн",
   "Predict started": "Прогноз начат",
   "Poll started": "Голосование началось",
-  "Start predict": "Начать прогноз"
+  "Start predict": "Начать прогноз",
+  "Deposit": "Депозит",
+  "Withdraw": "Вывод",
+  "Amount": "Сумма"
   }
   

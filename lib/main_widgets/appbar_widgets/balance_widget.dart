@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:stream_challenge/data/models/account.dart';
+import 'package:stream_challenge/feature/transaction/transaction_dialog.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
 
 final Map _currency = {
@@ -17,6 +18,7 @@ class BalanceWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double size = 65;
     final Account? account = ref.watch(accountProvider);
     final player = AudioPlayer();
     if (account == null) return Container();
@@ -27,16 +29,46 @@ class BalanceWidget extends ConsumerWidget {
       children: [
         Text('$balance ${_currency[account.currency]}'),
         SizedBox(width: 3),
+        // +
         TextButton(
-          onPressed: () {},
+          onPressed: () async {
+            await showDialog<void>(
+              context: context,
+              builder: (context) => TransactionDialog(
+                isDeposit: true,
+                account: account,
+              ),
+            );
+          },
           onLongPress: () async {
             await player.play(
               AssetSource('sounds/green_is_good.mpeg'),
               volume: 0.3,
             );
           },
-          style: ElevatedButton.styleFrom(maximumSize: Size(65, 65)),
-          child: Icon(Icons.add),
+          style: TextButton.styleFrom(maximumSize: Size(size, size)),
+          child: Icon(
+            Icons.add,
+            size: 20,
+          ),
+        ),
+        // -
+        TextButton(
+          onPressed: () async {
+            await showDialog<void>(
+              context: context,
+              builder: (context) => TransactionDialog(
+                isDeposit: false,
+                account: account,
+              ),
+            );
+          },
+          onLongPress: () async {},
+          style: TextButton.styleFrom(maximumSize: Size(size, size)),
+          child: Icon(
+            Icons.remove,
+            size: 20,
+          ),
         ),
       ],
     );
