@@ -5,7 +5,7 @@ import 'package:stream_challenge/common/mixins.dart';
 import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/feature/create_challenge/widgets/bet_slider.dart';
+import 'package:stream_challenge/feature/create_challenge/widgets/slider_widget.dart';
 import 'package:stream_challenge/providers/challenge_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'package:stream_challenge/use_cases/challenges_actions.dart';
@@ -57,7 +57,7 @@ class AuthorActionsState extends ConsumerState<ActionsBuilder> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            BetSlider(
+            SliderWidget(
               controller: controller,
               minBet: 0.0,
               maximum: challenge.bet,

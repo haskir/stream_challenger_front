@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:stream_challenge/data/models/account.dart';
-import 'package:stream_challenge/feature/transaction/transaction_dialog.dart';
+import 'package:stream_challenge/feature/transaction/transaction_dialogs.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
 
 final Map _currency = {
@@ -34,10 +34,7 @@ class BalanceWidget extends ConsumerWidget {
           onPressed: () async {
             await showDialog<void>(
               context: context,
-              builder: (context) => TransactionDialog(
-                isDeposit: true,
-                account: account,
-              ),
+              builder: (context) => DepositDialog(account: account),
             );
           },
           onLongPress: () async {
@@ -57,10 +54,7 @@ class BalanceWidget extends ConsumerWidget {
           onPressed: () async {
             await showDialog<void>(
               context: context,
-              builder: (context) => TransactionDialog(
-                isDeposit: false,
-                account: account,
-              ),
+              builder: (context) => WithdrawDialog(account: account),
             );
           },
           onLongPress: () async {},

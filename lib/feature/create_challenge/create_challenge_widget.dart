@@ -92,7 +92,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
                       const SizedBox(height: _margin),
 
                       // Поле для ставки и валюты
-                      BetSlider(
+                      SliderWidget(
                         controller: _betController,
                         minBet: minimum,
                         maximum: account!.balance,

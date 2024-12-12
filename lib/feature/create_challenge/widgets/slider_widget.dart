@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 
-class BetSlider extends ConsumerStatefulWidget {
+class SliderWidget extends ConsumerStatefulWidget {
   final TextEditingController controller;
   final double minBet;
   final double maximum;
   final String currency;
-  const BetSlider({
+  const SliderWidget({
     super.key,
     required this.controller,
     required this.minBet,
@@ -17,10 +17,10 @@ class BetSlider extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<BetSlider> createState() => _BetSliderState();
+  ConsumerState<SliderWidget> createState() => _BetSliderState();
 }
 
-class _BetSliderState extends ConsumerState<BetSlider> {
+class _BetSliderState extends ConsumerState<SliderWidget> {
   late double _sliderValue;
   final TextEditingController _percentageController = TextEditingController();
 
@@ -74,6 +74,7 @@ class _BetSliderState extends ConsumerState<BetSlider> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Flexible(
@@ -93,8 +94,15 @@ class _BetSliderState extends ConsumerState<BetSlider> {
                   controller: widget.controller,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText:
-                        AppLocale.of(context).translate(mCalculatedValue),
+                    labelText: AppLocale.of(context).translate(mCalcValue),
+                    hintText: widget.currency,
+                    alignLabelWithHint: true,
+                    helper: Container(
+                      alignment: Alignment.topRight,
+                      child: Text(widget.currency),
+                    ),
+                    //hintStyle: TextStyle(color: Colors.grey),
+                    //helperText: widget.currency,
                   ),
                   onChanged: _onResultChanged,
                   validator: (value) {
@@ -110,19 +118,21 @@ class _BetSliderState extends ConsumerState<BetSlider> {
                     return null;
                   }),
             ),
-            Text(widget.currency),
+            //Text(widget.currency),
           ],
         ),
         const SizedBox(height: 20),
-        Slider(
-          divisions: 40,
-          max: 100,
-          value: _sliderValue,
-          label: widget.controller.text,
-          onChanged: (double value) {
-            _onPercentageChanged(value.toString());
-            setState(() {});
-          },
+        Center(
+          child: Slider(
+            divisions: 40,
+            max: 100,
+            value: _sliderValue,
+            label: widget.controller.text,
+            onChanged: (double value) {
+              _onPercentageChanged(value.toString());
+              setState(() {});
+            },
+          ),
         ),
       ],
     );
