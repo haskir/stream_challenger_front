@@ -1,18 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/auth_state.dart';
+import 'package:stream_challenge/providers/providers.dart';
 
 import 'user_edit_widget.dart';
 
-class ProfileInfoCard extends StatelessWidget {
-  final AuthedUser user;
-
-  const ProfileInfoCard({super.key, required this.user});
+class ProfileInfoCard extends ConsumerWidget {
+  const ProfileInfoCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.read(authStateProvider).user;
+    if (user == null) return Container();
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

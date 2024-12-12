@@ -18,9 +18,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       ShellRoute(
         builder: (context, state, child) {
-          return MainWidget(
-            child: child,
-          );
+          return MainWidget(child: child);
         },
         routes: routes,
       ),

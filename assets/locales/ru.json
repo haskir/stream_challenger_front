@@ -97,6 +97,8 @@
   "Start predict": "Начать прогноз",
   "Deposit": "Депозит",
   "Withdraw": "Вывод",
-  "Amount": "Сумма"
+  "Amount": "Сумма",
+  "Please enter amount": "Пожалуйста, введите сумму",
+  "Invalid amount": "Некорректная сумма"
   }
   

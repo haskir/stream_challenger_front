@@ -6,6 +6,8 @@ import 'package:stream_challenge/data/models/transaction.dart';
 import 'package:stream_challenge/feature/transaction/deposit_dialog.dart';
 import 'package:stream_challenge/feature/transaction/withdraw_dialog.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
+import 'package:stream_challenge/providers/providers.dart';
+import 'package:stream_challenge/use_cases/transactions.dart';
 
 final Map _currency = {
   "RUB": "₽",
@@ -38,6 +40,9 @@ class BalanceWidget extends ConsumerWidget {
               context: context,
               builder: (context) => DepositDialog(account: account),
             );
+            if (dto == null) return;
+            final client = await ref.read(httpClientProvider.future);
+            TransactionsUseCase().deposit(dto, client);
             print(dto);
           },
           onLongPress: () async {
@@ -56,7 +61,9 @@ class BalanceWidget extends ConsumerWidget {
               context: context,
               builder: (context) => WithdrawDialog(account: account),
             );
-            print(dto);
+            if (dto == null) return;
+            final client = await ref.read(httpClientProvider.future);
+            TransactionsUseCase().withdraw(dto, client);
           },
           onLongPress: () async {},
           style: TextButton.styleFrom(maximumSize: Size(size, size)),

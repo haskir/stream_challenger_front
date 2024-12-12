@@ -136,7 +136,7 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
         ),
         Container(
           alignment: Alignment.topCenter,
-          height: 700,
+          height: 600,
           child: PageView(
             controller: _pageController,
             children: headers.keys.map((status) => _buildPage(status)).toList(),
