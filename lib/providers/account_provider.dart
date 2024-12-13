@@ -44,7 +44,7 @@ class AccountNotifier extends StateNotifier<Account?> {
     final authState = ref.watch(authStateProvider);
     if (authState.isAuthenticated) {
       await refresh();
-      _startUpdateLoop(5);
+      _startUpdateLoop(30);
     }
   }
 

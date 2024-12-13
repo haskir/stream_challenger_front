@@ -15,9 +15,7 @@ class TransactionsUseCase {
     result.fold(
       (left) => null,
       (right) {
-        print('right ${right.runtimeType} $right');
-        String url = right["url"];
-        html.window.open(url, "_blank");
+        html.window.open(right["url"], "_blank");
       },
     );
   }
@@ -30,8 +28,7 @@ class TransactionsUseCase {
     result.fold(
       (left) => null,
       (right) {
-        print('right ${right.runtimeType} $right');
-        return right["url"];
+        html.window.open(right["url"], "_blank");
       },
     );
   }

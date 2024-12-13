@@ -2,12 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:stream_challenge/data/models/account.dart';
-import 'package:stream_challenge/data/models/transaction.dart';
 import 'package:stream_challenge/feature/transaction/deposit_dialog.dart';
 import 'package:stream_challenge/feature/transaction/withdraw_dialog.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
-import 'package:stream_challenge/providers/providers.dart';
-import 'package:stream_challenge/use_cases/transactions.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 final Map _currency = {
@@ -43,16 +40,10 @@ class BalanceWidget extends ConsumerWidget {
             SizedBox(width: 3),
             // +
             TextButton(
-              onPressed: () async {
-                CreateTransactionDTO? dto =
-                    await showDialog<CreateTransactionDTO>(
-                  context: context,
-                  builder: (context) => DepositDialog(account: account),
-                );
-                if (dto == null) return;
-                final client = await ref.read(httpClientProvider.future);
-                TransactionsUseCase.deposit(dto, client);
-              },
+              onPressed: () async => await showDialog(
+                context: context,
+                builder: (context) => DepositDialog(account: account),
+              ),
               onLongPress: () async {
                 await player.play(
                   AssetSource('sounds/green_is_good.mpeg'),
@@ -64,16 +55,10 @@ class BalanceWidget extends ConsumerWidget {
             ),
             // -
             TextButton(
-              onPressed: () async {
-                CreateTransactionDTO? dto =
-                    await showDialog<CreateTransactionDTO>(
-                  context: context,
-                  builder: (context) => WithdrawDialog(account: account),
-                );
-                if (dto == null) return;
-                final client = await ref.read(httpClientProvider.future);
-                TransactionsUseCase.withdraw(dto, client);
-              },
+              onPressed: () async => await showDialog(
+                context: context,
+                builder: (context) => WithdrawDialog(account: account),
+              ),
               onLongPress: () async {},
               style: TextButton.styleFrom(maximumSize: Size(size, size)),
               child: Icon(Icons.remove, size: 20),
