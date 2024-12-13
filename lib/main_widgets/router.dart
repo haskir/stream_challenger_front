@@ -43,7 +43,7 @@ List<GoRoute> routes = [
     path: '/profile',
     builder: (context, state) => ProfilePage(),
   ),
-  GoRoute(
+/*   GoRoute(
     path: '/profile/transactions',
     builder: (context, state) => const ProfilePage(),
   ),
@@ -54,5 +54,5 @@ List<GoRoute> routes = [
   GoRoute(
     path: '/profile/challenges-to-me',
     builder: (context, state) => const ProfilePage(),
-  ),
+  ), */
 ];

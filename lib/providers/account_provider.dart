@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/data/models/account.dart';
 import 'package:stream_challenge/providers/providers.dart';
@@ -31,6 +32,8 @@ final accountClientProvider = Provider<Future<_AccountClient>>((ref) async {
 /// StateNotifier для управления состоянием Account
 class AccountNotifier extends StateNotifier<Account?> {
   final Ref ref;
+  Timer? _timer;
+  bool _isVisible = true;
 
   AccountNotifier(this.ref) : super(null) {
     initialize();
@@ -41,19 +44,33 @@ class AccountNotifier extends StateNotifier<Account?> {
     final authState = ref.watch(authStateProvider);
     if (authState.isAuthenticated) {
       await refresh();
-      _startUpdateLoop(60);
+      _startUpdateLoop(5);
     }
   }
 
-  /// Асинхронный цикл обновления данных
+  void setVisibility(bool visible) {
+    print("setVisibility $visible");
+    _isVisible = visible;
+    if (visible) {
+      refresh(); // Обновить данные сразу после возвращения
+    }
+  }
+
   void _startUpdateLoop(int seconds) {
-    Timer.periodic(Duration(seconds: seconds), (_) async {
+    _timer = Timer.periodic(Duration(seconds: seconds), (_) async {
       try {
-        await refresh();
+        if (_isVisible) {
+          await refresh();
+        }
       } catch (e) {
-        // Обработка ошибок при запросах (опционально)
+        // Обработка ошибок
       }
     });
+  }
+
+  void stopUpdateLoop() {
+    _timer?.cancel();
+    _timer = null;
   }
 
   /// Обновление данных Account

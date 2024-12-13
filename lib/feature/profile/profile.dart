@@ -1,47 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/data/models/auth_state.dart';
 import 'package:stream_challenge/feature/profile/widgets/challenge_list_widget.dart';
 import 'package:stream_challenge/feature/profile/widgets/transaction_list_widget.dart';
+import 'package:stream_challenge/providers/providers.dart';
 
 import 'widgets/profile_info_widget.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+final profilePageContentProvider =
+    StateNotifierProvider<ProfilePageContentNotifier, String>((ref) {
+  return ProfilePageContentNotifier('/');
+});
 
-  static const Map<String, String> titleHeaders = {
-    '/profile': 'My profile',
-    '/profile/transactions': 'Transactions',
-    '/profile/my-challenges': 'My challenges',
-    '/profile/challenges-to-me': 'Challenges to me',
-  };
+class ProfilePageContentNotifier extends StateNotifier<String> {
+  ProfilePageContentNotifier(super.initialPath);
 
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  void setContent(String path) => state = path;
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  final Map<String, int> _pathToIndex = {
-    '/profile': 0,
-    '/profile/transactions': 1,
-    '/profile/my-challenges': 2,
-    '/profile/challenges-to-me': 3,
+class ProfilePage extends ConsumerWidget {
+  static const Map<String, String> titleHeaders = {
+    '/': 'My profile',
+    '/transactions': 'Transactions',
+    '/my-challenges': 'My challenges',
+    '/challenges-to-me': 'Challenges to me',
   };
 
-  int _currentIndex = 0;
+  const ProfilePage({super.key});
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AuthedUser? user = ref.watch(authStateProvider).user;
+    final currentContent = ref.watch(profilePageContentProvider);
+    if (user == null) {
+      return const Center(child: Text('No user'));
+    }
 
-    // Сопоставляем текущий путь с индексом
-    final currentPath = GoRouter.of(context).state!.fullPath;
-    _currentIndex = _pathToIndex[currentPath] ?? 0;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+    final contentPath = ref.watch(profilePageContentProvider);
+    // Левая панель-меню
     return Row(
       children: [
         Drawer(
@@ -49,33 +47,47 @@ class _ProfilePageState extends State<ProfilePage> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              _buildDrawerItem(
-                context,
-                title: AppLocale.of(context).translate(mMyProfile),
-                path: '/profile',
-                index: 0,
+              ListTile(
+                title: Text(AppLocale.of(context).translate(mMyProfile)),
+                selected: currentContent == '/',
+                selectedTileColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                onTap: () => ref
+                    .read(profilePageContentProvider.notifier)
+                    .setContent('/'),
               ),
-              _buildDrawerItem(
-                context,
-                title: AppLocale.of(context).translate(mTransactions),
-                path: '/profile/transactions',
-                index: 1,
+              ListTile(
+                title: Text(AppLocale.of(context).translate(mTransactions)),
+                selected: currentContent == '/transactions',
+                selectedTileColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                onTap: () => ref
+                    .read(profilePageContentProvider.notifier)
+                    .setContent('/transactions'),
               ),
-              _buildDrawerItem(
-                context,
-                title: AppLocale.of(context).translate(mMyChallenges),
-                path: '/profile/my-challenges',
-                index: 2,
+              ListTile(
+                title: Text(AppLocale.of(context).translate(mMyChallenges)),
+                selected: currentContent == '/my-challenges',
+                selectedTileColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                onTap: () => ref
+                    .read(profilePageContentProvider.notifier)
+                    .setContent('/my-challenges'),
               ),
-              _buildDrawerItem(
-                context,
-                title: AppLocale.of(context).translate(mChallengesToMe),
-                path: '/profile/challenges-to-me',
-                index: 3,
+              ListTile(
+                title: Text(AppLocale.of(context).translate(mChallengesToMe)),
+                selected: currentContent == '/challenges-to-me',
+                selectedTileColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                onTap: () => ref
+                    .read(profilePageContentProvider.notifier)
+                    .setContent('/challenges-to-me'),
               ),
             ],
           ),
         ),
+
+        // Контент-панелька
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -83,20 +95,13 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: IndexedStack(
-                    index: _currentIndex,
-                    children: [
-                      const ProfileInfoCard(),
-                      const TransactionListWidget(),
-                      const ChallengesListWidget(
-                        isAuthor: true,
-                        key: ValueKey(true),
-                      ),
-                      const ChallengesListWidget(
-                        isAuthor: false,
-                        key: ValueKey(false),
-                      ),
-                    ],
+                  child: Scrollbar(
+                    thumbVisibility: true,
+                    scrollbarOrientation: ScrollbarOrientation.right,
+                    child: SingleChildScrollView(
+                      primary: true, // Это важное изменение
+                      child: _buildContent(contentPath, user),
+                    ),
                   ),
                 ),
               ],
@@ -107,20 +112,24 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildDrawerItem(BuildContext context,
-      {required String title, required String path, required int index}) {
-    return ListTile(
-      title: Text(title),
-      selected: _currentIndex == index,
-      selectedTileColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-      onTap: () {
-        if (_currentIndex != index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          context.go(path);
-        }
-      },
-    );
+  Widget _buildContent(String contentPath, AuthedUser user) {
+    switch (contentPath) {
+      case '/':
+        return ProfileInfoCard();
+      case '/transactions':
+        return TransactionListWidget();
+      case '/my-challenges':
+        return ChallengesListWidget(
+          isAuthor: true,
+          key: ValueKey(true),
+        );
+      case '/challenges-to-me':
+        return ChallengesListWidget(
+          isAuthor: false,
+          key: ValueKey(false),
+        );
+      default:
+        return Container();
+    }
   }
 }

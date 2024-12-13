@@ -4,32 +4,35 @@ import 'package:dartz/dartz.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/core/platform/response.dart';
 import 'package:stream_challenge/data/models/transaction.dart';
+import 'dart:html' as html;
 
-abstract class AbstractTransactionsUseCase {
-  //Future<Either<ErrorDTO, List<Map<String, dynamic>>>> getTransactions();
-  //Future<Either<ErrorDTO, Map<String, dynamic>>> getTransaction(String id);
-  Future<Map?> deposit(CreateTransactionDTO transaction, Requester client);
-  Future<Map?> withdraw(CreateTransactionDTO transaction, Requester client);
-}
-
-class TransactionsUseCase implements AbstractTransactionsUseCase {
-  @override
-  Future<Map?> deposit(transaction, client) async {
-    final result = await client.post(
+class TransactionsUseCase {
+  static Future deposit(transaction, client) async {
+    final Either result = await client.post(
       "/transactions/deposit",
       body: transaction.toMap(),
     );
-    print(result);
-    return null;
+    result.fold(
+      (left) => null,
+      (right) {
+        print('right ${right.runtimeType} $right');
+        String url = right["url"];
+        html.window.open(url, "_blank");
+      },
+    );
   }
 
-  @override
-  Future<Map?> withdraw(transaction, client) async {
-    final result = await client.post(
+  static Future withdraw(transaction, client) async {
+    final Either result = await client.post(
       "/transactions/withdraw",
       body: transaction.toMap(),
     );
-    print(result);
-    return null;
+    result.fold(
+      (left) => null,
+      (right) {
+        print('right ${right.runtimeType} $right');
+        return right["url"];
+      },
+    );
   }
 }
