@@ -115,10 +115,9 @@ class _DepositWidgetState extends ConsumerState<DepositDialog> {
             ElevatedButton(
               child: Text(AppLocale.of(context).translate(mSubmit)),
               onPressed: () async {
-                final currentContext = context; // Локальная копия контекста
                 await _submit();
                 if (mounted) {
-                  Navigator.of(currentContext).pop();
+                  Navigator.of(context).pop();
                 }
               },
             )
