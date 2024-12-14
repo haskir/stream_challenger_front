@@ -99,6 +99,7 @@
   "Withdraw": "Вывод",
   "Amount": "Сумма",
   "Please enter amount": "Пожалуйста, введите сумму",
-  "Invalid amount": "Некорректная сумма"
+  "Invalid amount": "Некорректная сумма",
+  "No transactions found": "Транзакции не найдены"
   }
   

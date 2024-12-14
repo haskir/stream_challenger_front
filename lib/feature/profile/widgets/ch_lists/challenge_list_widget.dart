@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/feature/profile/widgets/ch_list/challenges_panel_builder.dart';
+
+import 'challenges_panel_builder.dart';
 
 class ChallengesListWidget extends ConsumerStatefulWidget {
   final bool isAuthor;

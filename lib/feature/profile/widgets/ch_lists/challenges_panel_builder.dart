@@ -62,10 +62,6 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
 
   @override
   void initState() {
-/*     if (!widget.isAuthor) {
-      headers.remove("PENDING");
-      headers.remove("ACCEPTED");
-    } */
     tabController = TabController(length: headers.length, vsync: this);
     for (final status in headers.keys) {
       hasLoaded[status] = [];
@@ -163,6 +159,7 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
         child: PagedListView<int, Challenge>(
           pagingController: pagingControllers[status]!,
           builderDelegate: PagedChildBuilderDelegate<Challenge>(
+            animateTransitions: true,
             itemBuilder: (context, challenge, index) {
               return ChallengeCard(
                 challenge: challenge,

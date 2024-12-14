@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/auth_state.dart';
-import 'package:stream_challenge/feature/profile/widgets/challenge_list_widget.dart';
-import 'package:stream_challenge/feature/profile/widgets/transaction_list_widget.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
+import 'widgets/ch_lists/challenge_list_widget.dart';
 import 'widgets/profile_info_widget.dart';
+import 'widgets/tr_list/transaction_list_builder.dart';
 
 final profilePageContentProvider =
     StateNotifierProvider<ProfilePageContentNotifier, String>((ref) {
@@ -117,7 +117,7 @@ class ProfilePage extends ConsumerWidget {
       case '/':
         return ProfileInfoCard();
       case '/transactions':
-        return TransactionListWidget();
+        return TransactionsListWidget();
       case '/my-challenges':
         return ChallengesListWidget(
           isAuthor: true,

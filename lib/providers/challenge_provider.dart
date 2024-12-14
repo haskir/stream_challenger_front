@@ -71,10 +71,12 @@ class ChallengeGetter {
         return Right(challenges);
       });
     } catch (e) {
-      return Left(ErrorDTO(
-          message: "Error fetching challenges: $e",
-          type: "clientError",
-          code: -500));
+      return Left(
+        ErrorDTO(
+            message: "Error fetching challenges: $e",
+            type: "clientError",
+            code: -500),
+      );
     }
   }
 }
@@ -96,13 +98,13 @@ final authorChallengesProvider =
     );
     return result.fold(
       (error) {
-        if (kDebugMode) print("authorChallengesProvider $error");
+        if (kDebugMode) print("authorChallengesProvider0 $error");
         return null;
       },
       (challenges) => challenges,
     );
   } catch (error) {
-    print("authorChallengesProvider error: $error");
+    print("authorChallengesProvider1 error: $error");
     return null;
   }
 });

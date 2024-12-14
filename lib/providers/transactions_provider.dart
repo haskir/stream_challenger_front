@@ -7,29 +7,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/core/platform/response.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/data/models/transaction.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 class GetStruct {
-  final String status;
+  final String? status;
   final int page;
   final int size;
 
-  GetStruct({required this.status, required this.page, required this.size});
+  GetStruct({required this.page, required this.size, this.status});
 
-  Map<String, String> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      'status': status,
       'page': page.toString(),
       'size': size.toString(),
+      if (status != null) 'status': status,
     };
   }
 
   factory GetStruct.fromMap(Map<String, dynamic> map) {
     return GetStruct(
-      status: map['status'] as String,
-      page: map['page'] as int,
-      size: map['size'] as int,
+      status: map['status'],
+      page: map['page'],
+      size: map['size'],
     );
   }
 
@@ -39,93 +39,70 @@ class GetStruct {
       GetStruct.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-class _ChallengeGetter {
-  static Future<Either<ErrorDTO, Challenge>> getChallenge({
+class _TrGetter {
+  static Future<Either<ErrorDTO, Transaction>> getTransaction({
     required int id,
     required Requester client,
   }) async {
-    final response = await client.get('/challenges/$id');
+    final response = await client.get('/transactions/$id');
     return response.fold(
       (left) => Left(left),
-      (right) => Right(Challenge.fromMap(right)),
+      (right) => Right(Transaction.fromMap(right)),
     );
   }
 
-  static Future<Either<ErrorDTO, List<Challenge>>> getChallenges({
+  static Future<Either<ErrorDTO, List<Transaction>>> getTransactions({
     required GetStruct getStruct,
     required Requester client,
-    required bool isAuthor,
   }) async {
     final response = await client.get(
-      isAuthor ? '/challenges/author' : '/challenges/performer',
+      '/transactions',
       getStruct.toMap(),
     );
     try {
       return response.fold((error) => Left(error), (array) {
         if (array == null) {
-          return Right(List<Challenge>.empty());
+          return Right(List<Transaction>.empty());
         }
-        final challenges =
-            (array as List<dynamic>).map((e) => Challenge.fromMap(e)).toList();
+        final transactions = (array as List<dynamic>)
+            .map((e) => Transaction.fromMap(e))
+            .toList();
 
-        return Right(challenges);
+        return Right(transactions);
       });
     } catch (e) {
       return Left(ErrorDTO(
-          message: "Error fetching challenges: $e",
+          message: "Error fetching transactions: $e",
           type: "clientError",
           code: -500));
     }
   }
 }
 
-final challengeProvider =
-    FutureProvider.family<Either<ErrorDTO, Challenge>, int>((ref, id) async {
+final transactionProvider =
+    FutureProvider.family<Either<ErrorDTO, Transaction>, int>((ref, id) async {
   final client = await ref.watch(httpClientProvider.future);
-  final result = await _ChallengeGetter.getChallenge(id: id, client: client);
+  final result = await _TrGetter.getTransaction(id: id, client: client);
   return result;
 });
 
-final authorChallengesProvider =
-    FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
+final transactionsProvider =
+    FutureProvider.family<List<Transaction>?, GetStruct>(
+        (ref, getStruct) async {
   try {
-    final result = await _ChallengeGetter.getChallenges(
+    final result = await _TrGetter.getTransactions(
       getStruct: getStruct,
       client: await ref.watch(httpClientProvider.future),
-      isAuthor: true,
     );
-    print("authorChallengesProvider result: $result");
     return result.fold(
       (error) {
-        if (kDebugMode) print("authorChallengesProvider $error");
+        if (kDebugMode) print("transactionsProvider error0: $error");
         return null;
       },
-      (challenges) => challenges,
+      (transactions) => transactions,
     );
   } catch (error) {
-    print("authorChallengesProvider error: $error");
-    return null;
-  }
-});
-
-final performerChallengesProvider =
-    FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
-  try {
-    final result = await _ChallengeGetter.getChallenges(
-      getStruct: getStruct,
-      client: await ref.watch(httpClientProvider.future),
-      isAuthor: false,
-    );
-    print("performerChallengesProvider result: $result");
-    return result.fold(
-      (error) {
-        if (kDebugMode) print("performerChallengesProvider $error");
-        return null;
-      },
-      (challenges) => challenges,
-    );
-  } catch (error) {
-    print("performerChallengesProvider error: $error");
+    print("transactionsProvider error1: $error");
     return null;
   }
 });

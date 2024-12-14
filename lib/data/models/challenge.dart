@@ -84,8 +84,8 @@ class Challenge {
   final String currency;
   final double bet;
   int? rating;
-  String status;
   double? payout;
+  String status;
   String? reportStatus;
   final ChallengePerson author;
   final ChallengePerson performer;
@@ -103,8 +103,8 @@ class Challenge {
     required this.currency,
     required this.bet,
     required this.rating,
-    required this.status,
     required this.payout,
+    required this.status,
     required this.reportStatus,
     required this.author,
     required this.performer,
@@ -130,14 +130,14 @@ class Challenge {
       'currency': currency,
       'bet': bet,
       'rating': rating,
-      'status': status,
       'payout': payout,
+      'status': status,
       'report_status': reportStatus,
       'author': author.toMap(),
       'performer': performer.toMap(),
       'performer_login': performerLogin,
-      'created_at': createdAt.millisecondsSinceEpoch,
-      'updated_at': updatedAt.millisecondsSinceEpoch,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
       'report': report?.toMap(),
       'predict_id': predictID,
       'poll_id': pollID,
@@ -151,15 +151,15 @@ class Challenge {
       conditions: List<String>.from((map['conditions'])),
       currency: map['currency'],
       bet: map['bet'],
-      rating: map['rating'],
+      rating: map['rating'] as int?,
+      payout: map['payout'] as double?,
       status: map['status'],
-      payout: map['payout'],
       reportStatus: map['report_status'],
       author: ChallengePerson.fromMap(map['author']),
       performer: ChallengePerson.fromMap(map['performer']),
       performerLogin: map['performer_login'],
-      createdAt: dateTimeFormat.parse(map['created_at']),
-      updatedAt: dateTimeFormat.parse(map['updated_at']),
+      createdAt: DateTime.parse(map['created_at']),
+      updatedAt: DateTime.parse(map['updated_at']),
       report: map['report'] != null ? Report.fromMap(map['report']) : null,
       predictID: map['predict_id'],
       pollID: map['poll_id'],
@@ -234,7 +234,7 @@ class Report {
       'challenge_id': challengeId,
       'reason': reason,
       'comment': comment,
-      'created_at': createdAt.millisecondsSinceEpoch,
+      'created_at': createdAt.toIso8601String(),
       'status': status,
     };
   }
@@ -245,7 +245,7 @@ class Report {
       challengeId: map['challenge_id'],
       reason: map['reason'],
       comment: map['comment'] != null ? map['comment'] as String : null,
-      createdAt: dateTimeFormat.parse(map['created_at']),
+      createdAt: DateTime.parse(map['created_at']),
       status: map['status'],
     );
   }

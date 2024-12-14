@@ -111,3 +111,4 @@ const String mWithdraw = "Withdraw";
 const String mAmount = "Amount";
 const String mPleaseEnterAmount = "Please enter amount";
 const String mInvalidAmount = "Invalid amount";
+const String mNoTrans = 'No transactions found';
