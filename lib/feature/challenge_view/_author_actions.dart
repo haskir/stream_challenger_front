@@ -63,21 +63,24 @@ class AuthorActionsState extends ConsumerState<ActionsBuilder> {
               maximum: challenge.bet,
               currency: challenge.currency,
             ),
-            ElevatedButton(
-              onPressed: () async {
-                if (await Mixins.showConfDialog(context) ?? false) {
-                  double amount = double.parse(controller.text) / challenge.bet;
-                  controller.dispose();
-                  await _payChallenge(ref, amount);
-                }
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(AppLocale.of(context).translate(mPay)),
-                  Icon(Icons.attach_money),
-                ],
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () async {
+                  if (await Mixins.showConfDialog(context) ?? false) {
+                    double amount =
+                        double.parse(controller.text) / challenge.bet;
+                    controller.dispose();
+                    await _payChallenge(ref, amount);
+                  }
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(AppLocale.of(context).translate(mPay)),
+                    Icon(Icons.attach_money),
+                  ],
+                ),
               ),
             ),
           ],

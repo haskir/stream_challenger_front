@@ -105,7 +105,8 @@ class _BetSliderState extends ConsumerState<SliderWidget> {
                   onChanged: _onResultChanged,
                   validator: (value) {
                     if (value == null) {
-                      return "Enter a value";
+                      return AppLocale.of(context)
+                          .translate(mPleaseEnterAmount);
                     }
                     if (double.tryParse(value) == null ||
                         double.parse(value) < widget.minimum ||
@@ -118,7 +119,6 @@ class _BetSliderState extends ConsumerState<SliderWidget> {
             ),
           ],
         ),
-        const SizedBox(height: 20),
         Center(
           child: Slider(
             divisions: 40,
