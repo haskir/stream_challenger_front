@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:stream_challenge/common/text_consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/common/strings/export.dart';
 
 class DueDateTimeField extends StatefulWidget {
   final TextEditingController controller;

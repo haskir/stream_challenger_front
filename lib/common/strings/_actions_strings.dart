@@ -1,0 +1,12 @@
+const String mPay = "Pay";
+const String mCancel = "Cancel";
+const String mSubmit = "Submit";
+const String mNo = "No";
+const String mYes = "Yes";
+const String mSpam = "Spam";
+const String mOpenURL = "Open URL";
+const String mOpen = "Open";
+const String mConfirm = "Confirm";
+const String mCreate = "Create";
+const String mStartPoll = "Start poll";
+const String mStartPredict = "Start predict";

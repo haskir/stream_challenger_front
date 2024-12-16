@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:stream_challenge/common/text_consts.dart';
+import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/data/models/transaction.dart';
 import 'package:stream_challenge/providers/transactions_provider.dart';
 
@@ -53,7 +53,7 @@ class _TransactionsListState extends ConsumerState<TransactionsListWidget> {
   Widget build(BuildContext context) {
     bool isRefreshing = false;
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 550),
+      constraints: BoxConstraints(maxHeight: 700),
       child: RefreshIndicator(
         onRefresh: () async {
           isRefreshing = true;

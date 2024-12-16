@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stream_challenge/data/models/user_preferences.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
-import 'common/text_consts.dart';
+import 'package:stream_challenge/common/strings/export.dart';
 import 'core/platform/app_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // ignore: depend_on_referenced_packages
