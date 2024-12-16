@@ -15,7 +15,7 @@ class TransactionsUseCase {
     result.fold(
       (left) => null,
       (right) {
-        html.window.open(right["url"], "_blank");
+        html.window.open(right["url"], "_self");
       },
     );
   }
@@ -28,7 +28,7 @@ class TransactionsUseCase {
     result.fold(
       (left) => null,
       (right) {
-        html.window.open(right["url"], "_blank");
+        html.window.open(right["url"], "_self");
       },
     );
   }

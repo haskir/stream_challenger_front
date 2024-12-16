@@ -34,6 +34,7 @@ dependencies:
   flutter_svg: ^2.0.16
   gif: ^2.3.0
   visibility_detector: ^0.4.0+2
+  web: ^1.1.0
 
 dev_dependencies:
   flutter_test:

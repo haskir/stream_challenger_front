@@ -7,11 +7,13 @@ class CreateTransactionDTO {
   final double amount;
   final String currency;
   final bool isDeposit;
+  final String returnUrl;
 
   CreateTransactionDTO({
     required this.amount,
     required this.currency,
     required this.isDeposit,
+    required this.returnUrl,
   });
 
   Map<String, dynamic> toMap() {
@@ -19,14 +21,16 @@ class CreateTransactionDTO {
       'amount': amount,
       'currency': currency,
       'is_deposit': isDeposit,
+      'return_url': returnUrl,
     };
   }
 
   factory CreateTransactionDTO.fromMap(Map<String, dynamic> map) {
     return CreateTransactionDTO(
-      amount: map['amount'] as double,
-      currency: map['currency'] as String,
-      isDeposit: map['is_deposit'] as bool,
+      amount: map['amount'],
+      currency: map['currency'],
+      isDeposit: map['is_deposit'],
+      returnUrl: map['return_url'],
     );
   }
 

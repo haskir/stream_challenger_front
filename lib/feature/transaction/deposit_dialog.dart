@@ -32,7 +32,7 @@ class _DepositWidgetState extends ConsumerState<DepositDialog> {
     super.dispose();
   }
 
-  Future<void> _submit() async {
+  Future<void> _submit(dynamic url) async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
     setState(() {
@@ -42,6 +42,7 @@ class _DepositWidgetState extends ConsumerState<DepositDialog> {
       amount: double.parse(_controller.text),
       currency: widget.account.currency,
       isDeposit: true,
+      returnUrl: url.toString(),
     );
     final client = await ref.read(httpClientProvider.future);
     await TransactionsUseCase.deposit(dto, client);
@@ -115,10 +116,8 @@ class _DepositWidgetState extends ConsumerState<DepositDialog> {
             ElevatedButton(
               child: Text(AppLocale.of(context).translate(mSubmit)),
               onPressed: () async {
-                await _submit();
-                if (mounted) {
-                  Navigator.of(context).pop();
-                }
+                final router = ref.read(routerProvider);
+                await _submit(router.state?.uri);
               },
             )
           ],

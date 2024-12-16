@@ -61,6 +61,7 @@ class _WithdrawWidgetState extends ConsumerState<WithdrawDialog> {
                 amount: double.parse(_controller.text),
                 currency: widget.account.currency,
                 isDeposit: false,
+                returnUrl: '',
               );
               Navigator.of(context).pop(dto);
             })
