@@ -14,6 +14,13 @@ class TransactionViewWidget extends StatelessWidget {
     "FAILED": Colors.red,
   };
 
+  static const Map<String, String> statuses = {
+    "PENDING": mPending,
+    "COMPLETED": mCompleted,
+    "CANCELLED": mCancelled,
+    "FAILED": mTrError,
+  };
+
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
@@ -28,6 +35,7 @@ class TransactionViewWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(context),
@@ -62,7 +70,8 @@ class TransactionViewWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            AppLocale.of(context).translate(transaction.status),
+            AppLocale.of(context)
+                .translate(TransactionViewWidget.statuses[transaction.status]!),
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
