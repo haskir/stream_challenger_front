@@ -2,16 +2,13 @@ import 'package:dartz/dartz.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/core/platform/response.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/providers/api.dart';
 
 class ChallengesActions {
-  static String url = '${ApiPath.http}/challenges';
-
   static Future<Either<ErrorDTO, Challenge>> challengeCreate({
     required CreateChallengeDTO challenge,
     required Requester client,
   }) async {
-    return (await client.post(url, body: challenge.toMap())).fold(
+    return (await client.post('/challenges', body: challenge.toMap())).fold(
       (left) => Left(left),
       (right) => Right(Challenge.fromMap(right)),
     );

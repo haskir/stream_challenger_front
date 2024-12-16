@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 import 'package:stream_challenge/core/platform/token_repo.dart';
-import 'package:stream_challenge/providers/Api.dart';
+import 'package:stream_challenge/providers/api.dart';
 
 import '../../data/models/auth_state.dart';
 
@@ -20,6 +20,7 @@ abstract class AuthClient {
 }
 
 class _AuthServiceHTML implements AuthClient {
+  String path = kDebugMode ? ApiPathDebug.http : ApiPathSecured.http;
   bool _validated = false;
   late final Uri authUrl;
   String? _token;
@@ -28,8 +29,7 @@ class _AuthServiceHTML implements AuthClient {
   String? get token => _token;
 
   Future<void> init() async {
-    String path = ApiPath.http;
-    authUrl = Uri.parse('$path/api/auth');
+    authUrl = Uri.parse('${path}auth');
     _token = await _tokenRepo.getToken();
     if (!_validated && !kDebugMode) {
       _token = await validate() ? _token : null;
@@ -43,7 +43,7 @@ class _AuthServiceHTML implements AuthClient {
     try {
       Dio dio = Dio();
       Response response = await dio.get(
-        "${ApiPath.http}/api/auth/validate",
+        "${path}auth/validate",
         options: Options(headers: {
           "Authorization": "Bearer $_token",
           "Content-Type": "application/json",

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:stream_challenge/providers/Api.dart';
+import 'package:stream_challenge/providers/api.dart';
 import 'response.dart';
 
 abstract class _Client {
@@ -26,7 +26,7 @@ class Requester implements _Client {
   String token;
 
   Requester(this.token) {
-    _dio.options.baseUrl = ApiPath.http;
+    _dio.options.baseUrl = kDebugMode ? ApiPathDebug.http : ApiPathSecured.http;
     _dio.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',

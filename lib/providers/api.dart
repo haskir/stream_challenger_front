@@ -2,20 +2,21 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ApiPath {
+class ApiPathDebug {
   static const url = 'localhost';
   static const prefix = 'api';
-  static const security = false;
+  static const port = 80;
 
-  static String get http {
-    if (security) return 'https://$url:443/$prefix/';
-    return 'http://$url:80/$prefix/';
-  }
+  static String get http => 'http://$url:$port/$prefix/';
+  static String get ws => 'ws://$url:$port/$prefix/';
+}
 
-  static String get ws {
-    if (security) return 'wss://$url:443/$prefix/';
-    return 'ws://$url:80/$prefix/';
-  }
+class ApiPathSecured {
+  static const url = 'direct-api.haskir.keenetic.link';
+  static const port = 8900;
+
+  static String get http => 'https://$url/';
+  static String get ws => 'wss://$url/';
 }
 
 class RestrictedWordsChecker {

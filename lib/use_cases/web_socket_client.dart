@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/providers/Api.dart';
+import 'package:stream_challenge/providers/api.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 abstract class AbstractChallengePanelRequester {
@@ -15,7 +15,9 @@ abstract class AbstractChallengePanelRequester {
 
 class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
   final String token;
-  final Uri wsUrl = Uri.parse('${ApiPath.ws}panel/');
+  final Uri wsUrl = kDebugMode
+      ? Uri.parse('${ApiPathDebug.ws}panel/')
+      : Uri.parse('${ApiPathSecured.ws}panel/');
   late WebSocketChannel _channel;
   bool _isConnected = false;
   final List<Challenge> _challenges = [];
