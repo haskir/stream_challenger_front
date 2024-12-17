@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:html' as html;
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -20,7 +19,7 @@ abstract class AuthClient {
 }
 
 class _AuthServiceHTML implements AuthClient {
-  String path = kDebugMode ? ApiPathDebug.http : ApiPathSecured.http;
+  String path = ApiProvider.http;
   bool _validated = false;
   late final Uri authUrl;
   String? _token;
@@ -31,9 +30,9 @@ class _AuthServiceHTML implements AuthClient {
   Future<void> init() async {
     authUrl = Uri.parse('${path}auth');
     _token = await _tokenRepo.getToken();
-    if (!_validated && !kDebugMode) {
+    /* if (!_validated && !kDebugMode) {
       _token = await validate() ? _token : null;
-    }
+    } */
     authStateNotifier.value =
         _token == null ? AuthState() : AuthState(user: getUserInfo());
   }
@@ -47,7 +46,6 @@ class _AuthServiceHTML implements AuthClient {
         options: Options(headers: {
           "Authorization": "Bearer $_token",
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
         }),
       );
       _validated = response.statusCode == 200;

@@ -15,9 +15,7 @@ abstract class AbstractChallengePanelRequester {
 
 class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
   final String token;
-  final Uri wsUrl = kDebugMode
-      ? Uri.parse('${ApiPathDebug.ws}panel/')
-      : Uri.parse('${ApiPathSecured.ws}panel/');
+  final Uri wsUrl = Uri.parse('${ApiProvider.ws}panel/');
   late WebSocketChannel _channel;
   bool _isConnected = false;
   final List<Challenge> _challenges = [];
@@ -30,7 +28,7 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
 
   @override
   Future<bool> connect() async {
-    if (kDebugMode) print('Connecting to WebSocket...');
+    if (kDebugMode) print('Connecting to WebSocket ${wsUrl.toString()} ...');
 
     _channel = WebSocketChannel.connect(wsUrl);
 

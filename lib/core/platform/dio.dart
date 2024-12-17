@@ -26,11 +26,10 @@ class Requester implements _Client {
   String token;
 
   Requester(this.token) {
-    _dio.options.baseUrl = kDebugMode ? ApiPathDebug.http : ApiPathSecured.http;
+    _dio.options.baseUrl = ApiProvider.http;
     _dio.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
-      'Access-Control-Allow-Origin': 'localhost',
     };
     if (kDebugMode) {
       _dio.interceptors.add(LogInterceptor(

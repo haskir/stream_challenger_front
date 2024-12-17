@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-class ApiPathDebug {
+class _ApiPathDebug {
   static const url = 'localhost';
   static const prefix = 'api';
   static const port = 80;
@@ -11,39 +7,17 @@ class ApiPathDebug {
   static String get ws => 'ws://$url:$port/$prefix/';
 }
 
-class ApiPathSecured {
+class _ApiPathSecured {
   static const url = 'direct-api.haskir.keenetic.link';
-  static const port = 8900;
+  static const prefix = 'api';
 
-  static String get http => 'https://$url/';
-  static String get ws => 'wss://$url/';
+  static String get http => 'https://$url/$prefix/';
+  static String get ws => 'wss://$url/$prefix/';
 }
 
-class RestrictedWordsChecker {
-  late final List<String> words;
+class ApiProvider {
+  static const bool d = false;
 
-  RestrictedWordsChecker() {
-    init();
-  }
-
-  Future<void> init() async {
-    final jsonString =
-        await rootBundle.loadString('assets/locales/restricted_words.json');
-    final data = jsonDecode(jsonString);
-    words = data.cast<String>();
-
-    bool wordIsRestricted(String text) {
-      return words
-          .any((word) => text.toLowerCase().contains(word.toLowerCase()));
-    }
-
-    // ignore: unused_element
-    bool listContains(List<String> text) {
-      return text.any(wordIsRestricted);
-    }
-  }
+  static String get http => d ? _ApiPathDebug.http : _ApiPathSecured.http;
+  static String get ws => d ? _ApiPathDebug.ws : _ApiPathSecured.ws;
 }
-
-final restrictedWordsChecker = Provider<RestrictedWordsChecker>((ref) {
-  return RestrictedWordsChecker();
-});
