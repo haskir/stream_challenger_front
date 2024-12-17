@@ -7,7 +7,6 @@ import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'appbar_widgets/settings_widget.dart';
 import 'appbar_widgets/balance_widget.dart';
-import 'appbar_widgets/settings_widget.dart';
 import 'appbar_widgets/logo.dart';
 // ignore: unused_import
 import 'body_widgets/bottom_panel.dart';

@@ -8,6 +8,10 @@ import 'package:stream_challenge/data/models/user_preferences.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
 
 class SettingsWidget extends ConsumerStatefulWidget {
+  static const Map<String, String> languagesHeaders = {
+    'EN': 'English language',
+    'RU': 'Русский язык'
+  };
   const SettingsWidget({super.key});
 
   @override
@@ -15,21 +19,20 @@ class SettingsWidget extends ConsumerStatefulWidget {
 }
 
 class _LocaleState extends ConsumerState<SettingsWidget> {
+  String switchLanguage(String language) {
+    switch (language) {
+      case 'EN':
+        return 'RU';
+      case 'RU':
+        return 'EN';
+      default:
+        return 'EN';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Preferences preferences = ref.watch(preferencesProvider);
-
-    String switchLanguage(String language) {
-      switch (language) {
-        case 'EN':
-          return 'RU';
-        case 'RU':
-          return 'EN';
-        default:
-          return 'EN';
-      }
-    }
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -45,7 +48,7 @@ class _LocaleState extends ConsumerState<SettingsWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                switchLanguage(preferences.language),
+                SettingsWidget.languagesHeaders[preferences.language]!,
                 style: preferences.darkMode
                     ? const TextStyle(color: Colors.white)
                     : const TextStyle(color: Colors.black),
@@ -136,7 +139,9 @@ class AuthWidget extends ConsumerWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          title: Text(AppLocale.of(context).translate(mSettings)),
+          title: Center(
+            child: Text(AppLocale.of(context).translate(mSettings)),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
