@@ -58,12 +58,12 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
-    Row? titleWidget;
+    Widget? titleWidget;
 
     if (authState.isAuthenticated) {
-      titleWidget = Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
+      titleWidget = ListView(
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
         children: [
           TextButton(
             onPressed: () => context.go('/challenge/lapkinastol'),
@@ -99,7 +99,11 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
       // Левые элементы
       leading: LogoWidget(),
       // Центральные элементы
-      title: titleWidget,
+      title: ConstrainedBox(
+        constraints:
+            BoxConstraints(maxHeight: widget.preferredSize.height - 15),
+        child: titleWidget,
+      ),
       // Правые элементы
       actions: [
         BalanceWidget(),

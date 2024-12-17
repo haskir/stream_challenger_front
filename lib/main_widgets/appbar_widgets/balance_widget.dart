@@ -1,6 +1,8 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:stream_challenge/common/strings/_transactions_strings.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/data/models/account.dart';
 import 'package:stream_challenge/feature/transaction/deposit_dialog.dart';
 import 'package:stream_challenge/feature/transaction/withdraw_dialog.dart';
@@ -16,54 +18,97 @@ final Map _currency = {
 };
 
 class BalanceWidget extends ConsumerWidget {
+  static final player = AudioPlayer();
   const BalanceWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double size = 65;
     final Account? account = ref.watch(accountProvider);
-    final player = AudioPlayer();
     if (account == null) return Container();
     final String balance = account.balance % 1 == 0
         ? account.balance.toString()
         : account.balance.toStringAsFixed(2);
     return VisibilityDetector(
-        key: Key('account-visibility'),
-        onVisibilityChanged: (visibilityInfo) {
-          ref
-              .read(accountProvider.notifier)
-              .setVisibility(visibilityInfo.visibleFraction > 0);
-        },
-        child: Row(
-          children: [
-            Text('$balance ${_currency[account.currency]}'),
-            SizedBox(width: 3),
-            // +
-            TextButton(
-              onPressed: () async => await showDialog(
-                context: context,
-                builder: (context) => DepositDialog(account: account),
+      key: Key('account-visibility'),
+      onVisibilityChanged: (visibilityInfo) {
+        ref
+            .read(accountProvider.notifier)
+            .setVisibility(visibilityInfo.visibleFraction > 0);
+      },
+      child: TextButton(
+        child: Text(
+          style:
+              TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
+          '$balance ${_currency[account.currency]}',
+        ),
+        onPressed: () => _showBalanceDialog(context, account),
+      ),
+    );
+  }
+
+  void _showBalanceDialog(BuildContext context, Account account) {
+    const borderWidght = 1.5;
+    const iconSize = 20.0;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () async => await showDialog(
+                  context: context,
+                  builder: (context) => WithdrawDialog(account: account),
+                ),
+                onLongPress: () async {},
+                style: ElevatedButton.styleFrom(
+                  side: BorderSide(width: borderWidght, color: Colors.red),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      AppLocale.of(context).translate(mWithdraw),
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                      ),
+                    ),
+                    Icon(Icons.remove, size: iconSize, color: Colors.red),
+                  ],
+                ),
               ),
-              onLongPress: () async {
-                await player.play(
-                  AssetSource('sounds/green_is_good.mpeg'),
-                  volume: 0.3,
-                );
-              },
-              style: TextButton.styleFrom(maximumSize: Size(size, size)),
-              child: Icon(Icons.add, size: 20),
-            ),
-            // -
-            TextButton(
-              onPressed: () async => await showDialog(
-                context: context,
-                builder: (context) => WithdrawDialog(account: account),
+              // Снятие баланса -
+              SizedBox(height: 10), // Пополнение баланса +
+              ElevatedButton(
+                onPressed: () async => await showDialog(
+                  context: context,
+                  builder: (context) => DepositDialog(account: account),
+                ),
+                onLongPress: () async {
+                  await player.play(
+                    AssetSource('sounds/green_is_good.mpeg'),
+                    volume: 0.3,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  side: BorderSide(width: borderWidght, color: Colors.green),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(AppLocale.of(context).translate(mDeposit),
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
+                        )),
+                    Icon(Icons.add, size: iconSize, color: Colors.green),
+                  ],
+                ),
               ),
-              onLongPress: () async {},
-              style: TextButton.styleFrom(maximumSize: Size(size, size)),
-              child: Icon(Icons.remove, size: 20),
-            ),
-          ],
-        ));
+            ],
+          ),
+        );
+      },
+    );
   }
 }

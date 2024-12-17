@@ -20,6 +20,7 @@ abstract class AuthClient {
 
 class _AuthServiceHTML implements AuthClient {
   String path = ApiProvider.http;
+  // ignore: unused_field
   bool _validated = false;
   late final Uri authUrl;
   String? _token;
