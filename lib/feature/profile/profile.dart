@@ -63,16 +63,19 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Кнопка сворачивания/разворачивания
-                IconButton(
-                  icon: Icon(
-                    isCollapsed ? Icons.arrow_forward : Icons.arrow_back,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: IconButton(
+                    icon: Icon(
+                      isCollapsed ? Icons.arrow_forward : Icons.arrow_back,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isCollapsed = !isCollapsed;
+                        onAnimation = true;
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    setState(() {
-                      isCollapsed = !isCollapsed;
-                      onAnimation = true;
-                    });
-                  },
                 ),
                 // Меню
                 Expanded(
