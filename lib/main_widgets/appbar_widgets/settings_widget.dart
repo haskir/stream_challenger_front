@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/data/models/user_preferences.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
 
-class LocaleWidget extends ConsumerStatefulWidget {
-  const LocaleWidget({super.key});
+class SettingsWidget extends ConsumerStatefulWidget {
+  const SettingsWidget({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _LocaleState();
 }
 
-class _LocaleState extends ConsumerState<LocaleWidget> {
+class _LocaleState extends ConsumerState<SettingsWidget> {
   @override
   Widget build(BuildContext context) {
     Preferences preferences = ref.watch(preferencesProvider);
@@ -29,6 +29,7 @@ class _LocaleState extends ConsumerState<LocaleWidget> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        // Выбор языка
         TextButton(
           onPressed: () async {
             preferences.language = switchLanguage(preferences.language);
@@ -37,15 +38,30 @@ class _LocaleState extends ConsumerState<LocaleWidget> {
                 .updatePreferences(preferences);
           },
           child: Container(
-            decoration: BoxDecoration(shape: BoxShape.circle),
-            child: Center(
-              child: Text(
-                switchLanguage(preferences.language),
-                style: preferences.darkMode
-                    ? const TextStyle(color: Colors.white)
-                    : const TextStyle(color: Colors.black),
-              ),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
             ),
+            child: Text(
+              switchLanguage(preferences.language),
+              style: preferences.darkMode
+                  ? const TextStyle(color: Colors.white)
+                  : const TextStyle(color: Colors.black),
+            ),
+          ),
+        ),
+        // Выбор цветовой темы
+        IconButton(
+          onPressed: () async {
+            preferences.darkMode = !preferences.darkMode;
+            await ref
+                .read(preferencesProvider.notifier)
+                .updatePreferences(preferences);
+          },
+          icon: Icon(
+            preferences.darkMode
+                ? Icons.wb_sunny_outlined
+                : Icons.nightlight_outlined,
+            color: preferences.darkMode ? Colors.white : Colors.black,
           ),
         ),
       ],

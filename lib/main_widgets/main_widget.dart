@@ -7,9 +7,8 @@ import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'appbar_widgets/auth_widget.dart';
 import 'appbar_widgets/balance_widget.dart';
-import 'appbar_widgets/locale_widget.dart';
+import 'appbar_widgets/settings_widget.dart';
 import 'appbar_widgets/logo.dart';
-import 'appbar_widgets/theme_widget.dart';
 // ignore: unused_import
 import 'body_widgets/bottom_panel.dart';
 
@@ -61,35 +60,38 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
     Widget? titleWidget;
 
     if (authState.isAuthenticated) {
-      titleWidget = ListView(
+      titleWidget = SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        children: [
-          TextButton(
-            onPressed: () => context.go('/challenge/lapkinastol'),
-            child: Text(
-              AppLocale.of(context).translate(mCreateChallenge),
-              style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () => context.go('/challenge/lapkinastol'),
+              child: Text(
+                AppLocale.of(context).translate(mCreateChallenge),
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
+              ),
             ),
-          ),
-          TextButton(
-            onPressed: () => context.go('/panel'),
-            child: Text(
-              AppLocale.of(context).translate(mMyPanel),
-              style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
+            TextButton(
+              onPressed: () => context.go('/panel'),
+              child: Text(
+                AppLocale.of(context).translate(mMyPanel),
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
+              ),
             ),
-          ),
-          TextButton(
-            onPressed: () => context.go('/profile'),
-            child: Text(
-              AppLocale.of(context).translate(mProfile),
-              style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
+            TextButton(
+              onPressed: () => context.go('/profile'),
+              child: Text(
+                AppLocale.of(context).translate(mProfile),
+                style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     }
     return AppBar(
@@ -98,19 +100,19 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
 
       // Левые элементы
       leading: LogoWidget(),
-      // Центральные элементы
+
+      // Центральные элементы с прокруткой
       title: ConstrainedBox(
-        constraints:
-            BoxConstraints(maxHeight: widget.preferredSize.height - 15),
-        child: titleWidget,
+        constraints: BoxConstraints(
+          maxHeight: widget.preferredSize.height - 15,
+        ),
+        child: titleWidget, // Прокручиваемый виджет
       ),
+
       // Правые элементы
       actions: [
         BalanceWidget(),
-        LocaleWidget(),
-        const SizedBox(width: 8),
-        ThemeWidget(),
-        const SizedBox(width: 8),
+        SettingsWidget(),
         AuthWidget(),
         const SizedBox(width: 8),
       ],

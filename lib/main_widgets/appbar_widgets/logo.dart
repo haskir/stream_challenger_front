@@ -6,10 +6,15 @@ class LogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () => context.go('/'),
-      icon: Image.asset('images/logo_553.png'),
-      iconSize: 70,
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+        onPressed: () => context.go('/'),
+        icon: Image.asset('images/logo_553.png'),
+        iconSize: 60,
+      ),
     );
   }
 }
