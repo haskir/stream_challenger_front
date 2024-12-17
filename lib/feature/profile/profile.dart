@@ -66,9 +66,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: IconButton(
-                    icon: Icon(
-                      isCollapsed ? Icons.arrow_forward : Icons.arrow_back,
-                    ),
+                    icon: Icon(Icons.menu),
                     onPressed: () {
                       setState(() {
                         isCollapsed = !isCollapsed;
@@ -84,30 +82,30 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     children: [
                       _buildMenuItem(
                         context,
-                        mMyProfile,
+                        (isCollapsed || onAnimation) ? null : mMyProfile,
                         '/',
-                        currentContent,
+                        currentContent == '/',
                         Icons.person,
                       ),
                       _buildMenuItem(
                         context,
-                        mTransactions,
+                        (isCollapsed || onAnimation) ? null : mTransactions,
                         '/transactions',
-                        currentContent,
+                        currentContent == '/transactions',
                         Icons.payment,
                       ),
                       _buildMenuItem(
                         context,
-                        mMyChallenges,
+                        (isCollapsed || onAnimation) ? null : mMyChallenges,
                         '/my-challenges',
-                        currentContent,
+                        currentContent == '/my-challenges',
                         Icons.flag,
                       ),
                       _buildMenuItem(
                         context,
-                        mChallengesToMe,
+                        (isCollapsed || onAnimation) ? null : mChallengesToMe,
                         '/challenges-to-me',
-                        currentContent,
+                        currentContent == '/challenges-to-me',
                         Icons.assignment_turned_in,
                       ),
                     ],
@@ -131,7 +129,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     scrollbarOrientation: ScrollbarOrientation.right,
                     child: SingleChildScrollView(
                       primary: true,
-                      child: _buildContent(contentPath, user),
+                      child: _buildContent(contentPath),
                     ),
                   ),
                 ),
@@ -144,14 +142,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 
   // Метод для создания пунктов меню
-  Widget _buildMenuItem(BuildContext context, String title, String path,
-      String currentContent, IconData icon) {
+  Widget _buildMenuItem(
+    BuildContext context,
+    String? title,
+    String path,
+    bool isSelected,
+    IconData icon,
+  ) {
     return ListTile(
       leading: Icon(icon), // Иконка для компактного меню
-      title: (isCollapsed || onAnimation)
-          ? null
-          : Text(AppLocale.of(context).translate(title)),
-      selected: currentContent == path,
+      title:
+          title == null ? null : Text(AppLocale.of(context).translate(title)),
+      selected: isSelected,
       selectedTileColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
       onTap: () =>
           ref.read(profilePageContentProvider.notifier).setContent(path),
@@ -159,7 +161,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 }
 
-Widget _buildContent(String contentPath, AuthedUser user) {
+Widget _buildContent(String contentPath) {
   switch (contentPath) {
     case '/':
       return ProfileInfoCard();
@@ -177,5 +179,11 @@ Widget _buildContent(String contentPath, AuthedUser user) {
       );
     default:
       return Container();
+  }
+}
+
+class MenuBuilder {
+  static Widget buildMenu(BuildContext context, List<Widget> menuItems) {
+    return Row();
   }
 }

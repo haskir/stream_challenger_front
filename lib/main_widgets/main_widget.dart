@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/providers/providers.dart';
-import 'appbar_widgets/auth_widget.dart';
+import 'appbar_widgets/settings_widget.dart';
 import 'appbar_widgets/balance_widget.dart';
 import 'appbar_widgets/settings_widget.dart';
 import 'appbar_widgets/logo.dart';
@@ -54,45 +54,49 @@ class _AppBar extends ConsumerStatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends ConsumerState<_AppBar> {
+  bool isEnoughSpace = true;
+
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     Widget? titleWidget;
 
     if (authState.isAuthenticated) {
-      titleWidget = SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-              onPressed: () => context.go('/challenge/lapkinastol'),
-              child: Text(
-                AppLocale.of(context).translate(mCreateChallenge),
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium?.color),
+      titleWidget = isEnoughSpace
+          ? SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () => context.go('/challenge/lapkinastol'),
+                    child: Text(
+                      AppLocale.of(context).translate(mCreateChallenge),
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => context.go('/panel'),
+                    child: Text(
+                      AppLocale.of(context).translate(mMyPanel),
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => context.go('/profile'),
+                    child: Text(
+                      AppLocale.of(context).translate(mProfile),
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            TextButton(
-              onPressed: () => context.go('/panel'),
-              child: Text(
-                AppLocale.of(context).translate(mMyPanel),
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium?.color),
-              ),
-            ),
-            TextButton(
-              onPressed: () => context.go('/profile'),
-              child: Text(
-                AppLocale.of(context).translate(mProfile),
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyMedium?.color),
-              ),
-            ),
-          ],
-        ),
-      );
+            )
+          : null;
     }
     return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
@@ -102,17 +106,11 @@ class _CustomAppBarState extends ConsumerState<_AppBar> {
       leading: LogoWidget(),
 
       // Центральные элементы с прокруткой
-      title: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxHeight: widget.preferredSize.height - 15,
-        ),
-        child: titleWidget, // Прокручиваемый виджет
-      ),
+      title: titleWidget,
 
       // Правые элементы
       actions: [
         BalanceWidget(),
-        SettingsWidget(),
         AuthWidget(),
         const SizedBox(width: 8),
       ],

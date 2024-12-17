@@ -102,6 +102,9 @@
   "Invalid amount": "Некорректная сумма",
   "No transactions found": "Транзакции не найдены",
   "Transaction error": "Ошибка транзакции",
-  "COMPLETED": "ВЫПОЛНЕН"
+  "COMPLETED": "ВЫПОЛНЕН",
+  "Light Theme": "Светлый тема",
+"Dark Theme": "Тёмная тема",
+ "Settings": "Настройки"
   }
   

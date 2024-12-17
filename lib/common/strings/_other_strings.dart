@@ -8,3 +8,7 @@ const String mPleaseLogIn = "Please log in";
 
 const String mInfoAcception =
     "By clicking on the 'Create' button, you accept our";
+
+const String mLightTheme = "Light Theme";
+const String mDarkTheme = "Dark Theme";
+const String mSettings = "Settings";
