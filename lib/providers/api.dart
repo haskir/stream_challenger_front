@@ -16,7 +16,7 @@ class _ApiPathSecured {
 }
 
 class ApiProvider {
-  static const bool d = true;
+  static const bool d = false;
 
   static String get http => d ? _ApiPathDebug.http : _ApiPathSecured.http;
   static String get ws => d ? _ApiPathDebug.ws : _ApiPathSecured.ws;

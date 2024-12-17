@@ -9,8 +9,8 @@ import 'package:stream_challenge/providers/preferences_provider.dart';
 
 class SettingsWidget extends ConsumerStatefulWidget {
   static const Map<String, String> languagesHeaders = {
-    'EN': 'English language',
-    'RU': 'Русский язык'
+    'EN': 'Русский язык',
+    'RU': 'English language'
   };
   const SettingsWidget({super.key});
 
@@ -54,7 +54,10 @@ class _LocaleState extends ConsumerState<SettingsWidget> {
                     : const TextStyle(color: Colors.black),
               ),
               const SizedBox(width: 5),
-              const Icon(Icons.language, color: Colors.white),
+              Icon(
+                Icons.language,
+                color: preferences.darkMode ? Colors.white : Colors.black,
+              ),
             ],
           ),
         ),
