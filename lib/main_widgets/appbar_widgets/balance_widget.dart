@@ -47,68 +47,79 @@ class BalanceWidget extends ConsumerWidget {
   }
 
   void _showBalanceDialog(BuildContext context, Account account) {
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final Offset position = button.localToGlobal(Offset.zero);
     const borderWidght = 1.5;
     const iconSize = 20.0;
-    showDialog(
+
+    showMenu(
+      color: Theme.of(context).primaryColor,
+      menuPadding: EdgeInsets.symmetric(horizontal: 3, vertical: 0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton(
-                onPressed: () async => await showDialog(
-                  context: context,
-                  builder: (context) => WithdrawDialog(account: account),
+      position: RelativeRect.fromLTRB(
+        position.dx - button.size.width / 2, // Координаты X для левого края
+        position.dy + button.size.height, // Координаты Y (под виджетом)
+        position.dx + button.size.width / 2, // Правый край
+        position.dy, // Верхний край
+      ),
+      items: [
+        PopupMenuItem(
+          padding: EdgeInsets.zero,
+          enabled: false, // Отключаем нажатие
+          child: ElevatedButton(
+            onPressed: () async => await showDialog(
+              context: context,
+              builder: (context) => WithdrawDialog(account: account),
+            ),
+            onLongPress: () async {},
+            style: ElevatedButton.styleFrom(
+              side: BorderSide(width: borderWidght, color: Colors.red),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  AppLocale.of(context).translate(mWithdraw),
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
                 ),
-                onLongPress: () async {},
-                style: ElevatedButton.styleFrom(
-                  side: BorderSide(width: borderWidght, color: Colors.red),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      AppLocale.of(context).translate(mWithdraw),
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyMedium?.color,
-                      ),
-                    ),
-                    Icon(Icons.remove, size: iconSize, color: Colors.red),
-                  ],
-                ),
-              ),
-              // Снятие баланса -
-              SizedBox(height: 10), // Пополнение баланса +
-              ElevatedButton(
-                onPressed: () async => await showDialog(
-                  context: context,
-                  builder: (context) => DepositDialog(account: account),
-                ),
-                onLongPress: () async {
-                  await player.play(
-                    AssetSource('sounds/green_is_good.mpeg'),
-                    volume: 0.3,
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  side: BorderSide(width: borderWidght, color: Colors.green),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(AppLocale.of(context).translate(mDeposit),
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyMedium?.color,
-                        )),
-                    Icon(Icons.add, size: iconSize, color: Colors.green),
-                  ],
-                ),
-              ),
-            ],
+                Icon(Icons.remove, size: iconSize, color: Colors.red),
+              ],
+            ),
           ),
-        );
-      },
+        ),
+        PopupMenuItem(
+          padding: EdgeInsets.zero,
+          enabled: false, // Отключаем нажатие
+          child: ElevatedButton(
+            onPressed: () async => await showDialog(
+              context: context,
+              builder: (context) => DepositDialog(account: account),
+            ),
+            onLongPress: () async {
+              await player.play(
+                AssetSource('sounds/green_is_good.mpeg'),
+                volume: 0.3,
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              side: BorderSide(width: borderWidght, color: Colors.green),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(AppLocale.of(context).translate(mDeposit),
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                    )),
+                Icon(Icons.add, size: iconSize, color: Colors.green),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
