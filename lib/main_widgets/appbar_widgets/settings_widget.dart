@@ -144,8 +144,8 @@ class AuthWidget extends ConsumerWidget {
               const Divider(), // Разделитель
               TextButton(
                 onPressed: () async {
-                  Navigator.of(context).pop();
-                  context.go('/');
+                  Navigator.of(context).pop(); // Закрыть диалог
+                  context.go('/'); // Вернуться на главную
                   await ref.read(authStateProvider.notifier).logout();
                 },
                 child: Row(
