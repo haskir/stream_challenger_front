@@ -19,6 +19,13 @@ class StreamChallengeApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Preferences preferences = ref.watch(preferencesProvider);
     final router = ref.watch(routerProvider);
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
+    late bool isDark;
+    if (preferences.darkMode == null) {
+      isDark = brightness == Brightness.dark;
+    } else {
+      isDark = preferences.darkMode!;
+    }
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
@@ -26,7 +33,7 @@ class StreamChallengeApp extends ConsumerWidget {
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
       locale: Locale(preferences.language.toLowerCase()),
-      theme: preferences.darkMode ? darkTheme : lightTheme,
+      theme: isDark ? darkTheme : lightTheme,
       onGenerateTitle: (context) => AppLocale.of(context).translate(mTitle),
       localizationsDelegates: const [
         AppLocalizationsDelegate(),

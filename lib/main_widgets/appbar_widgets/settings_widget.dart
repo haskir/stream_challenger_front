@@ -19,7 +19,7 @@ class SettingsWidget extends ConsumerStatefulWidget {
 }
 
 class _LocaleState extends ConsumerState<SettingsWidget> {
-  String switchLanguage(String language) {
+  static String switchLanguage(String language) {
     switch (language) {
       case 'EN':
         return 'RU';
@@ -30,6 +30,28 @@ class _LocaleState extends ConsumerState<SettingsWidget> {
     }
   }
 
+  String themeText(bool? darkMode) {
+    switch (darkMode) {
+      case true:
+        return AppLocale.of(context).translate(mDarkTheme);
+      case false:
+        return AppLocale.of(context).translate(mLightTheme);
+      default:
+        return AppLocale.of(context).translate(mSystemTheme);
+    }
+  }
+
+  Color switchTheme(bool? darkMode) {
+    switch (darkMode) {
+      case true:
+        return Colors.white;
+      case false:
+        return Colors.black;
+      default:
+        return Colors.white;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Preferences preferences = ref.watch(preferencesProvider);
@@ -37,58 +59,76 @@ class _LocaleState extends ConsumerState<SettingsWidget> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         // Выбор языка
-        TextButton(
-          onPressed: () async {
-            preferences.language = switchLanguage(preferences.language);
-            await ref
-                .read(preferencesProvider.notifier)
-                .updatePreferences(preferences);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                SettingsWidget.languagesHeaders[preferences.language]!,
-                style: preferences.darkMode
-                    ? const TextStyle(color: Colors.white)
-                    : const TextStyle(color: Colors.black),
-              ),
-              const SizedBox(width: 5),
-              Icon(
-                Icons.language,
-                color: preferences.darkMode ? Colors.white : Colors.black,
-              ),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppLocale.of(context).translate(
+                  SettingsWidget.languagesHeaders[preferences.language]!),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color),
+            ),
+            IconButton(
+              onPressed: () async {
+                preferences.language = switchLanguage(preferences.language);
+                await ref
+                    .read(preferencesProvider.notifier)
+                    .updatePreferences(preferences);
+              },
+              icon: const Icon(Icons.language),
+            ),
+          ],
         ),
         // Выбор цветовой темы
-        TextButton(
-          onPressed: () async {
-            preferences.darkMode = !preferences.darkMode;
-            await ref
-                .read(preferencesProvider.notifier)
-                .updatePreferences(preferences);
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                preferences.darkMode
-                    ? AppLocale.of(context).translate(mLightTheme)
-                    : AppLocale.of(context).translate(mDarkTheme),
-                style: preferences.darkMode
-                    ? const TextStyle(color: Colors.white)
-                    : const TextStyle(color: Colors.black),
-              ),
-              const SizedBox(width: 5),
-              Icon(
-                preferences.darkMode
-                    ? Icons.wb_sunny_outlined
-                    : Icons.nightlight_outlined,
-                color: preferences.darkMode ? Colors.white : Colors.black,
-              ),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppLocale.of(context).translate(themeText(preferences.darkMode)),
+              style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                // Солнце
+                IconButton(
+                    onPressed: () async {
+                      preferences.darkMode = false;
+                      await ref
+                          .read(preferencesProvider.notifier)
+                          .updatePreferences(preferences);
+                    },
+                    icon: preferences.darkMode == false
+                        ? const Icon(Icons.light_mode)
+                        : const Icon(Icons.light_mode_outlined)),
+                // Луна
+                IconButton(
+                    onPressed: () async {
+                      preferences.darkMode = true;
+                      await ref
+                          .read(preferencesProvider.notifier)
+                          .updatePreferences(preferences);
+                    },
+                    icon: preferences.darkMode == true
+                        ? const Icon(Icons.dark_mode)
+                        : const Icon(Icons.dark_mode_outlined)),
+                // Системная
+                IconButton(
+                  onPressed: () async {
+                    preferences.darkMode = null;
+                    await ref
+                        .read(preferencesProvider.notifier)
+                        .updatePreferences(preferences);
+                  },
+                  icon: preferences.darkMode == null
+                      ? const Icon(Icons.settings)
+                      : const Icon(Icons.settings_outlined),
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );
@@ -123,13 +163,27 @@ class AuthWidget extends ConsumerWidget {
     }
 
     // Если пользователь не авторизован
-    return Center(
-      child: TextButton(
-        child: Text(AppLocale.of(context).translate(mAuth)),
-        onPressed: () async {
-          await ref.read(authStateProvider.notifier).auth(context);
-        },
-      ),
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () async {
+            Preferences preferences = ref.read(preferencesProvider);
+            preferences.language =
+                _LocaleState.switchLanguage(preferences.language);
+            await ref
+                .read(preferencesProvider.notifier)
+                .updatePreferences(preferences);
+          },
+          icon: const Icon(Icons.language_outlined),
+        ),
+        TextButton.icon(
+          label: Text(AppLocale.of(context).translate(mAuth)),
+          icon: const Icon(Icons.login),
+          onPressed: () async {
+            await ref.read(authStateProvider.notifier).auth(context);
+          },
+        ),
+      ],
     );
   }
 

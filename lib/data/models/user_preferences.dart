@@ -6,7 +6,7 @@ class Preferences {
   double minimumRewardInDollars;
   String language;
   String timezone;
-  bool darkMode;
+  bool? darkMode;
 
   Preferences({
     required this.minimumRewardInDollars,
@@ -29,7 +29,7 @@ class Preferences {
       minimumRewardInDollars: map['minimum_reward_in_dollars'] as double,
       language: map['language'] as String,
       timezone: map['timezone'] as String,
-      darkMode: map['dark_mode'] as bool,
+      darkMode: map['dark_mode'],
     );
   }
 
@@ -45,7 +45,7 @@ class Preferences {
         minimumRewardInDollars: 1.0,
         language: 'EN',
         timezone: 'UTC',
-        darkMode: false,
+        darkMode: null,
       );
 
   static const double epsilon = 1e-9; // Допустимая погрешность

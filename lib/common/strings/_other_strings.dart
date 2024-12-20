@@ -11,4 +11,5 @@ const String mInfoAcception =
 
 const String mLightTheme = "Light Theme";
 const String mDarkTheme = "Dark Theme";
+const String mSystemTheme = "System Theme";
 const String mSettings = "Settings";
