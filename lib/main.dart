@@ -52,8 +52,9 @@ void main() {
   container.read(authStateProvider.notifier);
 
   runApp(
-    const ProviderScope(
-      child: StreamChallengeApp(),
+    UncontrolledProviderScope(
+      container: container,
+      child: const StreamChallengeApp(),
     ),
   );
 }
