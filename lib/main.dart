@@ -19,13 +19,8 @@ class StreamChallengeApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Preferences preferences = ref.watch(preferencesProvider);
     final router = ref.watch(routerProvider);
-    Brightness brightness = MediaQuery.of(context).platformBrightness;
-    late bool isDark;
-    if (preferences.darkMode == null) {
-      isDark = brightness == Brightness.dark;
-    } else {
-      isDark = preferences.darkMode!;
-    }
+    bool isDark = preferences.darkMode ??
+        (MediaQuery.of(context).platformBrightness == Brightness.dark);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,

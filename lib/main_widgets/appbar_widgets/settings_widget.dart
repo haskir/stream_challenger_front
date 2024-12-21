@@ -15,11 +15,11 @@ class SettingsWidget extends ConsumerStatefulWidget {
   const SettingsWidget({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _LocaleState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SettingsState();
 }
 
-class _LocaleState extends ConsumerState<SettingsWidget> {
-  static String switchLanguage(String language) {
+class _SettingsState extends ConsumerState<SettingsWidget> {
+  static String swtchLang(String language) {
     switch (language) {
       case 'EN':
         return 'RU';
@@ -41,17 +41,6 @@ class _LocaleState extends ConsumerState<SettingsWidget> {
     }
   }
 
-  Color switchTheme(bool? darkMode) {
-    switch (darkMode) {
-      case true:
-        return Colors.white;
-      case false:
-        return Colors.black;
-      default:
-        return Colors.white;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Preferences preferences = ref.watch(preferencesProvider);
@@ -70,7 +59,7 @@ class _LocaleState extends ConsumerState<SettingsWidget> {
             ),
             IconButton(
               onPressed: () async {
-                preferences.language = switchLanguage(preferences.language);
+                preferences.language = swtchLang(preferences.language);
                 await ref
                     .read(preferencesProvider.notifier)
                     .updatePreferences(preferences);
@@ -169,7 +158,7 @@ class AuthWidget extends ConsumerWidget {
           onPressed: () async {
             Preferences preferences = ref.read(preferencesProvider);
             preferences.language =
-                _LocaleState.switchLanguage(preferences.language);
+                _SettingsState.swtchLang(preferences.language);
             await ref
                 .read(preferencesProvider.notifier)
                 .updatePreferences(preferences);
