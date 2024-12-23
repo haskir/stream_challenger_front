@@ -5,7 +5,10 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
-
+  <!-- https://habr.com/ru/articles/857678/ --> 
+  <script>
+    const serviceWorkerVersion = '{{flutter_service_worker_version}}';
+  </script>
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -23,6 +26,27 @@
   </script>
 </head>
 <body>
+  <!-- This script for Firebase -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function (ev) {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js');
+        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
+  
+        _flutter.loader.load({
+          serviceWorker: {
+            serviceWorkerVersion: serviceWorkerVersion,
+          },
+          onEntrypointLoaded: function (engineInitializer) {
+            engineInitializer.initializeEngine().then(function (appRunner) {
+              appRunner.runApp();
+            });
+          }
+        });
+      });
+    }
+  </script>
+  <!-- This script adds the flutter initialization JS code ------>
   <script src="flutter_bootstrap.js" async></script>
   <script>
     window.addEventListener('load', function(ev) {

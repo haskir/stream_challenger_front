@@ -42,6 +42,7 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
       );
       _startPing();
       if (kDebugMode) print("WebSocket connected.");
+      _channel.sink.add(jsonEncode({"token": token}));
       return true;
     } on WebSocketChannelException {
       if (kDebugMode) print('WebSocket connection failed.');
@@ -101,7 +102,11 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
     }
   }
 
-  void _handleError(error) => _reconnect();
+  void _handleError(error) {
+    if (kDebugMode) print('WebSocket error: $error');
+    disconnect();
+    _reconnect();
+  }
 
   void _handleDisconnect() {
     _challengeController.sink.addError('Connection lost.');

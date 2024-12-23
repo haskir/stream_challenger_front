@@ -65,6 +65,7 @@ class _SettingsState extends ConsumerState<SettingsWidget> {
                     .updatePreferences(preferences);
               },
               icon: const Icon(Icons.language),
+              color: Theme.of(context).iconTheme.color,
             ),
           ],
         ),
@@ -83,26 +84,30 @@ class _SettingsState extends ConsumerState<SettingsWidget> {
               children: [
                 // Солнце
                 IconButton(
-                    onPressed: () async {
-                      preferences.darkMode = false;
-                      await ref
-                          .read(preferencesProvider.notifier)
-                          .updatePreferences(preferences);
-                    },
-                    icon: preferences.darkMode == false
-                        ? const Icon(Icons.light_mode)
-                        : const Icon(Icons.light_mode_outlined)),
+                  onPressed: () async {
+                    preferences.darkMode = false;
+                    await ref
+                        .read(preferencesProvider.notifier)
+                        .updatePreferences(preferences);
+                  },
+                  icon: preferences.darkMode == false
+                      ? const Icon(Icons.light_mode)
+                      : const Icon(Icons.light_mode_outlined),
+                  color: Theme.of(context).iconTheme.color,
+                ),
                 // Луна
                 IconButton(
-                    onPressed: () async {
-                      preferences.darkMode = true;
-                      await ref
-                          .read(preferencesProvider.notifier)
-                          .updatePreferences(preferences);
-                    },
-                    icon: preferences.darkMode == true
-                        ? const Icon(Icons.dark_mode)
-                        : const Icon(Icons.dark_mode_outlined)),
+                  onPressed: () async {
+                    preferences.darkMode = true;
+                    await ref
+                        .read(preferencesProvider.notifier)
+                        .updatePreferences(preferences);
+                  },
+                  icon: preferences.darkMode == true
+                      ? const Icon(Icons.dark_mode)
+                      : const Icon(Icons.dark_mode_outlined),
+                  color: Theme.of(context).iconTheme.color,
+                ),
                 // Системная
                 IconButton(
                   onPressed: () async {
@@ -114,6 +119,7 @@ class _SettingsState extends ConsumerState<SettingsWidget> {
                   icon: preferences.darkMode == null
                       ? const Icon(Icons.settings)
                       : const Icon(Icons.settings_outlined),
+                  color: Theme.of(context).iconTheme.color,
                 ),
               ],
             ),

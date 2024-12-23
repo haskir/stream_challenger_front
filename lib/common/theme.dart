@@ -6,6 +6,12 @@ ThemeData lightTheme = ThemeData(
   primaryColorLight: Colors.blue[200],
   primaryColorDark: Colors.lightBlue,
   dialogBackgroundColor: Colors.white,
+  iconTheme: IconThemeData(color: Colors.black),
+  iconButtonTheme: IconButtonThemeData(
+    style: ButtonStyle(
+      iconColor: WidgetStateProperty.all(Colors.black),
+    ),
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -29,7 +35,13 @@ ThemeData darkTheme = ThemeData(
     unselectedItemColor:
         Colors.grey[500], // Цвет невыбранного элемента навигации
   ),
-  iconTheme: IconThemeData(color: Colors.grey[300]), // Цвет иконок
+  iconTheme: IconThemeData(color: Colors.white), // Цвет иконок
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: WidgetStateProperty.all(Colors.blueAccent),
+      foregroundColor: WidgetStateProperty.all(Colors.white),
+    ),
+  ),
   buttonTheme: ButtonThemeData(
       buttonColor: Colors.blueAccent, // Цвет кнопок
       textTheme: ButtonTextTheme.primary), // Текст на кнопках

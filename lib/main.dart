@@ -17,6 +17,7 @@ class StreamChallengeApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    WidgetsFlutterBinding.ensureInitialized();
     final Preferences preferences = ref.watch(preferencesProvider);
     final router = ref.watch(routerProvider);
     bool isDark = preferences.darkMode ??
@@ -43,9 +44,10 @@ class StreamChallengeApp extends ConsumerWidget {
 }
 
 void main() {
-  //debugPaintSizeEnabled = true;
+  // debugPaintSizeEnabled = true;
   setUrlStrategy(PathUrlStrategy());
   final container = ProviderContainer();
+  // container.read(firebaseProvider());
   container.read(preferencesProvider.notifier);
   container.read(authStateProvider.notifier);
 
