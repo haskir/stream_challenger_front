@@ -38,11 +38,11 @@ ThemeData darkTheme = ThemeData(
   iconTheme: IconThemeData(color: Colors.white), // Цвет иконок
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
-      backgroundColor: WidgetStateProperty.all(Colors.blueAccent),
+      backgroundColor: WidgetStateProperty.all(Colors.black12),
       foregroundColor: WidgetStateProperty.all(Colors.white),
     ),
   ),
   buttonTheme: ButtonThemeData(
-      buttonColor: Colors.blueAccent, // Цвет кнопок
+      buttonColor: Colors.grey, // Цвет кнопок
       textTheme: ButtonTextTheme.primary), // Текст на кнопках
 );

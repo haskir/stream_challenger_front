@@ -47,7 +47,6 @@ void main() {
   // debugPaintSizeEnabled = true;
   setUrlStrategy(PathUrlStrategy());
   final container = ProviderContainer();
-  // container.read(firebaseProvider());
   container.read(preferencesProvider.notifier);
   container.read(authStateProvider.notifier);
 
