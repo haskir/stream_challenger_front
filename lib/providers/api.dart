@@ -16,8 +16,8 @@ class _ApiPathSecured {
 }
 
 class ApiProvider {
-  static const bool debug = true;
+  static const bool isLocal = true;
 
-  static String get http => debug ? _ApiPathDebug.http : _ApiPathSecured.http;
-  static String get ws => debug ? _ApiPathDebug.ws : _ApiPathSecured.ws;
+  static String get http => isLocal ? _ApiPathDebug.http : _ApiPathSecured.http;
+  static String get ws => isLocal ? _ApiPathDebug.ws : _ApiPathSecured.ws;
 }
