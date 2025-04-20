@@ -1,10 +1,5 @@
-// ignore_for_file: unused_import
-
 import 'package:dartz/dartz.dart';
-import 'package:stream_challenge/core/platform/dio.dart';
-import 'package:stream_challenge/core/platform/response.dart';
-import 'package:stream_challenge/data/models/transaction.dart';
-import 'dart:html' as html;
+import 'package:stream_challenge/core/platform/export.dart';
 
 class TransactionsUseCase {
   static Future deposit(transaction, client) async {
@@ -14,9 +9,7 @@ class TransactionsUseCase {
     );
     result.fold(
       (left) => null,
-      (right) {
-        html.window.open(right["url"], "_self");
-      },
+      (right) => WebPlatform.openUrl(right["url"]),
     );
   }
 
@@ -27,9 +20,7 @@ class TransactionsUseCase {
     );
     result.fold(
       (left) => null,
-      (right) {
-        html.window.open(right["url"], "_self");
-      },
+      (right) => WebPlatform.openUrl(right["url"]),
     );
   }
 }

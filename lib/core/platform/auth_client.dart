@@ -1,16 +1,14 @@
 import 'dart:async';
-import 'dart:html' as html;
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:stream_challenge/core/platform/export.dart';
 
 import 'package:stream_challenge/core/platform/token_repo.dart';
+import 'package:stream_challenge/data/models/auth_state.dart';
 import 'package:stream_challenge/providers/api.dart';
-
-import '../../data/models/auth_state.dart';
 
 abstract class AuthClient {
   Future<void> auth(BuildContext context);
@@ -34,8 +32,7 @@ class _AuthServiceHTML implements AuthClient {
     if (!_validated && !kDebugMode) {
       _token = await validate() ? _token : null;
     }
-    authStateNotifier.value =
-        _token == null ? AuthState() : AuthState(user: getUserInfo());
+    authStateNotifier.value = _token == null ? AuthState() : AuthState(user: getUserInfo());
   }
 
   Future<bool> validate() async {
@@ -63,25 +60,14 @@ class _AuthServiceHTML implements AuthClient {
 
   @override
   Future<void> auth(BuildContext context) async {
-    final authCompleter = Completer<void>();
-
-    final newWindow = html.window.open(authUrl.toString(), "_blank");
-
-    // Функция для обработки сообщения от API
-    void messageHandler(html.Event event) async {
-      if (event is html.MessageEvent && event.origin == authUrl.origin) {
-        _token = event.data;
-        await _tokenRepo.setToken(event.data);
-        authStateNotifier.value = AuthState(user: getUserInfo());
-        newWindow.close();
-
-        authCompleter.complete();
-      }
+    try {
+      final token = await WebPlatform.openAuthPopupAndWait(authUrl);
+      _token = token;
+      await _tokenRepo.setToken(token);
+      authStateNotifier.value = AuthState(user: getUserInfo());
+    } catch (e) {
+      print("Auth failed: $e");
     }
-
-    html.window.addEventListener('message', messageHandler);
-    await authCompleter.future;
-    html.window.removeEventListener('message', messageHandler);
   }
 
   @override

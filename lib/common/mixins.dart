@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/core/platform/export.dart';
 import 'package:stream_challenge/data/models/challenge.dart';
-import 'dart:html' as html;
-
 import 'package:url_launcher/url_launcher.dart';
 
 class Mixins {
@@ -40,8 +39,7 @@ class Mixins {
     );
   }
 
-  static Widget personInfo(ChallengePerson person, BuildContext context,
-      [double radius = 15]) {
+  static Widget personInfo(ChallengePerson person, BuildContext context, [double radius = 15]) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Theme.of(context).colorScheme.primary),
@@ -83,7 +81,7 @@ class Mixins {
             TextButton(
               child: Text(AppLocale.of(context).translate(mOpen)),
               onPressed: () {
-                openURL(url);
+                WebPlatform.openUrl(url);
                 Navigator.of(context).pop();
               },
             ),
@@ -94,7 +92,4 @@ class Mixins {
   }
 
   static String buildURLFromLogin(String login) => "https://twitch.tv/$login";
-  static void openURL(String url) {
-    html.window.open(url, "_blank");
-  }
 }
