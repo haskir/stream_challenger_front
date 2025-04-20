@@ -3,7 +3,7 @@ import 'dart:html' as html;
 
 import 'package:stream_challenge/utils/util.dart';
 
-class WebPlatform {
+class Web {
   static Future<String> openAuthPopupAndWait(Uri authUrl) async {
     final completer = Completer<String>();
     final newWindow = openUrl(authUrl.toString(), "_blank");

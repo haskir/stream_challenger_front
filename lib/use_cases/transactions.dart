@@ -9,7 +9,7 @@ class TransactionsUseCase {
     );
     result.fold(
       (left) => null,
-      (right) => WebPlatform.openUrl(right["url"]),
+      (right) => Web.openUrl(right["url"]),
     );
   }
 
@@ -20,7 +20,7 @@ class TransactionsUseCase {
     );
     result.fold(
       (left) => null,
-      (right) => WebPlatform.openUrl(right["url"]),
+      (right) => Web.openUrl(right["url"]),
     );
   }
 }

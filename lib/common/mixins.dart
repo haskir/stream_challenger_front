@@ -81,7 +81,7 @@ class Mixins {
             TextButton(
               child: Text(AppLocale.of(context).translate(mOpen)),
               onPressed: () {
-                WebPlatform.openUrl(url);
+                Web.openUrl(url);
                 Navigator.of(context).pop();
               },
             ),

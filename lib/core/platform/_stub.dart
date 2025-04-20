@@ -1,4 +1,4 @@
-class WebPlatform {
+class Web {
   static Future<String> openAuthPopupAndWait(Uri authUrl) async {
     throw UnsupportedError('Web auth is not supported on this platform');
   }

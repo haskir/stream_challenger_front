@@ -61,7 +61,7 @@ class _AuthServiceHTML implements AuthClient {
   @override
   Future<void> auth(BuildContext context) async {
     try {
-      final token = await WebPlatform.openAuthPopupAndWait(authUrl);
+      final token = await Web.openAuthPopupAndWait(authUrl);
       _token = token;
       await _tokenRepo.setToken(token);
       authStateNotifier.value = AuthState(user: getUserInfo());
