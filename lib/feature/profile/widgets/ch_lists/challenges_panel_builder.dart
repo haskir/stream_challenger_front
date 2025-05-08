@@ -10,22 +10,19 @@ import 'package:stream_challenge/providers/challenge_provider.dart';
 class ChallengesPanel extends ConsumerStatefulWidget {
   final bool isAuthor;
   final Map<String, bool> expandedStates;
-  late final FutureProviderFamily<List<Challenge>?, GetStruct>
-      challengesProvider;
+  late final FutureProviderFamily<List<Challenge>?, GetStruct> challengesProvider;
 
   ChallengesPanel({
     super.key,
     required this.expandedStates,
     required this.isAuthor,
-  }) : challengesProvider =
-            isAuthor ? authorChallengesProvider : performerChallengesProvider;
+  }) : challengesProvider = isAuthor ? authorChallengesProvider : performerChallengesProvider;
 
   @override
   ConsumerState<ChallengesPanel> createState() => _ChallengesPanelState();
 }
 
-class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
-    with SingleTickerProviderStateMixin {
+class _ChallengesPanelState extends ConsumerState<ChallengesPanel> with SingleTickerProviderStateMixin {
   late TabController tabController;
   final Map<String, List<int>> hasLoaded = {}; // Для отслеживания загрузки
   final PageController _pageController = PageController();
@@ -88,9 +85,7 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
   Future<void> _fetchPage(String status, int pageKey) async {
     if (hasLoaded[status]!.contains(pageKey)) return;
 
-    final provider = ref.read(widget
-        .challengesProvider(GetStruct(status: status, page: pageKey, size: 10))
-        .future);
+    final provider = ref.read(widget.challengesProvider(GetStruct(status: status, page: pageKey, size: 10)).future);
 
     hasLoaded[status]!.add(pageKey);
 
@@ -170,8 +165,7 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel>
             firstPageProgressIndicatorBuilder: (context) => Center(
               child: !isRefreshing ? CircularProgressIndicator() : Text(""),
             ),
-            newPageProgressIndicatorBuilder: (context) =>
-                const Center(child: CircularProgressIndicator()),
+            newPageProgressIndicatorBuilder: (context) => const Center(child: CircularProgressIndicator()),
             noItemsFoundIndicatorBuilder: (context) => Center(
               child: Text(
                 AppLocale.of(context).translate(mNoChallengesAvailable),

@@ -24,7 +24,7 @@ class _ChallengeView extends ConsumerState<ViewChallengeWidget> {
           (challenge) => Center(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.5),
+                color: Colors.blue,
                 borderRadius: BorderRadius.circular(10),
               ),
               padding: EdgeInsets.all(16),

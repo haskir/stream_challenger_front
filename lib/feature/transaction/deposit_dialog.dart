@@ -77,18 +77,15 @@ class _DepositWidgetState extends ConsumerState<DepositDialog> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return AppLocale.of(context)
-                                .translate(mPleaseEnterAmount);
+                            return AppLocale.of(context).translate(mPleaseEnterAmount);
                           }
                           try {
                             double num = double.parse(value);
                             if (num <= 0) {
-                              return AppLocale.of(context)
-                                  .translate(mInvalidAmount);
+                              return AppLocale.of(context).translate(mInvalidAmount);
                             }
                           } catch (e) {
-                            return AppLocale.of(context)
-                                .translate(mInvalidAmount);
+                            return AppLocale.of(context).translate(mInvalidAmount);
                           }
                           return null;
                         },
@@ -117,7 +114,7 @@ class _DepositWidgetState extends ConsumerState<DepositDialog> {
               child: Text(AppLocale.of(context).translate(mSubmit)),
               onPressed: () async {
                 final router = ref.read(routerProvider);
-                await _submit(router.state?.uri);
+                await _submit(router.state.uri);
               },
             )
           ],

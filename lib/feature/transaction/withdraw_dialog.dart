@@ -35,9 +35,7 @@ class _WithdrawWidgetState extends ConsumerState<WithdrawDialog> {
   Future<void> _submit(dynamic url) async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
     CreateTransactionDTO dto = CreateTransactionDTO(
       amount: double.parse(_controller.text),
       currency: widget.account.currency,
@@ -56,8 +54,7 @@ class _WithdrawWidgetState extends ConsumerState<WithdrawDialog> {
     return Stack(
       children: [
         AlertDialog(
-          title:
-              Center(child: Text(AppLocale.of(context).translate(mWithdraw))),
+          title: Center(child: Text(AppLocale.of(context).translate(mWithdraw))),
           content: Form(
             key: _formKey,
             child: Column(
@@ -83,7 +80,7 @@ class _WithdrawWidgetState extends ConsumerState<WithdrawDialog> {
               child: Text(AppLocale.of(context).translate(mSubmit)),
               onPressed: () async {
                 final router = ref.read(routerProvider);
-                await _submit(router.state?.uri);
+                await _submit(router.state.uri);
               },
             )
           ],

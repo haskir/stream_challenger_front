@@ -8,21 +8,18 @@ import 'package:stream_challenge/providers/transactions_provider.dart';
 import 'transaction_view_widget.dart';
 
 class TransactionsListWidget extends ConsumerStatefulWidget {
-  final FutureProviderFamily<List<Transaction>?, GetStruct> trProvider =
-      transactionsProvider;
+  final FutureProviderFamily<List<Transaction>?, GetStruct> trProvider = transactionsProvider;
 
   TransactionsListWidget({super.key});
 
   @override
-  ConsumerState<TransactionsListWidget> createState() =>
-      _TransactionsListState();
+  ConsumerState<TransactionsListWidget> createState() => _TransactionsListState();
 }
 
 class _TransactionsListState extends ConsumerState<TransactionsListWidget> {
   bool isRefreshing = false;
   static const int _pageSize = 10;
-  final PagingController<int, Transaction> _pagingController =
-      PagingController(firstPageKey: 1);
+  final PagingController<int, Transaction> _pagingController = PagingController(firstPageKey: 1);
 
   @override
   void initState() {
@@ -35,8 +32,7 @@ class _TransactionsListState extends ConsumerState<TransactionsListWidget> {
   Future<void> _fetchPage(int pageKey) async {
     try {
       final getStruct = GetStruct(page: pageKey, size: _pageSize);
-      final transactionList =
-          await ref.read(widget.trProvider(getStruct).future);
+      final transactionList = await ref.read(widget.trProvider(getStruct).future);
 
       if (transactionList == null || transactionList.length < _pageSize) {
         _pagingController.appendLastPage(transactionList ?? []);
@@ -63,15 +59,12 @@ class _TransactionsListState extends ConsumerState<TransactionsListWidget> {
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<Transaction>(
             animateTransitions: true,
-            itemBuilder: (context, transaction, index) =>
-                TransactionViewWidget(transaction: transaction),
+            itemBuilder: (context, transaction, index) => TransactionViewWidget(transaction: transaction),
             firstPageProgressIndicatorBuilder: (context) => Center(
               child: !isRefreshing ? CircularProgressIndicator() : Text(""),
             ),
-            firstPageErrorIndicatorBuilder: (context) =>
-                ErrorWidget(_pagingController.error!),
-            newPageErrorIndicatorBuilder: (context) =>
-                ErrorWidget(_pagingController.error!),
+            firstPageErrorIndicatorBuilder: (context) => ErrorWidget(_pagingController.error!),
+            newPageErrorIndicatorBuilder: (context) => ErrorWidget(_pagingController.error!),
             noItemsFoundIndicatorBuilder: (context) => Center(
               child: Text(mNoTrans),
             ),

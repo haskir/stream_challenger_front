@@ -9,8 +9,7 @@ import 'widgets/ch_lists/challenge_list_widget.dart';
 import 'widgets/profile_info_widget.dart';
 import 'widgets/tr_list/transaction_list_builder.dart';
 
-final profilePageContentProvider =
-    StateNotifierProvider<ProfilePageContentNotifier, String>((ref) {
+final profilePageContentProvider = StateNotifierProvider<ProfilePageContentNotifier, String>((ref) {
   return ProfilePageContentNotifier('/');
 });
 
@@ -151,12 +150,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   ) {
     return ListTile(
       leading: Icon(icon), // Иконка для компактного меню
-      title:
-          title == null ? null : Text(AppLocale.of(context).translate(title)),
+      title: title == null ? null : Text(AppLocale.of(context).translate(title)),
       selected: isSelected,
-      selectedTileColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-      onTap: () =>
-          ref.read(profilePageContentProvider.notifier).setContent(path),
+      selectedTileColor: Theme.of(context).colorScheme.primary,
+      onTap: () => ref.read(profilePageContentProvider.notifier).setContent(path),
     );
   }
 }
