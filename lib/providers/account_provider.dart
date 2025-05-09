@@ -7,7 +7,7 @@ import 'package:stream_challenge/providers/providers.dart';
 
 /// Клиент для выполнения HTTP-запросов для Account
 class _AccountClient {
-  final String url = "/accounts";
+  final String url = "/account";
   final Requester httpClient;
 
   _AccountClient({required this.httpClient});

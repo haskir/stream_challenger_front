@@ -9,7 +9,7 @@ import '../data/models/steamer_info.dart';
 
 /// Requester - клиент для выполнения HTTP-запросов
 class _PreferencesRequester {
-  final String url = "/preferences";
+  final String url = "/user/preferences";
   final Requester httpClient;
 
   _PreferencesRequester({required this.httpClient});
@@ -104,19 +104,16 @@ class PreferencesNotifier extends StateNotifier<Preferences> {
 }
 
 /// Провайдер для PreferencesNotifier
-final preferencesProvider =
-    StateNotifierProvider<PreferencesNotifier, Preferences>((ref) {
+final preferencesProvider = StateNotifierProvider<PreferencesNotifier, Preferences>((ref) {
   return PreferencesNotifier(ref);
 });
 
-final streamerInfoProvider =
-    FutureProvider.family<StreamerInfo?, String>((ref, login) async {
+final streamerInfoProvider = FutureProvider.family<StreamerInfo?, String>((ref, login) async {
   final client = await ref.read(prefRequesterProvider.future);
   return client.getStreamerInfo(login);
 });
 
-final isOnlineProvider =
-    FutureProvider.family<bool, String>((ref, login) async {
+final isOnlineProvider = FutureProvider.family<bool, String>((ref, login) async {
   final client = await ref.read(prefRequesterProvider.future);
   return client.isStreamerOnline(login);
 });

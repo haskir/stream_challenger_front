@@ -12,8 +12,8 @@ class AuthedUser {
   final String email;
   final String broadcasterType;
   final DateTime expires_at;
-  final int account_id;
-  final int preferences_id;
+  // final int account_id;
+  // final int preferences_id;
 
   AuthedUser({
     required this.id,
@@ -22,8 +22,8 @@ class AuthedUser {
     required this.email,
     required this.broadcasterType,
     required this.expires_at,
-    required this.account_id,
-    required this.preferences_id,
+    // required this.account_id,
+    // required this.preferences_id,
   });
 
   @override
@@ -37,8 +37,8 @@ class AuthedUser {
       'email': email,
       'broadcaster_type': broadcasterType,
       'expires_at': expires_at.millisecondsSinceEpoch,
-      'account_id': account_id,
-      'preferences_id': preferences_id,
+      // 'account_id': account_id,
+      // 'preferences_id': preferences_id,
     };
   }
 
@@ -52,15 +52,14 @@ class AuthedUser {
       expires_at: DateTime.fromMillisecondsSinceEpoch(
         double.parse(map['expires_at'].toString()).toInt(),
       ),
-      account_id: map['account_id'],
-      preferences_id: map['preferences_id'],
+      // account_id: map['account_id'],
+      // preferences_id: map['preferences_id'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory AuthedUser.fromJson(String source) =>
-      AuthedUser.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory AuthedUser.fromJson(String source) => AuthedUser.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class AuthState {
