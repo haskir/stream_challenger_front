@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,39 +8,36 @@ import 'package:stream_challenge/models/challenge.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 class GetStruct {
-  final String status;
+  final List<String> statuses;
   final int page;
   final int size;
+  final bool isAuthor;
 
-  GetStruct({required this.status, required this.page, required this.size});
+  GetStruct({
+    required this.statuses,
+    required this.page,
+    required this.size,
+    required this.isAuthor,
+  });
 
-  Map<String, String> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      'status': status,
+      'statuses': statuses,
       'page': page.toString(),
       'size': size.toString(),
+      'is_author': isAuthor.toString(),
     };
   }
-
-  factory GetStruct.fromMap(Map<String, dynamic> map) {
-    return GetStruct(
-      status: map['status'] as String,
-      page: map['page'] as int,
-      size: map['size'] as int,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory GetStruct.fromJson(String source) => GetStruct.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class ChallengeGetter {
+  static const path = '/challenge';
+
   static Future<Either<ErrorDTO, Challenge>> getChallenge({
     required int id,
     required Requester client,
   }) async {
-    final response = await client.get('/challenges/$id');
+    final response = await client.get('$path/$id');
     return response.fold(
       (left) => Left(left),
       (right) => Right(Challenge.fromMap(right)),
@@ -53,10 +47,9 @@ class ChallengeGetter {
   static Future<Either<ErrorDTO, List<Challenge>>> getChallenges({
     required GetStruct getStruct,
     required Requester client,
-    required bool isAuthor,
   }) async {
     final response = await client.get(
-      isAuthor ? '/challenges/author' : '/challenges/performer',
+      path,
       getStruct.toMap(),
     );
     try {
@@ -82,12 +75,11 @@ final challengeProvider = FutureProvider.family<Either<ErrorDTO, Challenge>, int
   return result;
 });
 
-final authorChallengesProvider = FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
+final challengesProvider = FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
   try {
     final result = await ChallengeGetter.getChallenges(
       getStruct: getStruct,
       client: await ref.watch(httpClientProvider.future),
-      isAuthor: true,
     );
     return result.fold(
       (error) {
@@ -98,26 +90,6 @@ final authorChallengesProvider = FutureProvider.family<List<Challenge>?, GetStru
     );
   } catch (error) {
     print("authorChallengesProvider1 error: $error");
-    return null;
-  }
-});
-
-final performerChallengesProvider = FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
-  try {
-    final result = await ChallengeGetter.getChallenges(
-      getStruct: getStruct,
-      client: await ref.watch(httpClientProvider.future),
-      isAuthor: false,
-    );
-    return result.fold(
-      (error) {
-        if (kDebugMode) print("performerChallengesProvider $error");
-        return null;
-      },
-      (challenges) => challenges,
-    );
-  } catch (error) {
-    print("performerChallengesProvider error: $error");
     return null;
   }
 });

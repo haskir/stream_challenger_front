@@ -10,13 +10,12 @@ import 'package:stream_challenge/providers/challenge_provider.dart';
 class ChallengesPanel extends ConsumerStatefulWidget {
   final bool isAuthor;
   final Map<String, bool> expandedStates;
-  late final FutureProviderFamily<List<Challenge>?, GetStruct> challengesProvider;
 
-  ChallengesPanel({
+  const ChallengesPanel({
     super.key,
     required this.expandedStates,
     required this.isAuthor,
-  }) : challengesProvider = isAuthor ? authorChallengesProvider : performerChallengesProvider;
+  });
 
   @override
   ConsumerState<ChallengesPanel> createState() => _ChallengesPanelState();
@@ -85,7 +84,14 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel> with SingleTi
   Future<void> _fetchPage(String status, int pageKey) async {
     if (hasLoaded[status]!.contains(pageKey)) return;
 
-    final provider = ref.read(widget.challengesProvider(GetStruct(status: status, page: pageKey, size: 10)).future);
+    final provider = ref.read(challengesProvider(
+      GetStruct(
+        statuses: [status],
+        page: pageKey,
+        size: 10,
+        isAuthor: widget.isAuthor,
+      ),
+    ).future);
 
     hasLoaded[status]!.add(pageKey);
 
