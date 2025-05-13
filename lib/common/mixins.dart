@@ -51,11 +51,11 @@ class Mixins {
           children: [
             CircleAvatar(
               radius: radius,
-              backgroundImage: NetworkImage(person.urlImage),
+              backgroundImage: NetworkImage(person.profileImageUrl),
             ),
             const SizedBox(width: 5),
             Text(
-              person.name,
+              person.login,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],

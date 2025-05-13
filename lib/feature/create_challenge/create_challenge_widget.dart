@@ -8,6 +8,7 @@ import 'package:stream_challenge/common/strings/export.dart';
 
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
+import 'package:stream_challenge/main_widgets/body_widgets/blur_widget.dart';
 import 'package:stream_challenge/models/account.dart';
 import 'package:stream_challenge/models/challenge.dart';
 import 'package:stream_challenge/models/steamer_info.dart';
@@ -31,6 +32,7 @@ class CreateChallengeWidget extends ConsumerStatefulWidget {
 }
 
 class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
+  bool isLoading = false;
   Account? account;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _descriptionController;
@@ -78,41 +80,46 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
               constraints: BoxConstraints(maxWidth: 1000),
               child: Form(
                 key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      // Информация о стримере
-                      Center(child: streamerInfoWidget(streamerInfo)),
-                      // Поле для описания
-                      DescriptionField(controller: _descriptionController),
-                      const SizedBox(height: _margin),
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: [
+                          // Информация о стримере
+                          Center(child: streamerInfoWidget(streamerInfo)),
+                          // Поле для описания
+                          DescriptionField(controller: _descriptionController),
+                          const SizedBox(height: _margin),
 
-                      // Поле для ставки и валюты
-                      SliderWidget(
-                        controller: _betController,
-                        minimum: minimum,
-                        maximum: account!.balance,
-                        currency: account!.currency,
-                      ),
-                      const SizedBox(height: _margin),
-
-                      Column(children: [
-                        // Поле для условий испытания
-                        ConditionsSection(controllers: _controllers, max: 5),
-                        // Кнопка "Создать"
-                        ElevatedButton(
-                          onPressed: () async => await _submit(),
-                          child: Text(
-                            AppLocale.of(context).translate(mCreate),
+                          // Поле для ставки и валюты
+                          SliderWidget(
+                            controller: _betController,
+                            minimum: minimum,
+                            maximum: account!.balance,
+                            currency: account!.currency,
                           ),
-                        ),
-                        const SizedBox(height: _margin),
-                        infoAcception(context),
-                      ])
-                    ],
-                  ),
+                          const SizedBox(height: _margin),
+
+                          Column(children: [
+                            // Поле для условий испытания
+                            ConditionsSection(controllers: _controllers, max: 5),
+                            // Кнопка "Создать"
+                            ElevatedButton(
+                              onPressed: () async => await _submit(),
+                              child: Text(
+                                AppLocale.of(context).translate(mCreate),
+                              ),
+                            ),
+                            const SizedBox(height: _margin),
+                            infoAcception(context),
+                          ])
+                        ],
+                      ),
+                    ),
+                    if (isLoading) BlurAndBlock(),
+                  ],
                 ),
               ),
             ),
@@ -177,10 +184,12 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
       conditions: _controllers.map((e) => e.text).toList(),
       performerLogin: widget.performerLogin,
     );
+    setState(() => isLoading = true);
     bool res = await _createChallenge(
       challenge,
       await ref.watch(httpClientProvider.future),
     );
+    setState(() => isLoading = false);
     if (res) await ref.read(accountProvider.notifier).refresh();
   }
 

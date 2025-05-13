@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:stream_challenge/core/platform/datetime_format.dart';
 
 class Preferences {
+  int id;
   double minimumRewardInDollars;
   String language;
   String timezone;
   bool? darkMode;
 
   Preferences({
+    required this.id,
     required this.minimumRewardInDollars,
     required this.language,
     required this.timezone,
@@ -17,6 +19,7 @@ class Preferences {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'minimum_reward_in_dollars': minimumRewardInDollars,
       'language': language,
       'timezone': timezone,
@@ -26,6 +29,7 @@ class Preferences {
 
   factory Preferences.fromMap(Map<String, dynamic> map) {
     return Preferences(
+      id: map['id'] as int,
       minimumRewardInDollars: map['minimum_reward_in_dollars'] as double,
       language: map['language'] as String,
       timezone: map['timezone'] as String,
@@ -38,10 +42,10 @@ class Preferences {
   @override
   String toString() => prettyJson(toMap());
 
-  factory Preferences.fromJson(String source) =>
-      Preferences.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Preferences.fromJson(String source) => Preferences.fromMap(json.decode(source) as Map<String, dynamic>);
 
   factory Preferences.defaultPreferences() => Preferences(
+        id: 0,
         minimumRewardInDollars: 1.0,
         language: 'EN',
         timezone: 'UTC',
@@ -54,8 +58,7 @@ class Preferences {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
     return other is Preferences &&
-        (other.minimumRewardInDollars - minimumRewardInDollars).abs() <
-            epsilon &&
+        (other.minimumRewardInDollars - minimumRewardInDollars).abs() < epsilon &&
         other.language == language &&
         other.timezone == timezone &&
         other.darkMode == darkMode;
@@ -63,9 +66,6 @@ class Preferences {
 
   @override
   int get hashCode {
-    return minimumRewardInDollars.hashCode ^
-        language.hashCode ^
-        darkMode.hashCode ^
-        timezone.hashCode;
+    return minimumRewardInDollars.hashCode ^ language.hashCode ^ darkMode.hashCode ^ timezone.hashCode;
   }
 }

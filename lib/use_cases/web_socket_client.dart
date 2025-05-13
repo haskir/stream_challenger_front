@@ -58,24 +58,24 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
   void _handleData(dynamic data) {
     try {
       if (data == null) return;
-      final parsedData = jsonDecode(data);
-
+      dynamic parsedData = jsonDecode(data);
+      print(parsedData);
+      if (parsedData is String) parsedData = jsonDecode(parsedData);
+      print(parsedData);
       if (parsedData is List) {
-        // Инициализация списка
         _challenges.clear();
         _challenges.addAll(parsedData.map((json) => Challenge.fromMap(json)));
-      } else if (parsedData is Map) {
-        bool flag = false;
+      }
+      if (parsedData is Map) {
+        bool isNew = true;
         for (Challenge challenge in _challenges) {
           if (challenge.id == parsedData['id']) {
             challenge.update(parsedData as Map<String, dynamic>);
-            flag = true;
+            isNew = false;
             break;
           }
         }
-        if (!flag) {
-          _addChallenge(Challenge.fromMap(parsedData as Map<String, dynamic>));
-        }
+        if (isNew) _addChallenge(Challenge.fromMap(parsedData as Map<String, dynamic>));
       }
       // Передаем обновленный список
       _challengeController.add(List.unmodifiable(_challenges));

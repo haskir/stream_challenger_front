@@ -4,25 +4,29 @@ import 'dart:convert';
 import 'package:stream_challenge/core/platform/datetime_format.dart';
 
 class ChallengePerson {
-  final String name;
-  final String urlImage;
+  final String login;
+  final String profileImageUrl;
+  final double rating;
 
   ChallengePerson({
-    required this.name,
-    required this.urlImage,
+    required this.login,
+    required this.profileImageUrl,
+    required this.rating,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'name': name,
-      'url_image': urlImage,
+      'login': login,
+      'profile_image_url': profileImageUrl,
+      'rating': rating,
     };
   }
 
   factory ChallengePerson.fromMap(Map<String, dynamic> map) {
     return ChallengePerson(
-      name: map['name'] as String,
-      urlImage: map['url_image'] as String,
+      login: map['login'] as String,
+      profileImageUrl: map['profile_image_url'] as String,
+      rating: map['rating'] as double,
     );
   }
 
@@ -86,10 +90,8 @@ class Challenge {
   int? rating;
   double? payout;
   String status;
-  String? reportStatus;
   final ChallengePerson author;
   final ChallengePerson performer;
-  final String performerLogin;
   final DateTime createdAt;
   DateTime updatedAt;
   Report? report;
@@ -105,10 +107,8 @@ class Challenge {
     required this.rating,
     required this.payout,
     required this.status,
-    required this.reportStatus,
     required this.author,
     required this.performer,
-    required this.performerLogin,
     required this.createdAt,
     required this.updatedAt,
     required this.report,
@@ -132,10 +132,8 @@ class Challenge {
       'rating': rating,
       'payout': payout,
       'status': status,
-      'report_status': reportStatus,
       'author': author.toMap(),
       'performer': performer.toMap(),
-      'performer_login': performerLogin,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
       'report': report?.toMap(),
@@ -146,30 +144,27 @@ class Challenge {
 
   factory Challenge.fromMap(Map<String, dynamic> map) {
     return Challenge(
-      id: map['id'],
-      description: map['description'],
+      id: map['id'] as int,
+      description: map['description'] as String,
       conditions: List<String>.from((map['conditions'])),
-      currency: map['currency'],
-      bet: map['bet'],
+      currency: map['currency'] as String,
+      bet: map['bet'] as double,
       rating: map['rating'] as int?,
       payout: map['payout'] as double?,
-      status: map['status'],
-      reportStatus: map['report_status'],
-      author: ChallengePerson.fromMap(map['author']),
-      performer: ChallengePerson.fromMap(map['performer']),
-      performerLogin: map['performer_login'],
-      createdAt: DateTime.parse(map['created_at']),
-      updatedAt: DateTime.parse(map['updated_at']),
-      report: map['report'] != null ? Report.fromMap(map['report']) : null,
-      predictID: map['predict_id'],
-      pollID: map['poll_id'],
+      status: map['status'] as String,
+      author: ChallengePerson.fromMap(map['author'] as Map<String, dynamic>),
+      performer: ChallengePerson.fromMap(map['performer'] as Map<String, dynamic>),
+      createdAt: DateTime.parse(map['created_at'] as String),
+      updatedAt: DateTime.parse(map['updated_at'] as String),
+      report: map['report'] != null ? Report.fromMap(map['report'] as Map<String, dynamic>) : null,
+      predictID: map['predict_id'] as String?,
+      pollID: map['poll_id'] as String?,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Challenge.fromJson(String source) =>
-      Challenge.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Challenge.fromJson(String source) => Challenge.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() => prettyJson(toMap());
@@ -252,8 +247,7 @@ class Report {
 
   String toJson() => json.encode(toMap());
 
-  factory Report.fromJson(String source) =>
-      Report.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Report.fromJson(String source) => Report.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() => prettyJson(toMap());

@@ -72,36 +72,36 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError) {
           return Center(child: CircularProgressIndicator());
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        }
+        if (snapshot.data!.isEmpty) {
           return Center(
-              child: Text(
-            AppLocale.of(context).translate(mNoChallengesAvailable),
-          ));
-        } else {
-          final challenges = snapshot.data!;
-          final challengesByState = _groupChallengesByState(challenges);
-
-          final panelBuilder = ChallengesPanelBuilder(
-            expandedStates: _expandedStates,
-          );
-
-          return ListView(
-            children: [
-              ExpansionPanelList(
-                expansionCallback: (int index, bool isExpanded) {
-                  setState(() {
-                    final state = challengesByState.keys.elementAt(index);
-                    _expandedStates[state] = isExpanded;
-                  });
-                },
-                children: panelBuilder.buildExpansionPanels(
-                  context,
-                  challengesByState,
-                ),
-              ),
-            ],
+            child: Text(AppLocale.of(context).translate(mNoChallengesAvailable)),
           );
         }
+        final challenges = snapshot.data!;
+        print(challenges);
+        final challengesByState = _groupChallengesByState(challenges);
+
+        final panelBuilder = ChallengesPanelBuilder(
+          expandedStates: _expandedStates,
+        );
+
+        return ListView(
+          children: [
+            ExpansionPanelList(
+              expansionCallback: (int index, bool isExpanded) {
+                setState(() {
+                  final state = challengesByState.keys.elementAt(index);
+                  _expandedStates[state] = isExpanded;
+                });
+              },
+              children: panelBuilder.buildExpansionPanels(
+                context,
+                challengesByState,
+              ),
+            ),
+          ],
+        );
       },
     );
   }

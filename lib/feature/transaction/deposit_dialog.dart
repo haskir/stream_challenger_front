@@ -1,9 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
+import 'package:stream_challenge/main_widgets/body_widgets/blur_widget.dart';
 import 'package:stream_challenge/models/account.dart';
 import 'package:stream_challenge/models/currency.dart';
 import 'package:stream_challenge/models/transaction.dart';
@@ -24,7 +23,7 @@ class DepositDialog extends ConsumerStatefulWidget {
 class _DepositWidgetState extends ConsumerState<DepositDialog> {
   final TextEditingController _controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -35,9 +34,7 @@ class _DepositWidgetState extends ConsumerState<DepositDialog> {
   Future<void> _submit(dynamic url) async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => isLoading = true);
     CreateTransactionDTO dto = CreateTransactionDTO(
       amount: double.parse(_controller.text),
       currency: widget.account.currency,
@@ -46,9 +43,7 @@ class _DepositWidgetState extends ConsumerState<DepositDialog> {
     );
     final client = await ref.read(httpClientProvider.future);
     await TransactionsUseCase.deposit(dto, client);
-    setState(() {
-      _isLoading = false;
-    });
+    setState(() => isLoading = false);
   }
 
   @override
@@ -119,19 +114,7 @@ class _DepositWidgetState extends ConsumerState<DepositDialog> {
             )
           ],
         ),
-        if (_isLoading) ...[
-          // Блокировка интерфейса
-          Positioned.fill(
-            child: const ModalBarrier(dismissible: false),
-          ),
-          // Индикатор загрузки в центре и непрозрачность
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
-        ]
+        if (isLoading) BlurAndBlock(isLoading: isLoading),
       ],
     );
   }

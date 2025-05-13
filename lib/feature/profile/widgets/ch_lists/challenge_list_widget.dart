@@ -38,7 +38,6 @@ class _ChallengesListWidgetState extends ConsumerState<ChallengesListWidget> {
   @override
   Widget build(BuildContext context) {
     return ChallengesPanel(
-      key: ValueKey(widget.isAuthor),
       expandedStates: _expandedStates,
       isAuthor: widget.isAuthor,
     );
