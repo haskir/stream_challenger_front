@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/core/platform/response.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 class GetStruct {
@@ -35,8 +35,7 @@ class GetStruct {
 
   String toJson() => json.encode(toMap());
 
-  factory GetStruct.fromJson(String source) =>
-      GetStruct.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory GetStruct.fromJson(String source) => GetStruct.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class ChallengeGetter {
@@ -65,31 +64,25 @@ class ChallengeGetter {
         if (array == null) {
           return Right(List<Challenge>.empty());
         }
-        final challenges =
-            (array as List<dynamic>).map((e) => Challenge.fromMap(e)).toList();
+        final challenges = (array as List<dynamic>).map((e) => Challenge.fromMap(e)).toList();
 
         return Right(challenges);
       });
     } catch (e) {
       return Left(
-        ErrorDTO(
-            message: "Error fetching challenges: $e",
-            type: "clientError",
-            code: -500),
+        ErrorDTO(message: "Error fetching challenges: $e", type: "clientError", code: -500),
       );
     }
   }
 }
 
-final challengeProvider =
-    FutureProvider.family<Either<ErrorDTO, Challenge>, int>((ref, id) async {
+final challengeProvider = FutureProvider.family<Either<ErrorDTO, Challenge>, int>((ref, id) async {
   final client = await ref.watch(httpClientProvider.future);
   final result = await ChallengeGetter.getChallenge(id: id, client: client);
   return result;
 });
 
-final authorChallengesProvider =
-    FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
+final authorChallengesProvider = FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
   try {
     final result = await ChallengeGetter.getChallenges(
       getStruct: getStruct,
@@ -109,8 +102,7 @@ final authorChallengesProvider =
   }
 });
 
-final performerChallengesProvider =
-    FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
+final performerChallengesProvider = FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
   try {
     final result = await ChallengeGetter.getChallenges(
       getStruct: getStruct,

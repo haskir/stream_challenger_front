@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/auth_state.dart';
+import 'package:stream_challenge/models/auth_state.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 import 'widgets/ch_lists/challenge_list_widget.dart';

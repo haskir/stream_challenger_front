@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/common/strings/_transactions_strings.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/account.dart';
+import 'package:stream_challenge/models/account.dart';
 import 'package:stream_challenge/feature/transaction/deposit_dialog.dart';
 import 'package:stream_challenge/feature/transaction/withdraw_dialog.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
@@ -25,20 +25,15 @@ class BalanceWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Account? account = ref.watch(accountProvider);
     if (account == null) return Container();
-    final String balance = account.balance % 1 == 0
-        ? account.balance.toString()
-        : account.balance.toStringAsFixed(2);
+    final String balance = account.balance % 1 == 0 ? account.balance.toString() : account.balance.toStringAsFixed(2);
     return VisibilityDetector(
       key: Key('account-visibility'),
       onVisibilityChanged: (visibilityInfo) {
-        ref
-            .read(accountProvider.notifier)
-            .setVisibility(visibilityInfo.visibleFraction > 0);
+        ref.read(accountProvider.notifier).setVisibility(visibilityInfo.visibleFraction > 0);
       },
       child: TextButton(
         child: Text(
-          style:
-              TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
+          style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
           '$balance ${_currency[account.currency]}',
         ),
         onPressed: () => _showBalanceDialog(context, account),

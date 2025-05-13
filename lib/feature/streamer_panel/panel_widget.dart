@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 import 'package:stream_challenge/use_cases/web_socket_client.dart';
 import 'package:stream_challenge/feature/streamer_panel/widgets/challenges_panel_builder.dart';
 import 'package:stream_challenge/providers/providers.dart';
@@ -33,8 +33,7 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
   Future<void> initStream() async {
     final authNotifier = ref.read(authStateProvider.notifier);
 
-    _wsconnection =
-        ChallengesPanelWebSocket(token: await authNotifier.getTokenAsync());
+    _wsconnection = ChallengesPanelWebSocket(token: await authNotifier.getTokenAsync());
     await _wsconnection.connect().then((connected) {
       if (connected) {
         setState(() {
@@ -48,18 +47,14 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
     });
   }
 
-  Map<String, List<Challenge>> _groupChallengesByState(
-      List<Challenge> challenges) {
+  Map<String, List<Challenge>> _groupChallengesByState(List<Challenge> challenges) {
     final Map<String, List<Challenge>> challengesByState = {
       'ACCEPTED': [],
       'PENDING': [],
     };
     for (var challenge in challenges) {
       if (challengesByState[challenge.status] != null) {
-        challengesByState[challenge.status] = [
-          ...challengesByState[challenge.status]!,
-          challenge
-        ];
+        challengesByState[challenge.status] = [...challengesByState[challenge.status]!, challenge];
       }
     }
 
@@ -75,8 +70,7 @@ class _PanelWidgetState extends ConsumerState<PanelWidget> {
     return StreamBuilder<List<Challenge>>(
       stream: challengesStream,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting ||
-            snapshot.hasError) {
+        if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError) {
           return Center(child: CircularProgressIndicator());
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(

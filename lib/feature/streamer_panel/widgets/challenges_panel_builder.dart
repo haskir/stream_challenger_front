@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/common/consts.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 import 'package:stream_challenge/feature/challenge_view/challenge_card.dart';
 
 class ChallengesPanelBuilder {
@@ -11,8 +11,7 @@ class ChallengesPanelBuilder {
 
   List<ExpansionPanel>? cachedPanels;
 
-  List<ExpansionPanel> buildExpansionPanels(
-      BuildContext context, Map<String, List<Challenge>> challengesByStatus) {
+  List<ExpansionPanel> buildExpansionPanels(BuildContext context, Map<String, List<Challenge>> challengesByStatus) {
     if (cachedPanels != null) return cachedPanels!;
 
     cachedPanels = challengesByStatus.entries.map((entry) {
@@ -22,9 +21,7 @@ class ChallengesPanelBuilder {
       return ExpansionPanel(
         headerBuilder: (BuildContext context, bool isExpanded) {
           return ListTile(
-            title: Center(
-                child: Text(AppLocale.of(context)
-                    .translate(challengesStatusHeaders[status]!))),
+            title: Center(child: Text(AppLocale.of(context).translate(challengesStatusHeaders[status]!))),
             trailing: Text('(${challenges.length})',
                 style: TextStyle(
                   color: challengesStatusColors[status],

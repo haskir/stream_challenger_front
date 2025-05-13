@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 
 import '_author_actions.dart';
 import '_performer_actions.dart';

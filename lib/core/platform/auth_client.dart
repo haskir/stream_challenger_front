@@ -7,7 +7,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:stream_challenge/core/platform/export.dart';
 
 import 'package:stream_challenge/core/platform/token_repo.dart';
-import 'package:stream_challenge/data/models/auth_state.dart';
+import 'package:stream_challenge/models/auth_state.dart';
 import 'package:stream_challenge/providers/api.dart';
 
 abstract class AuthClient {

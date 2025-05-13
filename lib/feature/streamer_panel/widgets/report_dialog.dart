@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 
 class ReportDialog extends StatefulWidget {
   final int challengeId;
@@ -84,8 +84,7 @@ class ReportDialogState extends State<ReportDialog> {
               final dto = CreateReportDTO(
                 challengeId: widget.challengeId,
                 reason: _selectedReason!,
-                comment:
-                    _selectedReason == "Other" ? _textController.text : null,
+                comment: _selectedReason == "Other" ? _textController.text : null,
               );
               Navigator.of(context).pop(dto);
             }

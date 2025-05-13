@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/common/consts.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/auth_state.dart';
-import 'package:stream_challenge/data/models/user_preferences.dart';
+import 'package:stream_challenge/models/auth_state.dart';
+import 'package:stream_challenge/models/user_preferences.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
@@ -37,8 +37,7 @@ class UserEditDialogState extends ConsumerState<UserEditDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Поле для редактирования minimumInUSD
-          if (["affiliate", "partner"]
-              .contains(authState.user?.broadcasterType))
+          if (["affiliate", "partner"].contains(authState.user?.broadcasterType))
             TextField(
               controller: _textController,
               keyboardType: TextInputType.number,
@@ -60,8 +59,7 @@ class UserEditDialogState extends ConsumerState<UserEditDialog> {
                     preferences.timezone = newValue!;
                   });
                 },
-                items:
-                    timezones.map<DropdownMenuItem<String>>((String timezone) {
+                items: timezones.map<DropdownMenuItem<String>>((String timezone) {
                   return DropdownMenuItem<String>(
                     value: timezone,
                     child: Text(timezone),

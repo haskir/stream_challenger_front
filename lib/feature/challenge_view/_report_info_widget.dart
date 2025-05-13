@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 
 class ReportInfoWidget extends StatelessWidget {
   final Report report;

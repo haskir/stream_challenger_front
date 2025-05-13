@@ -6,7 +6,7 @@ import 'package:stream_challenge/common/mixins.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'package:stream_challenge/use_cases/challenges_actions.dart';
 
@@ -139,15 +139,12 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
     widget.onLoading(false);
 
     if (mounted) {
-      return result.fold(
-          (left) => Fluttertoast.showToast(msg: result.toString()),
-          (right) => Fluttertoast.showToast(
-              msg: AppLocale.of(context).translate(mReported)));
+      return result.fold((left) => Fluttertoast.showToast(msg: result.toString()),
+          (right) => Fluttertoast.showToast(msg: AppLocale.of(context).translate(mReported)));
     }
   }
 
-  Future _challengeAction(
-      Challenge challenge, Requester requester, String action) async {
+  Future _challengeAction(Challenge challenge, Requester requester, String action) async {
     widget.onLoading(true);
 
     final result = await ChallengesActions.challengeAction(
@@ -158,10 +155,7 @@ class PerformerActionsState extends ConsumerState<ActionsBuilder> {
 
     result.fold(
         (left) => Fluttertoast.showToast(
-            msg: left.message,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            timeInSecForIosWeb: 10),
+            msg: left.message, backgroundColor: Colors.red, textColor: Colors.white, timeInSecForIosWeb: 10),
         (right) => null);
     if (mounted) {
       widget.onLoading(false);

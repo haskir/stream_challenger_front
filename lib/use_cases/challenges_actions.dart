@@ -1,14 +1,16 @@
 import 'package:dartz/dartz.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/core/platform/response.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 
 class ChallengesActions {
+  static const path = "/challenge";
+
   static Future<Either<ErrorDTO, Challenge>> challengeCreate({
     required CreateChallengeDTO challenge,
     required Requester client,
   }) async {
-    return (await client.post('/challenges', body: challenge.toMap())).fold(
+    return (await client.post(path, body: challenge.toMap())).fold(
       (left) => Left(left),
       (right) => Right(Challenge.fromMap(right)),
     );
@@ -19,8 +21,7 @@ class ChallengesActions {
     required Requester requester,
     required String action,
   }) async {
-    final result = await requester.post('/challenges/${challenge.id}',
-        query: {'action': action.toUpperCase()});
+    final result = await requester.post('/challenges/${challenge.id}', query: {'action': action.toUpperCase()});
     return result;
   }
 
@@ -29,10 +30,10 @@ class ChallengesActions {
     required Requester client,
     required double decimalPercentage,
   }) async {
-    final result = (await client.post(
-      '/challenges/${challenge.id}/pay',
+    final result = await client.post(
+      '$path/${challenge.id}/pay',
       body: ({'percentage': decimalPercentage}),
-    ));
+    );
     return result.fold(
       (left) => Left(left),
       (right) => Right(Challenge.fromMap(right)),
@@ -60,10 +61,10 @@ class ChallengesActions {
     required Requester client,
     required int rating,
   }) async {
-    final result = (await client.post(
-      '/challenges/${challenge.id}/rate',
+    final result = await client.post(
+      '$path/${challenge.id}/rate',
       query: ({'value': rating}),
-    ));
+    );
     return result.fold(
       (left) => Left(left),
       (right) => Right(Challenge.fromMap(right)),

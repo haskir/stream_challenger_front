@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 import 'package:stream_challenge/providers/api.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -19,8 +19,7 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
   late WebSocketChannel _channel;
   bool _isConnected = false;
   final List<Challenge> _challenges = [];
-  final StreamController<List<Challenge>> _challengeController =
-      StreamController.broadcast();
+  final StreamController<List<Challenge>> _challengeController = StreamController.broadcast();
   Timer? _pingTimer;
   Timer? _reconnectTimer;
 

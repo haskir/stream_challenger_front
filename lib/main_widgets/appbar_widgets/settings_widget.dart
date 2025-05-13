@@ -4,14 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/providers/providers.dart';
-import 'package:stream_challenge/data/models/user_preferences.dart';
+import 'package:stream_challenge/models/user_preferences.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
 
 class SettingsWidget extends ConsumerStatefulWidget {
-  static const Map<String, String> languagesHeaders = {
-    'EN': 'Русский язык',
-    'RU': 'English language'
-  };
+  static const Map<String, String> languagesHeaders = {'EN': 'Русский язык', 'RU': 'English language'};
   const SettingsWidget({super.key});
 
   @override
@@ -52,17 +49,13 @@ class _SettingsState extends ConsumerState<SettingsWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              AppLocale.of(context).translate(
-                  SettingsWidget.languagesHeaders[preferences.language]!),
-              style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
+              AppLocale.of(context).translate(SettingsWidget.languagesHeaders[preferences.language]!),
+              style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
             ),
             IconButton(
               onPressed: () async {
                 preferences.language = swtchLang(preferences.language);
-                await ref
-                    .read(preferencesProvider.notifier)
-                    .updatePreferences(preferences);
+                await ref.read(preferencesProvider.notifier).updatePreferences(preferences);
               },
               icon: const Icon(Icons.language),
               color: Theme.of(context).iconTheme.color,
@@ -75,8 +68,7 @@ class _SettingsState extends ConsumerState<SettingsWidget> {
           children: [
             Text(
               AppLocale.of(context).translate(themeText(preferences.darkMode)),
-              style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyMedium?.color),
+              style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -86,9 +78,7 @@ class _SettingsState extends ConsumerState<SettingsWidget> {
                 IconButton(
                   onPressed: () async {
                     preferences.darkMode = false;
-                    await ref
-                        .read(preferencesProvider.notifier)
-                        .updatePreferences(preferences);
+                    await ref.read(preferencesProvider.notifier).updatePreferences(preferences);
                   },
                   icon: preferences.darkMode == false
                       ? const Icon(Icons.light_mode)
@@ -99,26 +89,19 @@ class _SettingsState extends ConsumerState<SettingsWidget> {
                 IconButton(
                   onPressed: () async {
                     preferences.darkMode = true;
-                    await ref
-                        .read(preferencesProvider.notifier)
-                        .updatePreferences(preferences);
+                    await ref.read(preferencesProvider.notifier).updatePreferences(preferences);
                   },
-                  icon: preferences.darkMode == true
-                      ? const Icon(Icons.dark_mode)
-                      : const Icon(Icons.dark_mode_outlined),
+                  icon:
+                      preferences.darkMode == true ? const Icon(Icons.dark_mode) : const Icon(Icons.dark_mode_outlined),
                   color: Theme.of(context).iconTheme.color,
                 ),
                 // Системная
                 IconButton(
                   onPressed: () async {
                     preferences.darkMode = null;
-                    await ref
-                        .read(preferencesProvider.notifier)
-                        .updatePreferences(preferences);
+                    await ref.read(preferencesProvider.notifier).updatePreferences(preferences);
                   },
-                  icon: preferences.darkMode == null
-                      ? const Icon(Icons.settings)
-                      : const Icon(Icons.settings_outlined),
+                  icon: preferences.darkMode == null ? const Icon(Icons.settings) : const Icon(Icons.settings_outlined),
                   color: Theme.of(context).iconTheme.color,
                 ),
               ],
@@ -147,8 +130,7 @@ class AuthWidget extends ConsumerWidget {
               onPressed: () => _showSettingsDialog(context, ref, authState),
               icon: CircleAvatar(
                 radius: 20,
-                backgroundImage:
-                    NetworkImage(authState.user!.profile_image_url),
+                backgroundImage: NetworkImage(authState.user!.profile_image_url),
               ),
             ),
             const SizedBox(width: 5),
@@ -163,11 +145,8 @@ class AuthWidget extends ConsumerWidget {
         IconButton(
           onPressed: () async {
             Preferences preferences = ref.read(preferencesProvider);
-            preferences.language =
-                _SettingsState.swtchLang(preferences.language);
-            await ref
-                .read(preferencesProvider.notifier)
-                .updatePreferences(preferences);
+            preferences.language = _SettingsState.swtchLang(preferences.language);
+            await ref.read(preferencesProvider.notifier).updatePreferences(preferences);
           },
           icon: const Icon(Icons.language_outlined),
         ),

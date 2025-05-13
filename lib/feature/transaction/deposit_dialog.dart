@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/account.dart';
-import 'package:stream_challenge/data/models/currency.dart';
-import 'package:stream_challenge/data/models/transaction.dart';
+import 'package:stream_challenge/models/account.dart';
+import 'package:stream_challenge/models/currency.dart';
+import 'package:stream_challenge/models/transaction.dart';
 import 'package:stream_challenge/providers/providers.dart';
 import 'package:stream_challenge/use_cases/transactions.dart';
 

@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
-import 'package:stream_challenge/data/models/user_preferences.dart';
+import 'package:stream_challenge/models/user_preferences.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
-import '../data/models/steamer_info.dart';
+import '../models/steamer_info.dart';
 
 /// Requester - клиент для выполнения HTTP-запросов
 class _PreferencesRequester {

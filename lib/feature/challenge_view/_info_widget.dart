@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/common/mixins.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 
 class InfoWidget extends StatelessWidget {
@@ -37,9 +37,7 @@ class InfoWidget extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 15),
                       // Аватарка
                       child: Mixins.personInfo(
-                        (isAuthor == true)
-                            ? challenge.performer
-                            : challenge.author,
+                        (isAuthor == true) ? challenge.performer : challenge.author,
                         context,
                         25,
                       ),
@@ -70,14 +68,12 @@ class InfoWidget extends StatelessWidget {
                     '${AppLocale.of(context).translate(mConditions)}:',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  ...challenge.conditions
-                      .map((condition) => Text('- $condition')),
+                  ...challenge.conditions.map((condition) => Text('- $condition')),
                 ],
               ),
             ),
           // Прогноз и голосование
-          if (isAuthor == false && challenge.status == "ACCEPTED")
-            _buildPredictAndPoll(challenge, context),
+          if (isAuthor == false && challenge.status == "ACCEPTED") _buildPredictAndPoll(challenge, context),
           // Ставка и статус (снизу)
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -101,8 +97,7 @@ class InfoWidget extends StatelessWidget {
           Text("${AppLocale.of(context).translate(mBet)}: "),
           Text(
             '${challenge.bet} ${challenge.currency}',
-            style:
-                const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
           ),
           if (challenge.payout != null) ...[
             const SizedBox(width: 10),
@@ -111,8 +106,7 @@ class InfoWidget extends StatelessWidget {
             ),
             Text(
               challenge.payout!.toStringAsFixed(2),
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.green),
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
             ),
             Text(' ${challenge.currency}')
           ]
@@ -178,10 +172,7 @@ class InfoWidget extends StatelessWidget {
         Row(
           children: [
             Text(AppLocale.of(context).translate(mPredictStarted),
-                style: TextStyle(
-                    color: (challenge.predictID != null)
-                        ? Colors.green
-                        : Colors.red)),
+                style: TextStyle(color: (challenge.predictID != null) ? Colors.green : Colors.red)),
             Icon((challenge.predictID != null) ? Icons.check : Icons.close),
           ],
         ),
@@ -189,10 +180,7 @@ class InfoWidget extends StatelessWidget {
         Row(
           children: [
             Text(AppLocale.of(context).translate(mPollStarted),
-                style: TextStyle(
-                    color: (challenge.pollID != null)
-                        ? Colors.green
-                        : Colors.red)),
+                style: TextStyle(color: (challenge.pollID != null) ? Colors.green : Colors.red)),
             Icon((challenge.pollID != null) ? Icons.check : Icons.close),
           ],
         )

@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:stream_challenge/core/platform/dio.dart';
 import 'package:stream_challenge/core/platform/response.dart';
-import 'package:stream_challenge/data/models/transaction.dart';
+import 'package:stream_challenge/models/transaction.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 class GetStruct {
@@ -35,8 +35,7 @@ class GetStruct {
 
   String toJson() => json.encode(toMap());
 
-  factory GetStruct.fromJson(String source) =>
-      GetStruct.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory GetStruct.fromJson(String source) => GetStruct.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class _TrGetter {
@@ -64,31 +63,23 @@ class _TrGetter {
         if (array == null) {
           return Right(List<Transaction>.empty());
         }
-        final transactions = (array as List<dynamic>)
-            .map((e) => Transaction.fromMap(e))
-            .toList();
+        final transactions = (array as List<dynamic>).map((e) => Transaction.fromMap(e)).toList();
 
         return Right(transactions);
       });
     } catch (e) {
-      return Left(ErrorDTO(
-          message: "Error fetching transactions: $e",
-          type: "clientError",
-          code: -500));
+      return Left(ErrorDTO(message: "Error fetching transactions: $e", type: "clientError", code: -500));
     }
   }
 }
 
-final transactionProvider =
-    FutureProvider.family<Either<ErrorDTO, Transaction>, int>((ref, id) async {
+final transactionProvider = FutureProvider.family<Either<ErrorDTO, Transaction>, int>((ref, id) async {
   final client = await ref.watch(httpClientProvider.future);
   final result = await _TrGetter.getTransaction(id: id, client: client);
   return result;
 });
 
-final transactionsProvider =
-    FutureProvider.family<List<Transaction>?, GetStruct>(
-        (ref, getStruct) async {
+final transactionsProvider = FutureProvider.family<List<Transaction>?, GetStruct>((ref, getStruct) async {
   try {
     final result = await _TrGetter.getTransactions(
       getStruct: getStruct,

@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stream_challenge/common/mixins.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 import 'package:stream_challenge/feature/create_challenge/widgets/slider_widget.dart';
 import 'package:stream_challenge/providers/challenge_provider.dart';
 import 'package:stream_challenge/providers/providers.dart';
@@ -67,8 +67,7 @@ class AuthorActionsState extends ConsumerState<ActionsBuilder> {
               child: ElevatedButton(
                 onPressed: () async {
                   if (await Mixins.showConfDialog(context) ?? false) {
-                    double amount =
-                        double.parse(controller.text) / challenge.bet;
+                    double amount = double.parse(controller.text) / challenge.bet;
                     controller.dispose();
                     await _payChallenge(ref, amount);
                   }
@@ -101,8 +100,7 @@ class AuthorActionsState extends ConsumerState<ActionsBuilder> {
     await result.fold((left) {
       Fluttertoast.showToast(msg: result.toString());
     }, (right) async {
-      final result =
-          await ChallengeGetter.getChallenge(id: challenge.id, client: client);
+      final result = await ChallengeGetter.getChallenge(id: challenge.id, client: client);
       result.fold((left) {}, (right) {
         challenge.payout = right.payout;
         setState(() {});
@@ -139,8 +137,7 @@ class AuthorActionsState extends ConsumerState<ActionsBuilder> {
     await result.fold((left) {
       Fluttertoast.showToast(msg: result.toString());
     }, (right) async {
-      final result =
-          await ChallengeGetter.getChallenge(id: challenge.id, client: client);
+      final result = await ChallengeGetter.getChallenge(id: challenge.id, client: client);
       result.fold((left) {}, (right) {
         challenge.rating = right.rating;
         setState(() {});

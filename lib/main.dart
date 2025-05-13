@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 // ignore: unnecessary_import
 import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:stream_challenge/data/models/user_preferences.dart';
+import 'package:stream_challenge/models/user_preferences.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'core/platform/app_localization.dart';
@@ -20,8 +20,7 @@ class StreamChallengeApp extends ConsumerWidget {
     WidgetsFlutterBinding.ensureInitialized();
     final Preferences preferences = ref.watch(preferencesProvider);
     final router = ref.watch(routerProvider);
-    bool isDark = preferences.darkMode ??
-        (MediaQuery.of(context).platformBrightness == Brightness.dark);
+    bool isDark = preferences.darkMode ?? (MediaQuery.of(context).platformBrightness == Brightness.dark);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,

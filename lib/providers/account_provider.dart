@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:stream_challenge/core/platform/dio.dart';
-import 'package:stream_challenge/data/models/account.dart';
+import 'package:stream_challenge/models/account.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 /// Клиент для выполнения HTTP-запросов для Account

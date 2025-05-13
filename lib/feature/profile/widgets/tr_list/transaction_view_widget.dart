@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stream_challenge/common/strings/export.dart';
 import 'package:stream_challenge/core/platform/app_localization.dart';
-import 'package:stream_challenge/data/models/transaction.dart';
+import 'package:stream_challenge/models/transaction.dart';
 
 class TransactionViewWidget extends StatelessWidget {
   final Transaction transaction;
@@ -65,13 +65,11 @@ class TransactionViewWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: TransactionViewWidget.colors[transaction.status] ??
-                Colors.black,
+            color: TransactionViewWidget.colors[transaction.status] ?? Colors.black,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            AppLocale.of(context)
-                .translate(TransactionViewWidget.statuses[transaction.status]!),
+            AppLocale.of(context).translate(TransactionViewWidget.statuses[transaction.status]!),
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -86,13 +84,10 @@ class TransactionViewWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildDetailRow(
-            AppLocale.of(context).translate(mAmount),
-            "${transaction.amount.toStringAsFixed(2)} ${transaction.currency}",
-            context),
+        _buildDetailRow(AppLocale.of(context).translate(mAmount),
+            "${transaction.amount.toStringAsFixed(2)} ${transaction.currency}", context),
         const SizedBox(height: 5),
-        _buildDetailRow(AppLocale.of(context).translate(mCreatedAt),
-            _formatDate(transaction.createdAt), context),
+        _buildDetailRow(AppLocale.of(context).translate(mCreatedAt), _formatDate(transaction.createdAt), context),
       ],
     );
   }

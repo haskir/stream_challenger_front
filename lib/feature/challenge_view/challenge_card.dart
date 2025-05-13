@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
+import 'package:stream_challenge/models/challenge.dart';
 import '_actions_builder.dart';
 import '_info_widget.dart';
 import '_report_info_widget.dart';
@@ -55,8 +55,7 @@ class ChallengeCardState extends ConsumerState<ChallengeCard> {
         children: [
           // Карточка с основной информацией
           Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             margin: const EdgeInsets.all(10),
             child: Padding(
               padding: const EdgeInsets.all(25),

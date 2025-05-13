@@ -8,9 +8,9 @@ import 'package:stream_challenge/common/strings/export.dart';
 
 import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/core/platform/dio.dart';
-import 'package:stream_challenge/data/models/account.dart';
-import 'package:stream_challenge/data/models/challenge.dart';
-import 'package:stream_challenge/data/models/steamer_info.dart';
+import 'package:stream_challenge/models/account.dart';
+import 'package:stream_challenge/models/challenge.dart';
+import 'package:stream_challenge/models/steamer_info.dart';
 import 'package:stream_challenge/use_cases/challenges_actions.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
 import 'package:stream_challenge/providers/preferences_provider.dart';
@@ -27,8 +27,7 @@ class CreateChallengeWidget extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<CreateChallengeWidget> createState() =>
-      _CreateChallengeWidgetState();
+  ConsumerState<CreateChallengeWidget> createState() => _CreateChallengeWidgetState();
 }
 
 class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
@@ -59,8 +58,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
           if (streamerInfo == null) {
             return const Center(child: Text(mCantCreateChallengeForThisUser));
           }
-          double minimum = streamerInfo.minimumRewardInDollars *
-              streamerInfo.currencyRates[account!.currency]!;
+          double minimum = streamerInfo.minimumRewardInDollars * streamerInfo.currencyRates[account!.currency]!;
           _descriptionController = TextEditingController();
           _betController = TextEditingController();
           if (account!.balance < minimum) {
@@ -131,8 +129,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
             backgroundImage: NetworkImage(streamerInfo.urlImage),
           ),
           const SizedBox(width: 5),
-          Text(streamerInfo.displayName,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(streamerInfo.displayName, style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(width: 5),
           IsOnlineStatusWidget(login: streamerInfo.login),
         ],
@@ -187,8 +184,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
     if (res) await ref.read(accountProvider.notifier).refresh();
   }
 
-  Future<bool> _createChallenge(
-      CreateChallengeDTO challenge, Requester client) async {
+  Future<bool> _createChallenge(CreateChallengeDTO challenge, Requester client) async {
     Either result = await ChallengesActions.challengeCreate(
       challenge: challenge,
       client: client,
@@ -197,8 +193,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
       Fluttertoast.showToast(msg: result.toString());
       return false;
     }, (right) async {
-      Fluttertoast.showToast(
-          msg: AppLocale.of(context).translate(mChallengeCreated));
+      Fluttertoast.showToast(msg: AppLocale.of(context).translate(mChallengeCreated));
       return true;
     });
   }
