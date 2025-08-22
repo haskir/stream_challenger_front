@@ -9,7 +9,7 @@ import 'package:stream_challenge/feature/transaction/withdraw_dialog.dart';
 import 'package:stream_challenge/providers/account_provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-final Map _currency = {
+const Map<String, String> _currency = {
   "RUB": "₽",
   "EUR": "€",
   "USD": "\$",
@@ -67,9 +67,11 @@ class BalanceWidget extends ConsumerWidget {
               context: context,
               builder: (context) => WithdrawDialog(account: account),
             ),
-            onLongPress: () async {},
             style: ElevatedButton.styleFrom(
-              side: BorderSide(width: borderWidght, color: Colors.red),
+              side: BorderSide(
+                width: borderWidght,
+                color: Colors.red,
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -100,16 +102,23 @@ class BalanceWidget extends ConsumerWidget {
               );
             },
             style: ElevatedButton.styleFrom(
-              side: BorderSide(width: borderWidght, color: Colors.green),
+              side: BorderSide(
+                width: borderWidght,
+                color: Colors.green,
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(AppLocale.of(context).translate(mDeposit),
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyMedium?.color,
-                    )),
-                Icon(Icons.add, size: iconSize, color: Colors.green),
+                Text(
+                  AppLocale.of(context).translate(mDeposit),
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
+                ),
+                Icon(
+                  Icons.add,
+                  size: iconSize,
+                  color: Colors.green,
+                ),
               ],
             ),
           ),

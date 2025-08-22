@@ -5,7 +5,6 @@ ThemeData lightTheme = ThemeData(
   primaryColor: Colors.lightBlue,
   primaryColorLight: Colors.blue[200],
   primaryColorDark: Colors.lightBlue,
-  dialogBackgroundColor: Colors.white,
   iconTheme: IconThemeData(color: Colors.black),
   iconButtonTheme: IconButtonThemeData(
     style: ButtonStyle(
@@ -28,12 +27,11 @@ ThemeData darkTheme = ThemeData(
     bodySmall: TextStyle(color: Colors.grey[300]), // Цвет основного текста
   ),
   cardColor: Colors.black12,
-  cardTheme: CardTheme(color: Colors.black12), // Цвет карточек
+  cardTheme: CardThemeData(color: Colors.black12), // Цвет карточек
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     backgroundColor: Colors.grey[400], // Цвет нижней навигационной панели
     selectedItemColor: Colors.white, // Цвет выбранного элемента навигации
-    unselectedItemColor:
-        Colors.grey[500], // Цвет невыбранного элемента навигации
+    unselectedItemColor: Colors.grey[500], // Цвет невыбранного элемента навигации
   ),
   iconTheme: IconThemeData(color: Colors.white), // Цвет иконок
   elevatedButtonTheme: ElevatedButtonThemeData(

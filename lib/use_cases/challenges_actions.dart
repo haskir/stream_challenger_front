@@ -21,7 +21,10 @@ class ChallengesActions {
     required Requester requester,
     required String action,
   }) async {
-    final result = await requester.post('$path/${challenge.id}/action', query: {'action': action.toUpperCase()});
+    final result = await requester.post(
+      '$path/${challenge.id}/action',
+      query: {'action': action.toUpperCase()},
+    );
     return result;
   }
 
