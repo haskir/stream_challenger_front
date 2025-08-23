@@ -21,7 +21,7 @@ dependencies:
   flutter_bloc: any
   get_it: any
   go_router: ^15.0.0
-  dio: ^5.7.0
+  dio: any
   flutter_secure_storage: ^9.2.2
   url_launcher: ^6.3.1
   jwt_decoder: ^2.0.1
