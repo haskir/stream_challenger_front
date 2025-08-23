@@ -56,7 +56,7 @@ class Requester implements _Client {
     try {
       final response = await _dio.request(
         url,
-        data: body,
+        data: method != 'GET' ? body : null,
         queryParameters: params,
         options: Options(method: method),
       );
