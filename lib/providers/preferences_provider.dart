@@ -9,13 +9,13 @@ import '../models/steamer_info.dart';
 
 /// Requester - клиент для выполнения HTTP-запросов
 class _PreferencesRequester {
-  final String url = "/user/preferences";
+  final String path = "/user/preferences";
   final Requester httpClient;
 
   _PreferencesRequester({required this.httpClient});
 
   Future<Preferences> fetchPreferences() async {
-    final response = await httpClient.get(url);
+    final response = await httpClient.get(path);
     return response.fold(
       (left) => Preferences.defaultPreferences(),
       (right) => Preferences.fromMap(right),
@@ -23,7 +23,7 @@ class _PreferencesRequester {
   }
 
   Future<Preferences?> updatePreferences(Preferences preferences) async {
-    final response = await httpClient.post(url, body: preferences.toMap());
+    final response = await httpClient.post(path, body: preferences.toMap());
     return response.fold(
       (left) => null,
       (right) => Preferences.fromMap(right),
@@ -31,9 +31,7 @@ class _PreferencesRequester {
   }
 
   Future<StreamerInfo?> getStreamerInfo(String login) async {
-    final response = await httpClient.get(
-      '$url/$login',
-    );
+    final response = await httpClient.get('$path/$login');
     return response.fold((left) => null, (right) {
       final Map data = Map<String, dynamic>.from(right);
       return StreamerInfo.fromMap(data as Map<String, dynamic>);

@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:html' as html;
+import 'dart:js_interop';
+import 'package:web/web.dart' as web;
 
 import 'package:stream_challenge/utils/util.dart';
 
@@ -10,20 +11,28 @@ class Web {
 
     debugPrint("Opening auth URL: ${authUrl.toString()}");
 
-    void messageHandler(html.Event event) {
-      if (event is html.MessageEvent /* && event.origin == authUrl.origin*/) {
-        final token = event.data;
-        newWindow.close();
+    // Обработчик событий
+    void messageHandler(web.MessageEvent event) {
+      final token = event.data?.dartify() as String?;
+      if (token != null) {
+        newWindow?.close();
         completer.complete(token);
       }
     }
 
-    html.window.addEventListener('message', messageHandler);
+    // Добавляем listener
+    void jsCallback(web.Event event) {
+      if (event.instanceOfString("MessageEvent")) {
+        messageHandler(event as web.MessageEvent);
+      }
+    }
 
+    JSExportedDartFunction jsFn = jsCallback.toJS;
+    web.window.addEventListener('message', jsFn);
     return await completer.future.whenComplete(() {
-      html.window.removeEventListener('message', messageHandler);
+      web.window.removeEventListener('message', jsFn);
     });
   }
 
-  static html.WindowBase openUrl(String url, [String name = "_self"]) => html.window.open(url, name);
+  static web.Window? openUrl(String url, [String name = "_self"]) => web.window.open(url, name);
 }

@@ -58,17 +58,11 @@ class _TransactionGetter {
     required GetStruct getStruct,
     required Requester client,
   }) async {
-    final response = await client.get(
-      '/transactions',
-      getStruct.toMap(),
-    );
+    final response = await client.get('/transactions', getStruct.toMap());
     try {
       return response.fold((error) => Left(error), (array) {
-        if (array == null) {
-          return Right(List<Transaction>.empty());
-        }
+        if (array == null) return Right(List<Transaction>.empty());
         final transactions = (array as List<dynamic>).map((e) => Transaction.fromMap(e)).toList();
-
         return Right(transactions);
       });
     } catch (e) {

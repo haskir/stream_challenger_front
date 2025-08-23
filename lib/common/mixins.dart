@@ -22,15 +22,11 @@ class Mixins {
           content: Text(AppLocale.of(context).translate(mAreYouSure)),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false); // Отменить
-              },
+              onPressed: () => Navigator.of(context).pop(false), // Отменить
               child: Text(AppLocale.of(context).translate(mNo)),
             ),
             ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(true); // Подтвердить
-              },
+              onPressed: () => Navigator.of(context).pop(true), // Подтвердить
               child: Text(AppLocale.of(context).translate(mYes)),
             ),
           ],

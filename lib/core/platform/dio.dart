@@ -54,10 +54,12 @@ class Requester implements _Client {
     T Function(dynamic data)? parser,
   }) async {
     try {
-      final response = await _dio.request(url,
-          data: body,
-          queryParameters: params,
-          options: Options(method: method));
+      final response = await _dio.request(
+        url,
+        data: body,
+        queryParameters: params,
+        options: Options(method: method),
+      );
 
       if (response.statusCode == 200) {
         if (parser != null) {
@@ -113,8 +115,12 @@ class Requester implements _Client {
     Map<String, dynamic>? query,
     Map<String, dynamic>? body,
   }) {
-    return _request<Map<String, dynamic>>('POST', url,
-        params: query ?? {}, body: body ?? {});
+    return _request<Map<String, dynamic>>(
+      'POST',
+      url,
+      params: query ?? {},
+      body: body ?? {},
+    );
   }
 
   @override

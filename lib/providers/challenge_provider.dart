@@ -63,10 +63,7 @@ class ChallengeGetter {
     required GetStruct getStruct,
     required Requester client,
   }) async {
-    final response = await client.get(
-      getStruct.isAuthor ? '/challenges/author' : '/challenges/performer',
-      getStruct.toMap(),
-    );
+    final response = await client.get(path, getStruct.toMap());
     try {
       return response.fold((error) => Left(error), (array) {
         if (array == null) return Right(List<Challenge>.empty());

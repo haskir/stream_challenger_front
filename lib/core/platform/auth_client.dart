@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ abstract class AuthClient {
 }
 
 class _AuthServiceHTML implements AuthClient {
-  String path = ApiProvider.http;
+  String path = '${ApiProvider.http}auth';
   bool _validated = false;
   late final Uri authUrl;
   String? _token;
@@ -27,7 +28,7 @@ class _AuthServiceHTML implements AuthClient {
   String? get token => _token;
 
   Future<void> init() async {
-    authUrl = Uri.parse('${path}auth');
+    authUrl = Uri.parse(path);
     _token = await _tokenRepo.getToken();
     if (!_validated && !kDebugMode) {
       _token = await validate() ? _token : null;
@@ -40,18 +41,13 @@ class _AuthServiceHTML implements AuthClient {
     try {
       Dio dio = Dio();
       Response response = await dio.get(
-        "${path}auth/validate",
-        options: Options(
-          headers: {
-            "Authorization": "Bearer $_token",
-            "Content-Type": "application/json",
-          },
-        ),
+        "$path/validate",
+        options: Options(headers: {"Authorization": "Bearer $_token", "Content-Type": "application/json"}),
       );
       _validated = response.statusCode == 200;
       return response.statusCode == 200;
     } catch (e) {
-      print("Error validating token: $e");
+      log("Error validating token: $e");
       return false;
     }
   }
