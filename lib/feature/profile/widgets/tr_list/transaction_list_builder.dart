@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:stream_challenge/common/strings/export.dart';
+import 'package:stream_challenge/core/platform/app_localization.dart';
 import 'package:stream_challenge/models/transaction.dart';
 import 'package:stream_challenge/providers/transactions_provider.dart';
 
@@ -61,12 +62,14 @@ class _TransactionsListState extends ConsumerState<TransactionsListWidget> {
             animateTransitions: true,
             itemBuilder: (context, transaction, index) => TransactionViewWidget(transaction: transaction),
             firstPageProgressIndicatorBuilder: (context) => Center(
-              child: !isRefreshing ? CircularProgressIndicator() : Text(""),
+              child: !isRefreshing ? CircularProgressIndicator() : Container(),
             ),
             firstPageErrorIndicatorBuilder: (context) => ErrorWidget(_pagingController.error!),
             newPageErrorIndicatorBuilder: (context) => ErrorWidget(_pagingController.error!),
             noItemsFoundIndicatorBuilder: (context) => Center(
-              child: Text(mNoTrans),
+              child: Text(
+                AppLocale.of(context).translate(mNoTrans),
+              ),
             ),
           ),
         ),

@@ -18,12 +18,9 @@ List<GoRoute> routes = [
     builder: (context, state) => HomePage(),
   ),
   GoRoute(
-      path: '/challenge/:performerLogin',
-      builder: (context, state) {
-        return CreateChallengeWidget(
-          performerLogin: state.pathParameters['performerLogin'] ?? '',
-        );
-      }),
+    path: '/challenge/:performerLogin',
+    builder: (context, state) => CreateChallengeWidget(performerLogin: state.pathParameters['performerLogin'] ?? ''),
+  ),
   GoRoute(
     path: '/panel',
     builder: (context, state) => PanelWidget(),

@@ -1,7 +1,7 @@
 class _ApiPathDebug {
   static const url = 'localhost';
   static const prefix = 'api';
-  static const port = 80;
+  static const port = 8400;
 
   static String get http => 'http://$url:$port/$prefix/';
   static String get ws => 'ws://$url:$port/$prefix/';

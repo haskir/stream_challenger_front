@@ -11,23 +11,27 @@ import 'package:stream_challenge/models/transaction.dart';
 import 'package:stream_challenge/providers/providers.dart';
 
 class GetStruct {
-  final String? status;
+  final List<String> statuses;
   final int page;
   final int size;
 
-  GetStruct({required this.page, required this.size, this.status});
+  GetStruct({
+    required this.page,
+    required this.size,
+    this.statuses = const [],
+  });
 
   Map<String, dynamic> toMap() {
     return {
       'page': page.toString(),
       'size': size.toString(),
-      if (status != null) 'status': status,
+      'status': statuses,
     };
   }
 
   factory GetStruct.fromMap(Map<String, dynamic> map) {
     return GetStruct(
-      status: map['status'],
+      statuses: map['status'],
       page: map['page'],
       size: map['size'],
     );
@@ -38,7 +42,7 @@ class GetStruct {
   factory GetStruct.fromJson(String source) => GetStruct.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
-class _TrGetter {
+class _TransactionGetter {
   static Future<Either<ErrorDTO, Transaction>> getTransaction({
     required int id,
     required Requester client,
@@ -75,13 +79,13 @@ class _TrGetter {
 
 final transactionProvider = FutureProvider.family<Either<ErrorDTO, Transaction>, int>((ref, id) async {
   final client = await ref.watch(httpClientProvider.future);
-  final result = await _TrGetter.getTransaction(id: id, client: client);
+  final result = await _TransactionGetter.getTransaction(id: id, client: client);
   return result;
 });
 
 final transactionsProvider = FutureProvider.family<List<Transaction>?, GetStruct>((ref, getStruct) async {
   try {
-    final result = await _TrGetter.getTransactions(
+    final result = await _TransactionGetter.getTransactions(
       getStruct: getStruct,
       client: await ref.watch(httpClientProvider.future),
     );

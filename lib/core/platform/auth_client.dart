@@ -41,10 +41,12 @@ class _AuthServiceHTML implements AuthClient {
       Dio dio = Dio();
       Response response = await dio.get(
         "${path}auth/validate",
-        options: Options(headers: {
-          "Authorization": "Bearer $_token",
-          "Content-Type": "application/json",
-        }),
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $_token",
+            "Content-Type": "application/json",
+          },
+        ),
       );
       _validated = response.statusCode == 200;
       return response.statusCode == 200;
@@ -54,9 +56,7 @@ class _AuthServiceHTML implements AuthClient {
     }
   }
 
-  final ValueNotifier<AuthState> authStateNotifier = ValueNotifier(
-    AuthState(),
-  );
+  final ValueNotifier<AuthState> authStateNotifier = ValueNotifier(AuthState());
 
   @override
   Future<void> auth(BuildContext context) async {

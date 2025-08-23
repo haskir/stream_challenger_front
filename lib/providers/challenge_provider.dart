@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +30,19 @@ class GetStruct {
       'is_author': isAuthor.toString(),
     };
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory GetStruct.fromMap(Map<String, dynamic> map) {
+    return GetStruct(
+      statuses: map['statuses'] as List<String>,
+      page: map['page'] as int,
+      size: map['size'] as int,
+      isAuthor: map['is_author'] as bool,
+    );
+  }
+
+  factory GetStruct.fromJson(String source) => GetStruct.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class ChallengeGetter {
@@ -49,16 +64,13 @@ class ChallengeGetter {
     required Requester client,
   }) async {
     final response = await client.get(
-      path,
+      getStruct.isAuthor ? '/challenges/author' : '/challenges/performer',
       getStruct.toMap(),
     );
     try {
       return response.fold((error) => Left(error), (array) {
-        if (array == null) {
-          return Right(List<Challenge>.empty());
-        }
-        final challenges = (array as List<dynamic>).map((e) => Challenge.fromMap(e)).toList();
-
+        if (array == null) return Right(List<Challenge>.empty());
+        List<Challenge> challenges = (array as List<dynamic>).map((e) => Challenge.fromMap(e)).toList();
         return Right(challenges);
       });
     } catch (e) {
@@ -75,7 +87,7 @@ final challengeProvider = FutureProvider.family<Either<ErrorDTO, Challenge>, int
   return result;
 });
 
-final challengesProvider = FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
+final authorChallengesProvider = FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
   try {
     final result = await ChallengeGetter.getChallenges(
       getStruct: getStruct,
@@ -83,13 +95,32 @@ final challengesProvider = FutureProvider.family<List<Challenge>?, GetStruct>((r
     );
     return result.fold(
       (error) {
-        if (kDebugMode) print("authorChallengesProvider0 $error");
+        if (kDebugMode) print("$error");
         return null;
       },
       (challenges) => challenges,
     );
   } catch (error) {
     print("authorChallengesProvider1 error: $error");
+    return null;
+  }
+});
+
+final performerChallengesProvider = FutureProvider.family<List<Challenge>?, GetStruct>((ref, getStruct) async {
+  try {
+    final result = await ChallengeGetter.getChallenges(
+      getStruct: getStruct,
+      client: await ref.watch(httpClientProvider.future),
+    );
+    return result.fold(
+      (error) {
+        if (kDebugMode) print("performerChallengesProvider $error");
+        return null;
+      },
+      (challenges) => challenges,
+    );
+  } catch (error) {
+    print("performerChallengesProvider error: $error");
     return null;
   }
 });

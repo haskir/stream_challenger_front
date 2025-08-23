@@ -26,6 +26,10 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel> with SingleTi
   final Map<String, List<int>> hasLoaded = {}; // Для отслеживания загрузки
   final PageController _pageController = PageController();
 
+  FutureProviderFamily<List<Challenge>?, GetStruct> get challengesProvider {
+    return widget.isAuthor ? authorChallengesProvider : performerChallengesProvider;
+  }
+
   static Map<String, String> headers = {
     'PENDING': mNewChallenges,
     'ACCEPTED': mAcceptedChallenges,
@@ -59,7 +63,7 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel> with SingleTi
   @override
   void initState() {
     tabController = TabController(length: headers.length, vsync: this);
-    for (final status in headers.keys) {
+    for (String status in headers.keys) {
       hasLoaded[status] = [];
     }
     pagingControllers.forEach((status, controller) {
@@ -151,34 +155,35 @@ class _ChallengesPanelState extends ConsumerState<ChallengesPanel> with SingleTi
   Widget _buildPage(String status) {
     bool isRefreshing = false;
     return RefreshIndicator(
-        onRefresh: () async {
-          isRefreshing = true;
-          pagingControllers[status]!.refresh();
-          hasLoaded[status] = [];
-          await _fetchPage(status, 1);
-        },
-        child: PagedListView<int, Challenge>(
-          pagingController: pagingControllers[status]!,
-          builderDelegate: PagedChildBuilderDelegate<Challenge>(
-            animateTransitions: true,
-            itemBuilder: (context, challenge, index) {
-              return ChallengeCard(
-                challenge: challenge,
-                isAuthor: widget.isAuthor,
-                key: ValueKey(challenge.id),
-              );
-            },
-            firstPageProgressIndicatorBuilder: (context) => Center(
-              child: !isRefreshing ? CircularProgressIndicator() : Text(""),
-            ),
-            newPageProgressIndicatorBuilder: (context) => const Center(child: CircularProgressIndicator()),
-            noItemsFoundIndicatorBuilder: (context) => Center(
-              child: Text(
-                AppLocale.of(context).translate(mNoChallengesAvailable),
-                style: const TextStyle(fontSize: 16),
-              ),
+      onRefresh: () async {
+        isRefreshing = true;
+        pagingControllers[status]!.refresh();
+        hasLoaded[status] = [];
+        await _fetchPage(status, 1);
+      },
+      child: PagedListView<int, Challenge>(
+        pagingController: pagingControllers[status]!,
+        builderDelegate: PagedChildBuilderDelegate<Challenge>(
+          animateTransitions: true,
+          itemBuilder: (context, challenge, index) {
+            return ChallengeCard(
+              challenge: challenge,
+              isAuthor: widget.isAuthor,
+              key: ValueKey(challenge.id),
+            );
+          },
+          firstPageProgressIndicatorBuilder: (context) => Center(
+            child: !isRefreshing ? CircularProgressIndicator() : Text(""),
+          ),
+          newPageProgressIndicatorBuilder: (context) => const Center(child: CircularProgressIndicator()),
+          noItemsFoundIndicatorBuilder: (context) => Center(
+            child: Text(
+              AppLocale.of(context).translate(mNoChallengesAvailable),
+              style: const TextStyle(fontSize: 16),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
