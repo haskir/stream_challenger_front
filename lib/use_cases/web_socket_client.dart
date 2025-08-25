@@ -39,7 +39,6 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
         onError: (error) => _handleError(error),
         onDone: _handleDisconnect,
       );
-      // _startPing();
       if (kDebugMode) print("WebSocket connected.");
       _channel.sink.add(jsonEncode({"token": token}));
       return true;
@@ -75,7 +74,9 @@ class ChallengesPanelWebSocket implements AbstractChallengePanelRequester {
             break;
           }
         }
-        if (isNew) _addChallenge(Challenge.fromMap(parsedData as Map<String, dynamic>));
+        if (isNew) {
+          _addChallenge(Challenge.fromMap(parsedData as Map<String, dynamic>));
+        }
       }
       // Передаем обновленный список
       _challengeController.add(List.unmodifiable(_challenges));

@@ -19,14 +19,6 @@ class ConditionsSection extends StatefulWidget {
 class _ConditionsSectionState extends State<ConditionsSection> {
   List<ConditionLineEdit> lines = [];
 
-  @override
-  void dispose() {
-    for (var controller in widget.controllers) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
-
   void _addCondition() {
     setState(() {
       if (lines.length == widget.max) {

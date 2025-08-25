@@ -41,6 +41,13 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
   static const double _margin = 10.0;
 
   @override
+  void initState() {
+    super.initState();
+    _descriptionController = TextEditingController();
+    _betController = TextEditingController();
+  }
+
+  @override
   Widget build(BuildContext context) {
     account = ref.watch(accountProvider);
     if (account == null) {
@@ -61,8 +68,6 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
             return const Center(child: Text(mCantCreateChallengeForThisUser));
           }
           double minimum = streamerInfo.minimumRewardInDollars * streamerInfo.currencyRates[account!.currency]!;
-          _descriptionController = TextEditingController();
-          _betController = TextEditingController();
           if (account!.balance < minimum) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -169,6 +174,7 @@ class _CreateChallengeWidgetState extends ConsumerState<CreateChallengeWidget> {
     for (var controller in _controllers) {
       controller.dispose();
     }
+    _controllers.clear();
     super.dispose();
   }
 
