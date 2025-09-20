@@ -9,7 +9,7 @@ class _ApiPathDebug {
 }
 
 class _ApiPathSecured {
-  static const url = 'front-stream-challenge.vibe-coder.fun';
+  static const url = 'back-stream-challenge.vibe-coder.fun';
   static const prefix = 'api';
 
   static String get http => 'https://$url/$prefix/';
