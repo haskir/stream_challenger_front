@@ -7,7 +7,7 @@ class _ApiPathDebug {
 }
 
 class _ApiPathSecured {
-  static const url = 'stream-challenge-api.haskir.keenetic.link';
+  static const url = 'front-stream-challenge.vibe-coder.fun';
   static const prefix = 'api';
 
   static String get http => 'https://$url/$prefix/';
