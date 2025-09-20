@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
+
 class _ApiPathDebug {
   static const url = 'localhost';
   static const prefix = 'api';
@@ -15,7 +17,7 @@ class _ApiPathSecured {
 }
 
 class ApiProvider {
-  static const bool isLocal = true;
+  static const bool isLocal = kDebugMode;
 
   static String get http => isLocal ? _ApiPathDebug.http : _ApiPathSecured.http;
   static String get ws => isLocal ? _ApiPathDebug.ws : _ApiPathSecured.ws;
