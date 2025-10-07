@@ -151,7 +151,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     return ListTile(
       leading: Icon(icon), // Иконка для компактного меню
       title: title == null ? null : Text(AppLocale.of(context).translate(title)),
-      textColor: isSelected ? Colors.white : null,
+      textColor: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.bodyMedium?.color,
       selected: isSelected,
       selectedTileColor: Theme.of(context).colorScheme.primary,
       onTap: () => ref.read(profilePageContentProvider.notifier).setContent(path),

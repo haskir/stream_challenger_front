@@ -36,3 +36,4 @@ linux
 macos
 windows
 .vscode
+lib/test.dart

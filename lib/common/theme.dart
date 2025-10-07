@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 
+class AppColors {
+  // Брендовые
+  static const primary = Color(0xFF2196F3);
+  static const primaryLight = Color(0xFF64B5F6);
+  static const primaryDark = Color(0xFF1976D2);
+
+  // Нейтральные
+  static const backgroundLight = Color(0xFFFFFFFF);
+  static const backgroundDark = Color(0xFF121212);
+
+  // Текст
+  static const textPrimary = Color(0xFF000000);
+  static const textSecondary = Color(0xFF757575);
+
+  // Ошибки / успех
+  static const error = Color(0xFFD32F2F);
+  static const success = Color(0xFF388E3C);
+}
+
 ThemeData lightTheme = ThemeData(
-  primarySwatch: Colors.lightBlue,
-  primaryColor: Colors.lightBlue,
-  primaryColorLight: Colors.blue[200],
-  primaryColorDark: Colors.lightBlue,
-  iconTheme: IconThemeData(color: Colors.black),
-  iconButtonTheme: IconButtonThemeData(
-    style: ButtonStyle(
-      iconColor: WidgetStateProperty.all(Colors.black),
-    ),
+  colorScheme: ColorScheme.light(
+    primary: AppColors.primary,
+    secondary: AppColors.success,
+    error: AppColors.error,
   ),
 );
 

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -30,7 +29,8 @@ class _AuthServiceHTML implements AuthClient {
   Future<void> init() async {
     authUrl = Uri.parse(path);
     _token = await _tokenRepo.getToken();
-    if (!_validated && !kDebugMode) {
+    bool validateAuth = const bool.fromEnvironment('VALIDATE_AUTH', defaultValue: false);
+    if (!_validated && !validateAuth) {
       _token = await validate() ? _token : null;
     }
     authStateNotifier.value = _token == null ? AuthState() : AuthState(user: getUserInfo());
