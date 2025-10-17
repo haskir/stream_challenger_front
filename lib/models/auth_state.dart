@@ -11,9 +11,7 @@ class AuthedUser {
   final String profile_image_url;
   final String email;
   final String broadcasterType;
-  final DateTime expires_at;
-  // final int account_id;
-  // final int preferences_id;
+  final DateTime exp;
 
   AuthedUser({
     required this.id,
@@ -21,9 +19,7 @@ class AuthedUser {
     required this.profile_image_url,
     required this.email,
     required this.broadcasterType,
-    required this.expires_at,
-    // required this.account_id,
-    // required this.preferences_id,
+    required this.exp,
   });
 
   @override
@@ -36,9 +32,7 @@ class AuthedUser {
       'profile_image_url': profile_image_url,
       'email': email,
       'broadcaster_type': broadcasterType,
-      'expires_at': expires_at.millisecondsSinceEpoch,
-      // 'account_id': account_id,
-      // 'preferences_id': preferences_id,
+      'expires_at': exp.millisecondsSinceEpoch,
     };
   }
 
@@ -49,11 +43,9 @@ class AuthedUser {
       profile_image_url: map['profile_image_url'],
       email: map['email'],
       broadcasterType: map['broadcaster_type'],
-      expires_at: DateTime.fromMillisecondsSinceEpoch(
+      exp: DateTime.fromMillisecondsSinceEpoch(
         double.parse(map['expires_at'].toString()).toInt(),
       ),
-      // account_id: map['account_id'],
-      // preferences_id: map['preferences_id'],
     );
   }
 
