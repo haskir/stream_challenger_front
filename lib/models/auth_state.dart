@@ -32,7 +32,7 @@ class AuthedUser {
       'profile_image_url': profile_image_url,
       'email': email,
       'broadcaster_type': broadcasterType,
-      'expires_at': exp.millisecondsSinceEpoch,
+      'exp': exp.millisecondsSinceEpoch,
     };
   }
 
@@ -44,7 +44,7 @@ class AuthedUser {
       email: map['email'],
       broadcasterType: map['broadcaster_type'],
       exp: DateTime.fromMillisecondsSinceEpoch(
-        double.parse(map['expires_at'].toString()).toInt(),
+        double.parse(map['exp'].toString()).toInt(),
       ),
     );
   }
