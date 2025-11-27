@@ -148,11 +148,14 @@ class AuthWidget extends ConsumerWidget {
             preferences.language = _SettingsState.swtchLang(preferences.language);
             await ref.read(preferencesProvider.notifier).updatePreferences(preferences);
           },
-          icon: const Icon(Icons.language_outlined),
+          icon: Icon(Icons.language_outlined, color: Theme.of(context).colorScheme.surface),
         ),
         TextButton.icon(
-          label: Text(AppLocale.of(context).translate(mAuth)),
-          icon: const Icon(Icons.login),
+          label: Text(
+            AppLocale.of(context).translate(mAuth),
+            style: TextStyle(color: Theme.of(context).colorScheme.surface),
+          ),
+          icon: Icon(Icons.login, color: Theme.of(context).colorScheme.surface),
           onPressed: () async {
             await ref.read(authStateProvider.notifier).auth(context);
           },

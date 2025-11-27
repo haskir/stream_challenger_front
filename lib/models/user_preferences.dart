@@ -1,16 +1,15 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 import 'package:stream_challenge/core/platform/datetime_format.dart';
 
 class Preferences {
-  int id;
+  int userId;
   double minimumRewardInDollars;
   String language;
   String timezone;
   bool? darkMode;
 
   Preferences({
-    required this.id,
+    required this.userId,
     required this.minimumRewardInDollars,
     required this.language,
     required this.timezone,
@@ -19,7 +18,7 @@ class Preferences {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
+      'user_id': userId,
       'minimum_reward_in_dollars': minimumRewardInDollars,
       'language': language,
       'timezone': timezone,
@@ -29,7 +28,7 @@ class Preferences {
 
   factory Preferences.fromMap(Map<String, dynamic> map) {
     return Preferences(
-      id: map['id'] as int,
+      userId: map['user_id'] as int,
       minimumRewardInDollars: map['minimum_reward_in_dollars'] as double,
       language: map['language'] as String,
       timezone: map['timezone'] as String,
@@ -45,7 +44,7 @@ class Preferences {
   factory Preferences.fromJson(String source) => Preferences.fromMap(json.decode(source) as Map<String, dynamic>);
 
   factory Preferences.defaultPreferences() => Preferences(
-        id: 0,
+        userId: 0,
         minimumRewardInDollars: 1.0,
         language: 'EN',
         timezone: 'UTC',

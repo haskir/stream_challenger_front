@@ -61,7 +61,7 @@ final prefRequesterProvider = FutureProvider((ref) async {
 /// StateNotifier для управления состоянием Preferences
 class PreferencesNotifier extends StateNotifier<Preferences> {
   final Ref ref;
-  late Preferences onServerPreferences;
+  Preferences onServerPreferences = Preferences.defaultPreferences();
   Timer? _timer;
 
   PreferencesNotifier(this.ref) : super(Preferences.defaultPreferences()) {
@@ -82,9 +82,7 @@ class PreferencesNotifier extends StateNotifier<Preferences> {
   }
 
   Future<void> sendPreferences() async {
-    if (state == onServerPreferences) {
-      return;
-    }
+    if (state == onServerPreferences) return;
     final client = await ref.read(prefRequesterProvider.future);
     onServerPreferences = await client.updatePreferences(state) ?? state;
   }
