@@ -21,6 +21,7 @@ class _AuthServiceHTML implements AuthClient {
   String path = '${ApiProvider.http}auth';
   bool _validated = false;
   late final Uri authUrl;
+  late bool validateAuth;
   String? _token;
   final TokenRepo _tokenRepo = TokenRepo();
 
@@ -29,8 +30,8 @@ class _AuthServiceHTML implements AuthClient {
   Future<void> init() async {
     authUrl = Uri.parse(path);
     _token = await _tokenRepo.getToken();
-    bool validateAuth = const bool.fromEnvironment('VALIDATE_AUTH', defaultValue: false);
-    if (!_validated && !validateAuth) {
+    validateAuth = const bool.fromEnvironment('VALIDATE_AUTH', defaultValue: false);
+    if (validateAuth && !_validated) {
       _token = await validate() ? _token : null;
     }
     authStateNotifier.value = _token == null ? AuthState() : AuthState(user: getUserInfo());

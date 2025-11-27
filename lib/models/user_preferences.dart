@@ -3,7 +3,7 @@ import 'package:stream_challenge/core/platform/datetime_format.dart';
 
 class Preferences {
   int userId;
-  double minimumRewardInDollars;
+  double? minimumRewardInDollars;
   String language;
   String timezone;
   bool? darkMode;
@@ -29,7 +29,8 @@ class Preferences {
   factory Preferences.fromMap(Map<String, dynamic> map) {
     return Preferences(
       userId: map['user_id'] as int,
-      minimumRewardInDollars: map['minimum_reward_in_dollars'] as double,
+      minimumRewardInDollars:
+          map['minimum_reward_in_dollars'] != null ? map['minimum_reward_in_dollars'] as double : null,
       language: map['language'] as String,
       timezone: map['timezone'] as String,
       darkMode: map['dark_mode'],
@@ -56,11 +57,8 @@ class Preferences {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    return other is Preferences &&
-        (other.minimumRewardInDollars - minimumRewardInDollars).abs() < epsilon &&
-        other.language == language &&
-        other.timezone == timezone &&
-        other.darkMode == darkMode;
+    if (other is! Preferences) return false;
+    return other.language == language && other.timezone == timezone && other.darkMode == darkMode;
   }
 
   @override

@@ -3,10 +3,12 @@ import 'package:stream_challenge/core/platform/datetime_format.dart';
 
 class Account {
   final int id;
+  final String login;
   double balance;
   String currency;
   Account({
     required this.id,
+    required this.login,
     required this.balance,
     required this.currency,
   });
@@ -14,6 +16,7 @@ class Account {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'login': login,
       'balance': balance,
       'currency': currency,
     };
@@ -22,6 +25,7 @@ class Account {
   factory Account.fromMap(Map<String, dynamic> map) {
     return Account(
       id: map['id'] as int,
+      login: map['login'],
       balance: map['balance'] as double,
       currency: map['currency'] as String,
     );
@@ -50,5 +54,6 @@ class Account {
         balance: 0,
         currency: 'USD',
         id: 0,
+        login: "EMPTY",
       );
 }
